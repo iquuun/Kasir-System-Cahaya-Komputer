@@ -1,0 +1,108 @@
+﻿SUCCESS
+stdClass Object
+(
+    [stats] => stdClass Object
+        (
+            [total_penjualan] => 0
+            [laba_kotor] => 0
+            [saldo_kas] => 0
+            [hutang_distributor] => 0
+            [nilai_aset] => 1390000
+            [total_transaksi] => 1
+        )
+
+    [chart_data] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [name] => Sen
+                    [value] => 0
+                )
+
+            [1] => stdClass Object
+                (
+                    [name] => Sel
+                    [value] => 0
+                )
+
+            [2] => stdClass Object
+                (
+                    [name] => Rab
+                    [value] => 0
+                )
+
+            [3] => stdClass Object
+                (
+                    [name] => Kam
+                    [value] => 0
+                )
+
+            [4] => stdClass Object
+                (
+                    [name] => Jum
+                    [value] => 0
+                )
+
+            [5] => stdClass Object
+                (
+                    [name] => Sab
+                    [value] => 0
+                )
+
+            [6] => stdClass Object
+                (
+                    [name] => Min
+                    [value] => 0
+                )
+
+        )
+
+    [recent_transactions] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [id] => INV-20260302-YNIIUQ
+                    [customer] => UMUM
+                    [total] => 1230
+                    [time] => 08:34
+                )
+
+            [1] => stdClass Object
+                (
+                    [id] => INV-20260228-ODTNJ0
+                    [customer] => UMUM
+                    [total] => 2500000
+                    [time] => 19:55
+                )
+
+            [2] => stdClass Object
+                (
+                    [id] => INV-20260228-XHKKOZ
+                    [customer] => UMUM
+                    [total] => 2500000
+                    [time] => 14:25
+                )
+
+            [3] => stdClass Object
+                (
+                    [id] => INV-20260228-EF3XRH
+                    [customer] => UMUM
+                    [total] => 2500000
+                    [time] => 14:09
+                )
+
+            [4] => stdClass Object
+                (
+                    [id] => INV-20260228-5QOWBV
+                    [customer] => UMUM
+                    [total] => 150000
+                    [time] => 14:02
+                )
+
+        )
+
+    [low_stock] => Array
+        (
+        )
+
+)
