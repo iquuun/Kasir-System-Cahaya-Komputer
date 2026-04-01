@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download } from 'lucide-react';
+import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -53,18 +53,41 @@ export default function PenjualanPage() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [saleItems, setSaleItems] = useState<SaleItem[]>([]);
+  const initDraft = () => {
+    try {
+      const saved = localStorage.getItem('draftKasir');
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+    return null;
+  };
+  const draft = initDraft() || {};
+
+  const [saleItems, setSaleItems] = useState<SaleItem[]>(draft.saleItems || []);
   const [loading, setLoading] = useState(true);
+  const [visibleProducts, setVisibleProducts] = useState(30);
+
+  // Drag and drop state
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dropTargetIdx, setDropTargetIdx] = useState<number | null>(null);
 
   // Sale Options
-  const [channel, setChannel] = useState('Offline');
-  const [payment, setPayment] = useState('0');
+  const [channel, setChannel] = useState(draft.channel || 'Offline');
+  const [payment, setPayment] = useState(draft.payment || '0');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSale, setLastSale] = useState<Sale | null>(null);
   const [shouldPrint, setShouldPrint] = useState(false);
-  const [customerAddress, setCustomerAddress] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [customerName, setCustomerName] = useState('');
+  const [customerAddress, setCustomerAddress] = useState(draft.customerAddress || '');
+  const [customerPhone, setCustomerPhone] = useState(draft.customerPhone || '');
+  const [customerName, setCustomerName] = useState(draft.customerName || '');
+  const [taxPercent, setTaxPercent] = useState(draft.taxPercent || 0);
+
+  useEffect(() => {
+    if (activeTab === 'pos') {
+      localStorage.setItem('draftKasir', JSON.stringify({
+        saleItems, channel, payment, customerAddress, customerPhone, customerName, taxPercent
+      }));
+    }
+  }, [saleItems, channel, payment, customerAddress, customerPhone, customerName, taxPercent, activeTab]);
 
   useEffect(() => {
     if (lastSale && shouldPrint) {
@@ -75,8 +98,6 @@ export default function PenjualanPage() {
       }, 500);
     }
   }, [lastSale, shouldPrint]);
-  const [taxPercent, setTaxPercent] = useState(0);
-
   // History filters & pagination
   const [historySearch, setHistorySearch] = useState('');
   const [historyMonth, setHistoryMonth] = useState('');
@@ -283,6 +304,89 @@ export default function PenjualanPage() {
     }));
   };
 
+  // --- DRAG AND DROP HANDLERS ---
+  const handleDragStart = (e: React.DragEvent, idx: number) => {
+    if (saleItems[idx].is_sub) {
+      e.preventDefault(); 
+      return;
+    }
+    setDraggedIdx(idx);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggedIdx === null || draggedIdx === targetIdx) return;
+    setDropTargetIdx(targetIdx);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIdx(null);
+    setDropTargetIdx(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    if (draggedIdx === null) {
+      handleDragEnd();
+      return;
+    }
+
+    let actualTargetIdx = targetIdx;
+    while (actualTargetIdx > 0 && saleItems[actualTargetIdx].is_sub) {
+      actualTargetIdx--;
+    }
+
+    if (draggedIdx === actualTargetIdx) {
+      handleDragEnd();
+      return;
+    }
+
+    let dragEndIdx = draggedIdx;
+    while (dragEndIdx + 1 < saleItems.length && saleItems[dragEndIdx + 1].is_sub) {
+      dragEndIdx++;
+    }
+    const blockLength = dragEndIdx - draggedIdx + 1;
+    const blockToMove = saleItems.slice(draggedIdx, draggedIdx + blockLength);
+
+    const isDraggingDown = draggedIdx < actualTargetIdx;
+    let insertAtIdx = actualTargetIdx;
+    
+    if (isDraggingDown) {
+      while (insertAtIdx + 1 < saleItems.length && saleItems[insertAtIdx + 1].is_sub) {
+        insertAtIdx++;
+      }
+      insertAtIdx++; 
+    }
+
+    const newItems = [...saleItems];
+    newItems.splice(draggedIdx, blockLength);
+
+    if (draggedIdx < insertAtIdx) {
+      insertAtIdx -= blockLength;
+    }
+
+    newItems.splice(insertAtIdx, 0, ...blockToMove);
+    setSaleItems(newItems);
+    handleDragEnd();
+  };
+
+  const isTargetBlock = (idx: number) => {
+    if (dropTargetIdx === null || draggedIdx === null) return false;
+    let tParent = dropTargetIdx;
+    while(tParent > 0 && saleItems[tParent].is_sub) tParent--;
+    
+    // Prevent highlighting if dragging over self
+    if (tParent === draggedIdx) return false;
+
+    let tEnd = tParent;
+    while(tEnd + 1 < saleItems.length && saleItems[tEnd + 1].is_sub) tEnd++;
+
+    return idx >= tParent && idx <= tEnd;
+  };
+  // ------------------------------
+
   const calculatedTotal = saleItems.reduce(
     (sum, item) => sum + item.harga_jual_saat_itu * item.qty,
     0
@@ -357,6 +461,7 @@ export default function PenjualanPage() {
       setCustomerName('');
       setCustomerAddress('');
       setCustomerPhone('');
+      localStorage.removeItem('draftKasir');
       fetchData(); // Refresh products and history
 
     } catch (err: any) {
@@ -480,10 +585,29 @@ export default function PenjualanPage() {
                           {saleItems.map((item, idx) => {
                             const subtotal = item.harga_jual_saat_itu * item.qty;
                             return (
-                              <tr key={idx} className={`group hover:bg-gray-50 transition-colors ${item.is_sub ? 'bg-gray-50/50' : ''}`}>
+                              <tr 
+                                key={idx} 
+                                draggable={!item.is_sub}
+                                onDragStart={(e) => handleDragStart(e, idx)}
+                                onDragOver={(e) => handleDragOver(e, idx)}
+                                onDrop={(e) => handleDrop(e, idx)}
+                                onDragEnd={handleDragEnd}
+                                className={`group hover:bg-gray-50/80 transition-all 
+                                  ${item.is_sub ? 'bg-gray-50/30' : ''} 
+                                  ${draggedIdx === idx ? 'opacity-40 bg-gray-100' : ''} 
+                                  ${isTargetBlock(idx) ? 'bg-blue-100/70 border-y-2 border-blue-400' : ''}
+                                `}
+                              >
                                 <td className="py-2 px-1.5">
                                   <div className="flex items-center gap-1.5">
-                                    {item.is_sub && <div className="w-2.5 h-4 border-l-2 border-b-2 border-gray-300 rounded-bl ml-1" />}
+                                    {!item.is_sub ? (
+                                      <div className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-200 rounded text-gray-400 shrink-0" title="Tarik untuk memindahkan">
+                                        <GripVertical size={13} strokeWidth={2.5} />
+                                      </div>
+                                    ) : (
+                                      <div className="w-[21px] shrink-0" />
+                                    )}
+                                    {item.is_sub && <div className="w-2 h-3.5 border-l-2 border-b-2 border-gray-300 rounded-bl ml-0.5" />}
                                     {item.product.id < 0 ? (
                                       <input
                                         type="text"
@@ -588,13 +712,19 @@ export default function PenjualanPage() {
                           type="text"
                           placeholder="Cari Produk..."
                           value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
+                          onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setVisibleProducts(30);
+                          }}
                           className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs"
                         />
                       </div>
                       <select
                         value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        onChange={(e) => {
+                          setSelectedCategory(e.target.value);
+                          setVisibleProducts(30);
+                        }}
                         className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium"
                       >
                         <option value="all">Semua Kategori</option>
@@ -609,24 +739,34 @@ export default function PenjualanPage() {
                     {filteredProducts.length === 0 ? (
                       <p className="text-center text-xs text-gray-400 mt-6">Produk tidak ditemukan</p>
                     ) : (
-                      filteredProducts.map(product => (
-                        <div key={product.id} className="p-2.5 bg-white border border-gray-100 rounded-lg flex justify-between items-center hover:shadow-sm hover:border-[#3B82F6] transition-all group">
-                          <div className="flex-1 pr-2">
-                            <p className="font-bold text-xs text-gray-800 leading-tight line-clamp-2">{product.name}</p>
-                            <p className="text-[11px] font-black text-[#3B82F6] mt-0.5">Rp {product.harga_jual.toLocaleString('id-ID')}</p>
-                            <div className="flex items-center gap-1.5 mt-1">
-                              <span className="text-[9px] bg-gray-100 text-gray-600 px-1 py-0.5 rounded font-bold">Stok: {product.stok_saat_ini}</span>
-                              <span className="text-[9px] text-gray-400 uppercase">{product.category?.name || 'UMUM'}</span>
+                      <>
+                        {filteredProducts.slice(0, visibleProducts).map(product => (
+                          <div key={product.id} className="p-2.5 bg-white border border-gray-100 rounded-lg flex justify-between items-center hover:shadow-sm hover:border-[#3B82F6] transition-all group">
+                            <div className="flex-1 pr-2">
+                              <p className="font-bold text-xs text-gray-800 leading-tight line-clamp-2">{product.name}</p>
+                              <p className="text-[11px] font-black text-[#3B82F6] mt-0.5">Rp {product.harga_jual.toLocaleString('id-ID')}</p>
+                              <div className="flex items-center gap-1.5 mt-1">
+                                <span className="text-[9px] bg-gray-100 text-gray-600 px-1 py-0.5 rounded font-bold">Stok: {product.stok_saat_ini}</span>
+                                <span className="text-[9px] text-gray-400 uppercase">{product.category?.name || 'UMUM'}</span>
+                              </div>
                             </div>
+                            <button
+                              onClick={() => addItem(product)}
+                              className="w-8 h-8 bg-[#3B82F6] text-white rounded-md flex items-center justify-center hover:bg-[#2563EB] shadow-sm transform active:scale-95 transition-all"
+                            >
+                              <Plus size={16} />
+                            </button>
                           </div>
+                        ))}
+                        {visibleProducts < filteredProducts.length && (
                           <button
-                            onClick={() => addItem(product)}
-                            className="w-8 h-8 bg-[#3B82F6] text-white rounded-md flex items-center justify-center hover:bg-[#2563EB] shadow-sm transform active:scale-95 transition-all"
+                            onClick={() => setVisibleProducts(prev => prev + 50)}
+                            className="w-full py-2 mt-2 text-xs font-bold text-[#3B82F6] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
                           >
-                            <Plus size={16} />
+                            Tampilkan Lebih Banyak ({filteredProducts.length - visibleProducts} lagi)
                           </button>
-                        </div>
-                      ))
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -894,12 +1034,12 @@ export default function PenjualanPage() {
       {/* FAKTUR TEMPLATE - Continuous Form 21cm x 14.5cm */}
       <div id="print-area" className="faktur-print bg-white text-black font-sans" style={{ width: '100%', margin: '0' }}>
         {lastSale && (
-          <div className="bg-white" style={{ fontSize: '14px', fontWeight: 'normal', fontFamily: '"Courier New", Courier, monospace' }}>
+          <div className="bg-white" style={{ fontSize: '14px', fontWeight: 'normal', fontFamily: '"Courier New", Courier, monospace', lineHeight: '1.2' }}>
             {/* ===== HEADER ===== */}
             <table className="w-full border-collapse">
               <tbody>
                 <tr>
-                  <td style={{ width: '55%', verticalAlign: 'top', padding: '0' }}>
+                  <td style={{ width: '65%', verticalAlign: 'top', padding: '0' }}>
                     <div className="flex items-start gap-3">
                       {settings.store_logo && (
                         <img
@@ -910,13 +1050,13 @@ export default function PenjualanPage() {
                       )}
                       <div>
                         <div style={{ fontSize: '19px', fontWeight: 'bold', textTransform: 'uppercase', lineHeight: '1.1' }}>{settings.store_name || 'CAHAYA KOMPUTER ID'}</div>
-                        <div style={{ fontSize: '11px', marginTop: '2px', fontWeight: 'normal' }}>{settings.store_address || 'Alamat Toko Belum Diatur'}</div>
-                        <div style={{ fontSize: '11px', fontWeight: 'normal' }}>Telepon/HP : {settings.store_phone || '-'}</div>
+                        <div style={{ fontSize: '13px', marginTop: '2px', fontWeight: 'normal' }}>{settings.store_address || 'Alamat Toko Belum Diatur'}</div>
+                        <div style={{ fontSize: '13px', fontWeight: 'normal' }}>Telepon/HP : {settings.store_phone || '-'}</div>
                       </div>
                     </div>
                   </td>
-                  <td style={{ width: '45%', verticalAlign: 'top', textAlign: 'right', padding: '0' }}>
-                    <div style={{ fontSize: '20px', fontWeight: 'bold', textTransform: 'uppercase', lineHeight: '1.1', border: '2px solid black', display: 'inline-block', padding: '4px 10px' }}>FAKTUR PENJUALAN</div>
+                  <td style={{ width: '35%', verticalAlign: 'bottom', textAlign: 'right', padding: '0', paddingBottom: '2px' }}>
+                    <div style={{ fontSize: '26px', fontWeight: 'bold', textTransform: 'uppercase', lineHeight: '1.1', display: 'inline-block' }}>FAKTUR PENJUALAN</div>
                   </td>
                 </tr>
               </tbody>
@@ -926,12 +1066,11 @@ export default function PenjualanPage() {
             <table className="w-full border-collapse" style={{ fontSize: '13px', marginTop: '4px' }}>
               <tbody>
                 <tr>
-                  <td style={{ width: '65%', verticalAlign: 'top', padding: '2px 0' }}>
+                  <td style={{ width: '65%', verticalAlign: 'top', padding: '0' }}>
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                        <span>Kepada Yth.</span>
-                        <span>:</span>
-                        <span style={{ fontSize: '15px', textTransform: 'uppercase', fontWeight: 'bold' }}>{(lastSale as any).customer_name || 'UMUM'}</span>
+                      <div style={{ marginBottom: '2px' }}>
+                        <div>Kepada Yth. :</div>
+                        <div style={{ fontSize: '15px', textTransform: 'uppercase', fontWeight: 'bold', marginTop: '1px' }}>{(lastSale as any).customer_name || 'UMUM'}</div>
                       </div>
                       <table className="border-collapse" style={{ fontSize: '13px', marginTop: '1px' }}>
                         <tbody>
@@ -941,8 +1080,8 @@ export default function PenjualanPage() {
                       </table>
                     </div>
                   </td>
-                  <td style={{ width: '35%', verticalAlign: 'top', padding: '2px 0' }}>
-                    <table className="w-full border-collapse" style={{ fontSize: '13px', textAlign: 'left' }}>
+                  <td style={{ width: '35%', verticalAlign: 'top', padding: '0' }}>
+                    <table className="w-full border-collapse" style={{ fontSize: '13px', textAlign: 'left', lineHeight: '1.2' }}>
                       <tbody>
                         <tr><td style={{ width: '110px' }}>Tanggal / Jam</td><td style={{ width: '10px' }}>:</td><td>{new Date(lastSale.tanggal).toLocaleDateString('id-ID')} {new Date(lastSale.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</td></tr>
                         <tr><td>No. Faktur</td><td>:</td><td className="uppercase">{lastSale.invoice}</td></tr>
@@ -971,7 +1110,7 @@ export default function PenjualanPage() {
                   return [...lastSale.items].map((item, idx) => {
                     const isSubItem = !!item.parent_id;
                     return (
-                      <tr key={idx} style={{ lineHeight: '1.4' }}>
+                      <tr key={idx} style={{ lineHeight: '1.15' }}>
                         <td style={{ padding: '1px 2px', paddingLeft: isSubItem ? '16px' : '2px' }}>
                           {item.product?.name || item.manual_name || 'Unit'}
                         </td>
@@ -997,32 +1136,26 @@ export default function PenjualanPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: '4px' }}>
               <div style={{ width: '50%', fontSize: '13px' }}>
                 <div>Keterangan:</div>
-                <div style={{ whiteSpace: 'pre-line', lineHeight: '1.4', marginTop: '2px' }}>
+                <div style={{ whiteSpace: 'pre-line', lineHeight: '1.2', marginTop: '2px' }}>
                   {settings.store_notes || 'Terima kasih atas kepercayaan Anda.\nMohon simpan Faktur ini sebagai bukti transaksi.'}
                 </div>
                 <div style={{ marginTop: '6px' }}>Berlaku Untuk Claim Garansi</div>
               </div>
 
               <div style={{ width: '45%', fontSize: '14px' }}>
-                <table className="w-full border-collapse">
+                <table className="w-full border-collapse" style={{ lineHeight: '1.25' }}>
                   <tbody>
-                    <tr><td style={{ padding: '2px 0', textAlign: 'left' }}>Subtotal :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td></tr>
-                    <tr><td style={{ padding: '2px 0', textAlign: 'left' }}>Pajak ({lastSale?.tax_percent || 0}%) :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.tax_amount || 0).toLocaleString('id-ID')}</td></tr>
+                    <tr><td style={{ padding: '1px 0', textAlign: 'left' }}>Subtotal :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td></tr>
+                    <tr><td style={{ padding: '1px 0', textAlign: 'left' }}>Pajak ({lastSale?.tax_percent || 0}%) :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.tax_amount || 0).toLocaleString('id-ID')}</td></tr>
                     <tr style={{ borderTop: '1.5px solid black' }}>
-                      <td style={{ padding: '3px 0', textAlign: 'left', fontSize: '15px' }}>Total :</td>
+                      <td style={{ padding: '2px 0', textAlign: 'left', fontSize: '15px' }}>Total :</td>
                       <td style={{ textAlign: 'right', fontSize: '15px', fontWeight: 'bold' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td>
                     </tr>
-                  </tbody>
-                </table>
-                <div style={{ borderBottom: '1.5px solid black', margin: '2px 0' }}></div>
-                <table className="w-full border-collapse">
-                  <tbody>
-                    <tr><td style={{ padding: '2px 0', textAlign: 'left' }}>Tunai :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.pembayaran || 0).toLocaleString('id-ID')}</td></tr>
+                    <tr><td style={{ padding: '1px 0', textAlign: 'left' }}>Tunai :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.pembayaran || 0).toLocaleString('id-ID')}</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
-
             {/* Signature Section */}
             <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
               <div style={{ textAlign: 'center', width: '160px' }}>
@@ -1070,7 +1203,7 @@ export default function PenjualanPage() {
             color: #000 !important;
             border-color: #000 !important;
             background: transparent !important;
-            font-family: "Courier New", Courier, monospace !important;
+            font-family: "Draft", "Epson Draft", "Epson Roman", "Courier New", Courier, monospace !important;
             font-weight: bold !important;
             -webkit-font-smoothing: none !important;
             text-rendering: optimizeSpeed !important;
