@@ -1047,7 +1047,7 @@ export default function PenjualanPage() {
                     <div className="flex items-start gap-3">
                       {settings.store_logo && (
                         <img
-                          src={`${api.defaults.baseURL?.replace(/\/api$/, '')}/storage/${settings.store_logo}`}
+                          src={`http://${window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname}:8000/storage/${settings.store_logo}?t=${Date.now()}`}
                           alt="Logo"
                           style={{ height: '52px', width: '52px', objectFit: 'contain' }}
                         />

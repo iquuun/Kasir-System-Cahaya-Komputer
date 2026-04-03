@@ -87,10 +87,10 @@ export default function PengaturanPage() {
             setStoreNotes(res.data.store_notes || '');
             setInvoiceStartNumber(res.data.invoice_start_number || '10000');
             if (res.data.store_logo) {
-                const base = api.defaults.baseURL?.endsWith('/api') 
-                    ? api.defaults.baseURL.slice(0, -4) 
-                    : api.defaults.baseURL?.replace(/\/api$/, '');
-                setLogoPreview(`${base}/storage/${res.data.store_logo}?t=${Date.now()}`);
+                // Get base URL from current window to ensure host matches for all LAN devices
+                const host = window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname;
+                const publicBase = `http://${host}:8000`; // Port 8000 is our backend port
+                setLogoPreview(`${publicBase}/storage/${res.data.store_logo}?t=${Date.now()}`);
             }
         } catch (err) {
             console.error('Failed to fetch settings', err);

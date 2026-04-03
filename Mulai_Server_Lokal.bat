@@ -32,6 +32,16 @@ echo.
 :: 1. Menjalankan Backend Laravel (PHP artisan serve)
 :: ============================================================
 echo [1/2] Menyalakan Backend API (Database)...
+
+:: Memastikan link storage ok (Penting untuk Logo saat pindah PC)
+cd /d "%PROJECT_DIR%api"
+if exist public\storage (
+    echo    Mengecek link gambar...
+) else (
+    echo    Menyambungkan folder gambar (storage link)...
+    php artisan storage:link
+)
+
 start "Backend Kasir" cmd /k "title Backend Kasir - JANGAN DITUTUP! & color 0A & cd /d "%PROJECT_DIR%api" & echo. & echo ============================== & echo   BACKEND BERJALAN (port 8000) & echo   JANGAN TUTUP JENDELA INI! & echo ============================== & echo. & php artisan serve --host=0.0.0.0 --port=8000"
 
 :: Tunggu backend siap dulu (5 detik)
