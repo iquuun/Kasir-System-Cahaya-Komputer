@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical } from 'lucide-react';
+import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical, Edit2 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -80,6 +80,9 @@ export default function PenjualanPage() {
   const [customerPhone, setCustomerPhone] = useState(draft.customerPhone || '');
   const [customerName, setCustomerName] = useState(draft.customerName || '');
   const [taxPercent, setTaxPercent] = useState(draft.taxPercent || 0);
+  const [isManual, setIsManual] = useState(false);
+  const [manualInvoice, setManualInvoice] = useState('');
+  const [manualDate, setManualDate] = useState('');
 
   useEffect(() => {
     if (activeTab === 'pos') {
@@ -424,6 +427,8 @@ export default function PenjualanPage() {
         tax_percent: taxPercent,
         pembayaran: parseFloat(payment),
         kembalian: parseFloat(payment) - customTotal,
+        invoice: isManual ? manualInvoice : null,
+        tanggal: isManual ? manualDate : null,
         items: saleItems.map((item, idx) => {
           let parent_idx = null;
           if (item.is_sub) {
@@ -461,6 +466,9 @@ export default function PenjualanPage() {
       setCustomerName('');
       setCustomerAddress('');
       setCustomerPhone('');
+      setIsManual(false);
+      setManualInvoice('');
+      setManualDate('');
       localStorage.removeItem('draftKasir');
       fetchData(); // Refresh products and history
 
@@ -548,6 +556,45 @@ export default function PenjualanPage() {
                         className="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
                       />
                     </div>
+                  </div>
+
+                  {/* Manual Input Toggle & Fields */}
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <div className="flex items-center justify-between mb-2">
+                       <button 
+                        type="button"
+                        onClick={() => setIsManual(!isManual)}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold transition-all ${isManual ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+                       >
+                        <Edit2 size={12} />
+                        {isManual ? 'MODE MANUAL AKTIF' : 'AKTIFKAN INPUT MANUAL (Data Lama)'}
+                       </button>
+                       {isManual && <p className="text-[10px] text-orange-600 font-bold animate-pulse">⚠️ Perhatikan No. Invoice agar tidak duplikat</p>}
+                    </div>
+
+                    {isManual && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-1">
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-semibold text-orange-600 uppercase">No. Invoice Manual</label>
+                          <input
+                            type="text"
+                            placeholder="Contoh: INV-LAMA-001"
+                            value={manualInvoice}
+                            onChange={(e) => setManualInvoice(e.target.value)}
+                            className="text-xs bg-orange-50 border border-orange-200 rounded-md px-2.5 py-1.5 outline-none focus:border-orange-500 transition-colors font-bold"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-semibold text-orange-600 uppercase">Tanggal Transaksi</label>
+                          <input
+                            type="datetime-local"
+                            value={manualDate}
+                            onChange={(e) => setManualDate(e.target.value)}
+                            className="text-xs bg-orange-50 border border-orange-200 rounded-md px-2.5 py-1.5 outline-none focus:border-orange-500 transition-colors font-bold"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

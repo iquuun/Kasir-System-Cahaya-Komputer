@@ -33,6 +33,8 @@ class SaleController extends Controller
             'pembayaran' => 'required|numeric',
             'kembalian' => 'required|numeric',
             'tax_percent' => 'nullable|numeric|min:0',
+            'invoice' => 'nullable|string|unique:sales,invoice',
+            'tanggal' => 'nullable|date',
         ]);
 
         DB::beginTransaction();
@@ -66,28 +68,32 @@ class SaleController extends Controller
                 ];
             }
 
-            // Penomoran Faktur Berkelanjutan (Mulai dari Setting atau Faktur Terakhir)
-            $startNumberSetting = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'invoice_start_number')->value('value');
-            $startNumber = $startNumberSetting ? (int)$startNumberSetting : 10000;
-            
-            $lastSale = Sale::orderBy('id', 'desc')->first();
-            $nextNumber = $startNumber;
+            // Penomoran Faktur (Manual atau Otomatis)
+            if (!empty($validated['invoice'])) {
+                $invoice = $validated['invoice'];
+            } else {
+                $startNumberSetting = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'invoice_start_number')->value('value');
+                $startNumber = $startNumberSetting ? (int)$startNumberSetting : 10000;
+                
+                $lastSale = Sale::orderBy('id', 'desc')->first();
+                $nextNumber = $startNumber;
 
-            if ($lastSale && preg_match('/^INV-(\d+)$/', $lastSale->invoice, $matches)) {
-                $lastNumber = (int)$matches[1];
-                if ($lastNumber >= $startNumber) {
-                    $nextNumber = $lastNumber + 1;
+                if ($lastSale && preg_match('/^INV-(\d+)$/', $lastSale->invoice, $matches)) {
+                    $lastNumber = (int)$matches[1];
+                    if ($lastNumber >= $startNumber) {
+                        $nextNumber = $lastNumber + 1;
+                    }
                 }
+                $invoice = 'INV-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
             }
 
-            $invoice = 'INV-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
             $taxPercent = $validated['tax_percent'] ?? 0;
             $taxAmount = ($totalPenjualan * $taxPercent) / 100;
 
             $sale = Sale::create([
                 'invoice' => $invoice,
                 'channel' => $validated['channel'],
-                'tanggal' => now(),
+                'tanggal' => $validated['tanggal'] ?? now(),
                 'total_penjualan' => $totalPenjualan,
                 'total_hpp' => $totalHpp,
                 'laba_kotor' => $totalPenjualan - $totalHpp - $taxAmount,

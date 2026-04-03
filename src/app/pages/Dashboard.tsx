@@ -52,13 +52,15 @@ function StatCard({ title, value, subtitle, icon: Icon }: StatCardProps) {
 
 export default function Dashboard() {
   const { isOwner } = useAuth();
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardData & { subtitle: string }> (null as any);
   const [loading, setLoading] = useState(true);
+  const [range, setRange] = useState<'weekly' | 'monthly'>('weekly');
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await api.get('/dashboard');
+        setLoading(true);
+        const res = await api.get(`/dashboard?range=${range}`);
         setData(res.data);
       } catch (error) {
         console.error("Gagal memuat dashboard", error);
@@ -67,7 +69,7 @@ export default function Dashboard() {
       }
     };
     fetchDashboard();
-  }, []);
+  }, [range]);
 
   if (loading) {
     return (
@@ -117,19 +119,41 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Top Header with Filters */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100 w-fit">
+          <button
+            onClick={() => setRange('weekly')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'weekly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+          >
+            MINGGUAN
+          </button>
+          <button
+            onClick={() => setRange('monthly')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'monthly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+          >
+            BULANAN
+          </button>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 rounded-lg">
+          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+          <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Data Real-Time {range === 'weekly' ? 'Mingguan' : 'Bulanan'}</p>
+        </div>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <StatCard
           title="Total Penjualan"
           value={`Rp ${(data.stats.total_penjualan / 1000000).toFixed(1)} Jt`}
-          subtitle="Minggu ini"
+          subtitle={data.subtitle}
           icon={ShoppingCart}
         />
         {isOwner && (
           <StatCard
             title="Laba Kotor"
             value={`Rp ${(data.stats.laba_kotor / 1000000).toFixed(1)} Jt`}
-            subtitle="Minggu ini"
+            subtitle={data.subtitle}
             icon={TrendingUp}
           />
         )}
@@ -160,7 +184,7 @@ export default function Dashboard() {
         <StatCard
           title="Total Transaksi"
           value={data.stats.total_transaksi.toLocaleString('id-ID')}
-          subtitle="Bulan ini"
+          subtitle={data.subtitle}
           icon={DollarSign}
         />
       </div>
