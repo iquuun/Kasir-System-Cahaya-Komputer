@@ -85,10 +85,22 @@ class SaleController extends Controller
                     }
                 }
                 $invoice = 'INV-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+                
+                while (Sale::where('invoice', $invoice)->exists()) {
+                    $nextNumber++;
+                    $invoice = 'INV-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+                }
             }
 
             $taxPercent = $validated['tax_percent'] ?? 0;
             $taxAmount = ($totalPenjualan * $taxPercent) / 100;
+
+            // DP Logic
+            $pembayaran = $validated['pembayaran'];
+            $isDP = $pembayaran < $totalPenjualan;
+            $kembalian = $isDP ? 0 : ($pembayaran - $totalPenjualan);
+            $sisaBayar = $isDP ? ($totalPenjualan - $pembayaran) : 0;
+            $statusBayar = $isDP ? 'dp' : 'lunas';
 
             $sale = Sale::create([
                 'invoice' => $invoice,
@@ -99,8 +111,10 @@ class SaleController extends Controller
                 'laba_kotor' => $totalPenjualan - $totalHpp - $taxAmount,
                 'tax_percent' => $taxPercent,
                 'tax_amount' => $taxAmount,
-                'pembayaran' => $validated['pembayaran'],
-                'kembalian' => $validated['kembalian'],
+                'pembayaran' => $pembayaran,
+                'kembalian' => $kembalian,
+                'status_bayar' => $statusBayar,
+                'sisa_bayar' => $sisaBayar,
                 'user_id' => $request->user()->id,
             ]);
 
@@ -156,6 +170,41 @@ class SaleController extends Controller
         ]);
 
         $sale->update($validated);
+
+        return response()->json($sale->load(['items.product', 'user']));
+    }
+
+    // Pelunasan DP
+    public function pelunasan(Request $request, Sale $sale)
+    {
+        $request->validate([
+            'jumlah_bayar' => 'required|numeric|min:1',
+        ]);
+
+        if ($sale->status_bayar === 'lunas') {
+            return response()->json(['message' => 'Transaksi ini sudah lunas.'], 400);
+        }
+
+        $jumlahBayar = (float) $request->jumlah_bayar;
+        $sisaSekarang = (float) $sale->sisa_bayar;
+        $pembayaranBaru = (float) $sale->pembayaran + $jumlahBayar;
+
+        if ($jumlahBayar >= $sisaSekarang) {
+            // Lunas
+            $kembalian = $jumlahBayar - $sisaSekarang;
+            $sale->update([
+                'pembayaran' => $pembayaranBaru,
+                'kembalian' => $kembalian,
+                'sisa_bayar' => 0,
+                'status_bayar' => 'lunas',
+            ]);
+        } else {
+            // Masih DP
+            $sale->update([
+                'pembayaran' => $pembayaranBaru,
+                'sisa_bayar' => $sisaSekarang - $jumlahBayar,
+            ]);
+        }
 
         return response()->json($sale->load(['items.product', 'user']));
     }

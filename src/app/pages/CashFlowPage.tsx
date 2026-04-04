@@ -15,7 +15,7 @@ export default function CashFlowPage() {
   return (
     <div className="space-y-6">
       {/* Header Tabs */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 flex gap-2">
+      <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md rounded-xl shadow-sm border border-gray-100 p-2 flex gap-2">
         <button
           onClick={() => setActiveTab('laba_rugi')}
           className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
@@ -25,7 +25,7 @@ export default function CashFlowPage() {
           }`}
         >
           <TrendingUpIcon size={16} />
-          Laporan Laba Rugi
+          Laporan Keuangan Toko
         </button>
         <button
           onClick={() => setActiveTab('pembukuan')}

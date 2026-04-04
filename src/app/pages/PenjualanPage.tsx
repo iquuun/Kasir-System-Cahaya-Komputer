@@ -39,6 +39,8 @@ interface Sale {
   total_penjualan: number;
   pembayaran: number;
   kembalian: number;
+  status_bayar?: string;
+  sisa_bayar?: number;
   items: SaleItem[];
   user?: { name: string };
   tax_percent: number;
@@ -98,7 +100,7 @@ export default function PenjualanPage() {
         window.print();
         setShouldPrint(false);
         toast.success('Transaksi Berhasil!');
-      }, 500);
+      }, 1000);
     }
   }, [lastSale, shouldPrint]);
   // History filters & pagination
@@ -128,6 +130,30 @@ export default function PenjualanPage() {
       toast.error(err?.response?.data?.message || 'Gagal membatalkan transaksi');
     } finally {
       setIsVoiding(false);
+    }
+  };
+
+  // Pelunasan DP modal state
+  const [pelunasanTarget, setPelunasanTarget] = useState<Sale | null>(null);
+  const [pelunasanInput, setPelunasanInput] = useState('');
+  const [isPelunasanSubmitting, setIsPelunasanSubmitting] = useState(false);
+
+  const handlePelunasanSubmit = async () => {
+    if (!pelunasanTarget || !pelunasanInput || Number(pelunasanInput) < 1) return;
+    try {
+      setIsPelunasanSubmitting(true);
+      const res = await api.post(`/sales/${pelunasanTarget.id}/pelunasan`, {
+        jumlah_bayar: Number(pelunasanInput)
+      });
+      toast.success('Pelunasan berhasil diproses!');
+      setPelunasanTarget(null);
+      setPelunasanInput('');
+      const salesRes = await api.get('/sales');
+      setSales(salesRes.data);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Gagal memproses pelunasan');
+    } finally {
+      setIsPelunasanSubmitting(false);
     }
   };
 
@@ -414,8 +440,8 @@ export default function PenjualanPage() {
   };
 
   const handleSubmit = async () => {
-    if (parseFloat(payment) < customTotal) {
-      toast.error('Pembayaran kurang!');
+    if (payment === '' || parseFloat(payment) < 0) {
+      toast.error('Masukkan jumlah pembayaran yang valid!');
       return;
     }
 
@@ -500,7 +526,7 @@ export default function PenjualanPage() {
       ) : (
         <div className="space-y-6">
           {/* Tab Switcher */}
-          <div className="flex gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-100 max-w-fit no-print">
+          <div className="sticky top-0 z-40 flex gap-2 bg-white/90 backdrop-blur-md p-1 rounded-xl shadow-sm border border-gray-100 max-w-fit no-print">
             <button
               onClick={() => setActiveTab('pos')}
               className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === 'pos' ? 'bg-[#3B82F6] text-white' : 'text-gray-500 hover:bg-gray-50'}`}
@@ -611,7 +637,7 @@ export default function PenjualanPage() {
                   </div>
 
                   {/* Cart Table */}
-                  <div className="flex-1 overflow-y-auto pr-1 mb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+                  <div className="flex-1 overflow-y-auto pr-1 mb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent max-h-[400px]">
                     {saleItems.length === 0 ? (
                       <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-3 opacity-50">
                         <ShoppingCart size={48} strokeWidth={1} />
@@ -837,8 +863,8 @@ export default function PenjualanPage() {
                       </div>
                     )}
                     {parseFloat(payment) < customTotal && parseFloat(payment) > 0 && (
-                      <div className="flex items-center justify-between bg-red-50 text-red-600 px-3 py-2 rounded-md border border-red-100 mt-1.5">
-                        <span className="font-bold text-xs">KURANG BAYAR</span>
+                      <div className="flex items-center justify-between bg-amber-50 text-amber-700 px-3 py-2 rounded-md border border-amber-200 mt-1.5 shadow-inner">
+                        <span className="font-bold text-xs uppercase tracking-wider">SISA (DP)</span>
                         <span className="font-black text-sm">Rp {(customTotal - parseFloat(payment)).toLocaleString('id-ID')}</span>
                       </div>
                     )}
@@ -856,10 +882,11 @@ export default function PenjualanPage() {
 
                     <button
                       onClick={handleSubmit}
-                      disabled={saleItems.length === 0 || isSubmitting || parseFloat(payment) < customTotal}
-                      className="col-span-3 h-10 mt-1 bg-green-600 text-white rounded-lg font-black text-[13px] tracking-widest shadow-md shadow-green-600/20 disabled:bg-gray-300 disabled:shadow-none transition-all active:scale-[0.98] hover:bg-green-700 uppercase"
+                      disabled={saleItems.length === 0 || isSubmitting || payment === ''}
+                      className={`col-span-3 h-10 mt-1 text-white rounded-lg font-black text-[13px] tracking-widest shadow-md transition-all active:scale-[0.98] uppercase disabled:bg-gray-300 disabled:shadow-none 
+                        ${parseFloat(payment) < customTotal ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20' : 'bg-green-600 hover:bg-green-700 shadow-green-600/20'}`}
                     >
-                      {isSubmitting ? 'Memproses...' : 'Submit (F10)'}
+                      {isSubmitting ? 'Memproses...' : (parseFloat(payment) < customTotal ? 'BAYAR DP (F10)' : 'Submit (F10)')}
                     </button>
                   </div>
                 </div>
@@ -954,9 +981,23 @@ export default function PenjualanPage() {
                               <td className="px-3 py-2 font-bold text-gray-800 text-xs">{sale.invoice}</td>
                               <td className="px-3 py-2 text-gray-600 text-xs">{new Date(sale.tanggal).toLocaleString('id-ID')}</td>
                               <td className="px-3 py-2"><span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase">{sale.channel}</span></td>
-                              <td className="px-3 py-2 text-right font-bold text-gray-800 text-xs">Rp {Number(sale.total_penjualan).toLocaleString('id-ID')}</td>
+                              <td className="px-3 py-2 text-right font-bold text-gray-800 text-xs">
+                                Rp {Number(sale.total_penjualan).toLocaleString('id-ID')}
+                                {sale.status_bayar === 'dp' && (
+                                  <div className="text-[10px] text-amber-600 mt-0.5 whitespace-nowrap">Sisa: Rp {Number(sale.sisa_bayar).toLocaleString('id-ID')}</div>
+                                )}
+                              </td>
                               <td className="px-3 py-2 text-center">
                                 <div className="flex items-center justify-center gap-1">
+                                  {sale.status_bayar === 'dp' ? (
+                                    <button onClick={() => setPelunasanTarget(sale)} className="p-1 px-2 text-amber-600 bg-amber-50 hover:bg-amber-100 font-bold rounded-md transition-colors text-[10px] mr-1" title="Lunasi Sisa Pembayaran">
+                                      LUNASI
+                                    </button>
+                                  ) : (
+                                    <span className="p-1 px-2 text-green-600 bg-green-50 font-bold rounded-md text-[10px] mr-1 pointer-events-none">
+                                      LUNAS
+                                    </span>
+                                  )}
                                   <button onClick={() => { setLastSale(sale); setTimeout(() => window.print(), 100); }} className="p-1.5 text-gray-400 hover:text-[#3B82F6] hover:bg-blue-50 rounded-md transition-colors" title="Cetak Faktur">
                                     <Printer size={15} />
                                   </button>
@@ -1082,6 +1123,47 @@ export default function PenjualanPage() {
         </div>
       )}
 
+      {/* ====== PELUNASAN DP MODAL ====== */}
+      {pelunasanTarget && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm overflow-hidden animate-in">
+            <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-4 text-center">
+              <h3 className="text-white font-bold text-sm">Pelunasan Tagihan (DP)</h3>
+            </div>
+            <div className="p-5">
+              <div className="bg-gray-50 rounded-xl p-3 space-y-2 mb-4 text-xs">
+                <div className="flex justify-between"><span className="text-gray-500">Invoice</span><span className="font-bold text-gray-800">{pelunasanTarget.invoice}</span></div>
+                <div className="flex justify-between"><span className="text-gray-500">Total Tagihan</span><span className="font-bold text-gray-800">Rp {Number(pelunasanTarget.total_penjualan).toLocaleString('id-ID')}</span></div>
+                <div className="flex justify-between"><span className="text-gray-500">Sudah Dibayar</span><span className="font-bold text-gray-800">Rp {Number(pelunasanTarget.pembayaran).toLocaleString('id-ID')}</span></div>
+                <div className="border-t border-gray-200 pt-2 flex justify-between"><span className="text-gray-500 font-bold">Sisa Tagihan</span><span className="font-black text-amber-600 text-sm">Rp {Number(pelunasanTarget.sisa_bayar).toLocaleString('id-ID')}</span></div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Nominal Pembayaran</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-sm">Rp</span>
+                  <input
+                    type="number"
+                    value={pelunasanInput}
+                    onChange={(e) => setPelunasanInput(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-500 font-bold"
+                    placeholder="0"
+                  />
+                </div>
+                <div className="flex gap-2 mt-2">
+                   <button onClick={() => setPelunasanInput(pelunasanTarget.sisa_bayar?.toString() || '0')} className="flex-1 py-1.5 bg-amber-50 text-amber-600 font-bold text-[10px] rounded uppercase hover:bg-amber-100 transition-colors">Lunasi Semua (Uang Pas)</button>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => { setPelunasanTarget(null); setPelunasanInput(''); }} disabled={isPelunasanSubmitting} className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-200 transition-colors disabled:opacity-50">Batal</button>
+                <button onClick={handlePelunasanSubmit} disabled={isPelunasanSubmitting} className="flex-1 px-3 py-2 bg-amber-500 text-white rounded-lg text-xs font-bold hover:bg-amber-600 transition-colors disabled:opacity-50">
+                  {isPelunasanSubmitting ? 'Memproses...' : 'Proses Bayar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* FAKTUR TEMPLATE - Continuous Form 21cm x 14.5cm */}
       <div id="print-area" className="faktur-print bg-white text-black font-sans" style={{ width: '100%', margin: '0' }}>
         {lastSale && (
@@ -1094,7 +1176,7 @@ export default function PenjualanPage() {
                     <div className="flex items-start gap-3">
                       {settings.store_logo && (
                         <img
-                          src={`http://${window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname}:8000/storage/${settings.store_logo}?t=${Date.now()}`}
+                          src={`http://${window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname}:8000/storage/${settings.store_logo}`}
                           alt="Logo"
                           style={{ height: '52px', width: '52px', objectFit: 'contain' }}
                         />
@@ -1196,15 +1278,18 @@ export default function PenjualanPage() {
               </div>
 
               <div style={{ width: '45%', fontSize: '14px' }}>
-                <table className="w-full border-collapse" style={{ lineHeight: '1.25' }}>
+                <table className="w-full border-collapse" style={{ lineHeight: '1' }}>
                   <tbody>
-                    <tr><td style={{ padding: '1px 0', textAlign: 'left' }}>Subtotal :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td></tr>
-                    <tr><td style={{ padding: '1px 0', textAlign: 'left' }}>Pajak ({lastSale?.tax_percent || 0}%) :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.tax_amount || 0).toLocaleString('id-ID')}</td></tr>
+                    <tr><td style={{ padding: '0', textAlign: 'left' }}>Subtotal :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td></tr>
+                    <tr><td style={{ padding: '0', textAlign: 'left' }}>Pajak ({lastSale?.tax_percent || 0}%) :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.tax_amount || 0).toLocaleString('id-ID')}</td></tr>
                     <tr style={{ borderTop: '1.5px solid black' }}>
-                      <td style={{ padding: '2px 0', textAlign: 'left', fontSize: '15px' }}>Total :</td>
-                      <td style={{ textAlign: 'right', fontSize: '15px', fontWeight: 'bold' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td>
+                      <td style={{ padding: '1px 0 0 0', textAlign: 'left', fontSize: '15px' }}>Total :</td>
+                      <td style={{ padding: '1px 0 0 0', textAlign: 'right', fontSize: '15px', fontWeight: 'bold' }}>{Number(lastSale?.total_penjualan || 0).toLocaleString('id-ID')}</td>
                     </tr>
-                    <tr><td style={{ padding: '1px 0', textAlign: 'left' }}>Tunai :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.pembayaran || 0).toLocaleString('id-ID')}</td></tr>
+                    <tr><td style={{ padding: '0', textAlign: 'left' }}>Tunai :</td><td style={{ textAlign: 'right' }}>{Number(lastSale?.pembayaran || 0).toLocaleString('id-ID')}</td></tr>
+                    {lastSale?.status_bayar === 'dp' && (
+                      <tr><td style={{ padding: '1px 0 0 0', textAlign: 'left', fontWeight: 'bold' }}>Sisa (DP) :</td><td style={{ padding: '1px 0 0 0', textAlign: 'right', fontWeight: 'bold', borderTop: '1px solid black' }}>{Number(lastSale?.sisa_bayar || 0).toLocaleString('id-ID')}</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>

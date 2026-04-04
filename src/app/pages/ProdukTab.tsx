@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Upload } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Upload, Tags, Package, Banknote, Box, Percent } from 'lucide-react';
 import { toast } from 'sonner';
+import Select from 'react-select';
 import api from '../api';
 
 interface Category {
@@ -482,95 +483,147 @@ export default function ProdukTab() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-center justify-center p-3 z-50">
           <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="p-4 border-b border-gray-100 shrink-0">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {modalMode === 'add' ? 'Tambah Produk' : 'Edit Produk'}
-              </h3>
+            <div className="p-4 border-b border-gray-100 shrink-0 bg-gray-50/50">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${modalMode === 'add' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'}`}>
+                  {modalMode === 'add' ? <Plus size={20} /> : <Edit size={20} />}
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-800">
+                    {modalMode === 'add' ? 'Tambah Produk Baru' : 'Edit Detail Produk'}
+                  </h3>
+                  <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wider">
+                    {modalMode === 'add' ? 'Input stok & harga barang' : 'Perbarui informasi produk'}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="p-4 overflow-y-auto flex-1">
-              <form id="productForm" onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="col-span-full">
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
-                      Nama Produk
-                    </label>
+            <div className="p-5 overflow-y-auto flex-1 bg-white">
+              <form id="productForm" onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
+                <div className="col-span-full">
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                    Nama Produk
+                  </label>
+                  <div className="relative">
+                    <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                     <input
                       type="text"
                       required
+                      placeholder="Cth: HDD External 1TB..."
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-xs font-medium bg-gray-50/50"
                     />
                   </div>
+                </div>
 
-                  <div className="col-span-full">
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
-                      Kategori
-                    </label>
-                    <select
+                <div className="col-span-full">
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                    Kategori Produk
+                  </label>
+                  <div className="relative">
+                    <Tags className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10" size={14} />
+                    <Select
                       required
-                      value={formData.category_id}
-                      onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none bg-white"
-                    >
-                      <option value="" disabled>Pilih Kategori</option>
-                      {categoriesList.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
+                      placeholder="Pilih Kategori..."
+                      value={categoriesList.find(c => c.id.toString() === formData.category_id) ? { 
+                        value: formData.category_id, 
+                        label: categoriesList.find(c => c.id.toString() === formData.category_id)?.name 
+                      } : null}
+                      onChange={(option: any) => setFormData({ ...formData, category_id: option?.value || '' })}
+                      options={categoriesList.map(cat => ({ value: cat.id.toString(), label: cat.name }))}
+                      menuPlacement="auto"
+                      styles={{
+                        control: (base) => ({ 
+                          ...base, 
+                          minHeight: '38px', 
+                          borderRadius: '8px', 
+                          borderColor: '#E5E7EB', 
+                          fontSize: '12px',
+                          backgroundColor: '#F9FAFB',
+                          paddingLeft: '28px'
+                        }),
+                        option: (base, state) => ({
+                          ...base,
+                          fontSize: '11px',
+                          fontWeight: state.isSelected ? 'bold' : 'normal',
+                          padding: '8px 12px'
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          color: '#1F2937'
+                        }),
+                        placeholder: (base) => ({
+                          ...base,
+                          fontSize: '12px',
+                          color: '#9CA3AF'
+                        })
+                      }}
+                    />
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
-                      Harga Beli (HPP)
-                    </label>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                    Harga Beli (HPP)
+                  </label>
+                  <div className="relative">
+                    <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                     <input
                       type="number"
                       required
                       min="0"
+                      placeholder="Rp 0"
                       value={formData.harga_beli}
                       onChange={(e) => setFormData({ ...formData, harga_beli: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold text-gray-700 bg-gray-50/50"
                     />
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
-                      Harga Jual
-                    </label>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                    Harga Jual
+                  </label>
+                  <div className="relative">
+                    <Percent className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                     <input
                       type="number"
                       required
                       min="0"
+                      placeholder="Rp 0"
                       value={formData.harga_jual}
                       onChange={(e) => setFormData({ ...formData, harga_jual: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none text-xs font-black text-blue-600 bg-blue-50/30"
                     />
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
-                      Stok Saat Ini
-                    </label>
+                <div className="md:col-span-1">
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                    Stok Saat Ini
+                  </label>
+                  <div className="relative">
+                    <Box className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                     <input
                       type="number"
                       required
                       min="0"
                       value={formData.stok_saat_ini}
                       onChange={(e) => setFormData({ ...formData, stok_saat_ini: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none disabled:bg-gray-100"
+                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold bg-gray-50/50"
                     />
                   </div>
                 </div>
               </form>
             </div>
-            <div className="p-4 border-t border-gray-100 shrink-0 flex justify-end gap-3 bg-gray-50">
+            <div className="p-4 border-t border-gray-100 shrink-0 flex justify-end gap-3 bg-gray-50/80 backdrop-blur-sm">
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="px-3 py-2 text-gray-600 hover:bg-gray-200 bg-gray-100 rounded-lg transition-colors font-medium border border-gray-200"
+                className="px-4 py-2 text-gray-500 hover:bg-gray-200 bg-white rounded-lg transition-all font-bold text-xs uppercase tracking-widest border border-gray-200"
               >
                 Batal
               </button>
@@ -578,9 +631,14 @@ export default function ProdukTab() {
                 type="submit"
                 form="productForm"
                 disabled={isSubmitting}
-                className="px-3 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] transition-colors disabled:opacity-50 font-medium shadow-sm"
+                className="px-6 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 font-bold text-xs uppercase tracking-widest flex items-center gap-2"
               >
-                {isSubmitting ? 'Menyimpan...' : 'Simpan Produk'}
+                {isSubmitting ? 'Memproses...' : (
+                  <>
+                    <Plus size={16} />
+                    {modalMode === 'add' ? 'Simpan Produk' : 'Simpan Perubahan'}
+                  </>
+                )}
               </button>
             </div>
           </div>

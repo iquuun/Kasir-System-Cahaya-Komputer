@@ -13,7 +13,7 @@ export default function PembelianPage() {
     return (
         <div className="space-y-6">
             {/* Tab Navigation */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-2 inline-flex gap-2">
+            <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md rounded-lg shadow-sm border border-gray-100 p-2 inline-flex gap-2">
                 <button
                     onClick={() => setActiveTab('pembelian')}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-xs transition-colors ${activeTab === 'pembelian'

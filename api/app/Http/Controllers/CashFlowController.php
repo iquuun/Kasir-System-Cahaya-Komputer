@@ -16,21 +16,34 @@ class CashFlowController extends Controller
         }
 
         if ($request->has('bulan') && $request->bulan) {
-            $query->whereRaw('DATE_FORMAT(tanggal, "%Y-%m") = ?', [$request->bulan]);
+            // Use strftime for SQLite compatibility
+            $query->whereRaw("strftime('%Y-%m', tanggal) = ?", [$request->bulan]);
         }
 
         $cashFlows = $query->get();
 
-        $summary = DB::table('cash_flows')->selectRaw('
-            SUM(CASE WHEN tipe = "masuk" THEN nominal ELSE 0 END) as total_masuk,
-            SUM(CASE WHEN tipe = "keluar" THEN nominal ELSE 0 END) as total_keluar
-        ')->first();
+        // Summary FILTERED by the same bulan filter
+        $summaryQuery = DB::table('cash_flows');
+        if ($request->has('bulan') && $request->bulan) {
+            $summaryQuery->whereRaw("strftime('%Y-%m', tanggal) = ?", [$request->bulan]);
+        }
+
+        $summary = $summaryQuery->selectRaw("
+            SUM(CASE WHEN tipe = 'masuk' THEN nominal ELSE 0 END) as total_masuk,
+            SUM(CASE WHEN tipe = 'keluar' THEN nominal ELSE 0 END) as total_keluar,
+            SUM(CASE WHEN tipe = 'keluar' AND sumber = 'biaya_operasional' THEN nominal ELSE 0 END) as biaya_operasional
+        ")->first();
+
+        $totalMasuk = (float) ($summary->total_masuk ?? 0);
+        $totalKeluar = (float) ($summary->total_keluar ?? 0);
+        $biayaOperasional = (float) ($summary->biaya_operasional ?? 0);
 
         return response()->json([
             'data' => $cashFlows,
-            'total_masuk' => $summary->total_masuk ?? 0,
-            'total_keluar' => $summary->total_keluar ?? 0,
-            'saldo' => ($summary->total_masuk ?? 0) - ($summary->total_keluar ?? 0),
+            'total_masuk' => $totalMasuk,
+            'total_keluar' => $totalKeluar,
+            'biaya_operasional' => $biayaOperasional,
+            'saldo' => $totalMasuk - $totalKeluar,
         ]);
     }
 

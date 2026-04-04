@@ -17,6 +17,8 @@ class Sale extends Model
         'tax_amount',
         'pembayaran',
         'kembalian',
+        'status_bayar',
+        'sisa_bayar',
         'user_id',
         'nama_barang_manual',
         'username_pembeli',

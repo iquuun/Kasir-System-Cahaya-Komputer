@@ -14,7 +14,7 @@ export default function ProdukPage() {
     return (
         <div className="space-y-6">
             {/* Tabs Navigation */}
-            <div className="flex gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-100 max-w-fit">
+            <div className="sticky top-0 z-40 flex gap-2 bg-white/90 backdrop-blur-md p-1 rounded-xl shadow-sm border border-gray-100 max-w-fit">
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}

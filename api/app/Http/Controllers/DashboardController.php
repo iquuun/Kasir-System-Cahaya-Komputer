@@ -104,7 +104,9 @@ class DashboardController extends Controller
             'recent_transactions' => $transaksiTerbaru,
             'low_stock' => [],
             'range' => $range,
-            'subtitle' => $range === 'weekly' ? 'Minggu ini' : 'Bulan ini'
+            'subtitle' => $range === 'weekly'
+                ? $start->translatedFormat('j M') . ' — ' . $end->translatedFormat('j M Y')
+                : 'Bulan ' . $now->translatedFormat('F Y')
         ]);
     }
 }

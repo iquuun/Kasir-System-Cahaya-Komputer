@@ -25,6 +25,7 @@ Route::get('/ping', [SystemController::class, 'ping']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [DashboardController::class , 'index']);
     Route::get('/laporan-laba', [LaporanLabaController::class , 'index']);
+    Route::post('/laporan-laba/piutang', [LaporanLabaController::class , 'updatePiutang']);
     Route::get('/nilai-aset', [NilaiAsetController::class , 'index']);
     Route::get('/settings/backup', [SettingController::class, 'backupDatabase']);
     Route::post('/settings/restore', [SettingController::class, 'restoreDatabase']);
@@ -44,8 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('distributors', DistributorController::class);
     Route::apiResource('purchases', PurchaseController::class);
 
-    // Penjualan / POS
     Route::apiResource('sales', SaleController::class);
+    Route::post('sales/{sale}/pelunasan', [SaleController::class, 'pelunasan']);
 
     // Cash Flow
     Route::get('cash-flows', [CashFlowController::class , 'index']);
