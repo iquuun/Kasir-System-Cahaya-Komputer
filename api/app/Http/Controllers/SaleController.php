@@ -35,6 +35,9 @@ class SaleController extends Controller
             'tax_percent' => 'nullable|numeric|min:0',
             'invoice' => 'nullable|string|unique:sales,invoice',
             'tanggal' => 'nullable|date',
+            'username_pembeli' => 'nullable|string|max:255',
+            'alamat_pembeli' => 'nullable|string|max:255',
+            'telepon_pembeli' => 'nullable|string|max:255',
         ]);
 
         DB::beginTransaction();
@@ -111,6 +114,9 @@ class SaleController extends Controller
                 'laba_kotor' => $totalPenjualan - $totalHpp - $taxAmount,
                 'tax_percent' => $taxPercent,
                 'tax_amount' => $taxAmount,
+                'username_pembeli' => $validated['username_pembeli'] ?? null,
+                'alamat_pembeli' => $validated['alamat_pembeli'] ?? null,
+                'telepon_pembeli' => $validated['telepon_pembeli'] ?? null,
                 'pembayaran' => $pembayaran,
                 'kembalian' => $kembalian,
                 'status_bayar' => $statusBayar,
@@ -162,11 +168,13 @@ class SaleController extends Controller
     {
         $validated = $request->validate([
             'nama_barang_manual' => 'nullable|string|max:255',
-            'username_pembeli' => 'nullable|string|max:255',
             'harga_modal_manual' => 'nullable|numeric|min:0',
             'masuk_dp' => 'nullable|numeric|min:0',
             'keluar_tf' => 'nullable|numeric|min:0',
             'status_pencairan' => 'nullable|string|in:belum,lunas',
+            'username_pembeli' => 'nullable|string|max:255',
+            'alamat_pembeli' => 'nullable|string|max:255',
+            'telepon_pembeli' => 'nullable|string|max:255',
         ]);
 
         $sale->update($validated);

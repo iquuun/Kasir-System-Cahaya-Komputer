@@ -22,6 +22,8 @@ class Sale extends Model
         'user_id',
         'nama_barang_manual',
         'username_pembeli',
+        'alamat_pembeli',
+        'telepon_pembeli',
         'harga_modal_manual',
         'masuk_dp',
         'keluar_tf',

@@ -45,6 +45,9 @@ interface Sale {
   user?: { name: string };
   tax_percent: number;
   tax_amount: number;
+  username_pembeli?: string;
+  alamat_pembeli?: string;
+  telepon_pembeli?: string;
 }
 
 export default function PenjualanPage() {
@@ -455,6 +458,9 @@ export default function PenjualanPage() {
         kembalian: parseFloat(payment) - customTotal,
         invoice: isManual ? manualInvoice : null,
         tanggal: isManual ? manualDate : null,
+        username_pembeli: customerName || 'UMUM',
+        alamat_pembeli: customerAddress || '-',
+        telepon_pembeli: customerPhone || '-',
         items: saleItems.map((item, idx) => {
           let parent_idx = null;
           if (item.is_sub) {
@@ -479,12 +485,7 @@ export default function PenjualanPage() {
       };
 
       const res = await api.post('/sales', payload);
-      setLastSale({
-        ...res.data,
-        customer_name: customerName || 'UMUM',
-        customer_address: customerAddress || '-',
-        customer_phone: customerPhone || '-'
-      });
+      setLastSale(res.data);
       setShouldPrint(true);
       setSaleItems([]);
       setPayment('0');
@@ -1077,10 +1078,20 @@ export default function PenjualanPage() {
             {/* Content */}
             <div className="p-5">
               <div className="bg-gray-50 rounded-xl p-3 space-y-2 mb-4">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500 font-medium">Invoice</span>
-                  <span className="font-bold text-gray-800">{voidTarget.invoice}</span>
-                </div>
+                  <div className="flex flex-col">
+                    <div className="flex gap-2">
+                       <span className="w-20 text-gray-500">Kepada Yth.</span>
+                       <span className="font-bold">: {voidTarget.username_pembeli || 'UMUM'}</span>
+                    </div>
+                    <div className="flex gap-2">
+                       <span className="w-20 text-gray-500">Alamat</span>
+                       <span>: {voidTarget.alamat_pembeli || '-'}</span>
+                    </div>
+                    <div className="flex gap-2">
+                       <span className="w-20 text-gray-500">No. HP</span>
+                       <span>: {voidTarget.telepon_pembeli || '-'}</span>
+                    </div>
+                  </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-500 font-medium">Tanggal</span>
                   <span className="text-gray-700">{new Date(voidTarget.tanggal).toLocaleString('id-ID')}</span>
@@ -1203,12 +1214,12 @@ export default function PenjualanPage() {
                     <div>
                       <div style={{ marginBottom: '2px' }}>
                         <div>Kepada Yth. :</div>
-                        <div style={{ fontSize: '15px', textTransform: 'uppercase', fontWeight: 'bold', marginTop: '1px' }}>{(lastSale as any).customer_name || 'UMUM'}</div>
+                        <div style={{ fontSize: '15px', textTransform: 'uppercase', fontWeight: 'bold', marginTop: '1px' }}>{lastSale.username_pembeli || 'UMUM'}</div>
                       </div>
                       <table className="border-collapse" style={{ fontSize: '13px', marginTop: '1px' }}>
                         <tbody>
-                          <tr><td style={{ width: '68px' }}>Alamat</td><td style={{ width: '10px' }}>:</td><td>{(lastSale as any).customer_address || '-'}</td></tr>
-                          <tr><td>No. HP</td><td>:</td><td>{(lastSale as any).customer_phone || '-'}</td></tr>
+                          <tr><td style={{ width: '68px' }}>Alamat</td><td style={{ width: '10px' }}>:</td><td>{lastSale.alamat_pembeli || '-'}</td></tr>
+                          <tr><td>No. HP</td><td>:</td><td>{lastSale.telepon_pembeli || '-'}</td></tr>
                         </tbody>
                       </table>
                     </div>
