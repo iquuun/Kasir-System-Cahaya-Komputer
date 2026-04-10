@@ -10,6 +10,11 @@ interface Distributor {
   name: string;
 }
 
+interface Category {
+  id: number;
+  name: string;
+}
+
 interface Product {
   id: number;
   name: string;
@@ -40,6 +45,7 @@ export default function PembelianTab() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [distributors, setDistributors] = useState<Distributor[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -61,6 +67,15 @@ export default function PembelianTab() {
   
   const [isEditMode, setIsEditMode] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
+
+  // Quick Product Modal
+  const [isQuickProductModalOpen, setIsQuickProductModalOpen] = useState(false);
+  const [currentRowIdx, setCurrentRowIdx] = useState<number | null>(null);
+  const [quickProductFormData, setQuickProductFormData] = useState({
+    name: '',
+    category_id: '',
+    harga_jual: ''
+  });
 
   interface FormDataState {
     invoice: string;
@@ -101,14 +116,16 @@ export default function PembelianTab() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [purchasesRes, distributorsRes, productsRes] = await Promise.all([
+      const [purchasesRes, distributorsRes, productsRes, categoriesRes] = await Promise.all([
         api.get('/purchases'),
         api.get('/distributors'),
-        api.get('/products')
+        api.get('/products'),
+        api.get('/categories')
       ]);
       setPurchases(purchasesRes.data);
       setDistributors(distributorsRes.data);
       setProducts(productsRes.data);
+      setCategories(categoriesRes.data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Gagal memuat data');
     } finally {
@@ -117,16 +134,18 @@ export default function PembelianTab() {
   };
 
   const filteredPurchases = useMemo(() => {
-    return purchases.filter((p) => {
-      const matchesFilter = filter === 'all' || p.status_pembayaran === filter;
-      const matchesMonth = filterMonth === '' || p.tanggal.startsWith(filterMonth);
-      const searchLower = searchQuery.toLowerCase();
-      const matchesSearch = 
-        p.invoice?.toLowerCase().includes(searchLower) ||
-        p.distributor?.name.toLowerCase().includes(searchLower);
-      
-      return matchesFilter && matchesMonth && matchesSearch;
-    });
+    return purchases
+      .filter((p) => {
+        const matchesFilter = filter === 'all' || p.status_pembayaran === filter;
+        const matchesMonth = filterMonth === '' || p.tanggal.startsWith(filterMonth);
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch = 
+          p.invoice?.toLowerCase().includes(searchLower) ||
+          p.distributor?.name.toLowerCase().includes(searchLower);
+        
+        return matchesFilter && matchesMonth && matchesSearch;
+      })
+      .sort((a, b) => b.id - a.id);
   }, [purchases, filter, filterMonth, searchQuery]);
 
   const totalPages = Math.ceil(filteredPurchases.length / itemsPerPage) || 1;
@@ -253,6 +272,58 @@ export default function PembelianTab() {
       } catch (err: any) {
         toast.error(err.response?.data?.message || 'Gagal menghapus pembelian');
       }
+    }
+  };
+
+  const handleOpenQuickProductModal = (idx: number) => {
+    setCurrentRowIdx(idx);
+    setQuickProductFormData({
+      name: '',
+      category_id: categories.length > 0 ? categories[0].id.toString() : '',
+      harga_jual: ''
+    });
+    setIsQuickProductModalOpen(true);
+  };
+
+  const handleQuickProductSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickProductFormData.name || !quickProductFormData.category_id || currentRowIdx === null) return;
+
+    try {
+      setIsSubmitting(true);
+      const purchasePrice = parseFloat(formData.items[currentRowIdx].harga_beli || '0');
+      
+      const payload = {
+        name: quickProductFormData.name,
+        category_id: parseInt(quickProductFormData.category_id),
+        harga_beli: purchasePrice,
+        harga_jual: parseFloat(quickProductFormData.harga_jual || '0'),
+        stok_saat_ini: 0 // New product starts with 0 stock, will be increased by purchase
+      };
+
+      const res = await api.post('/products', payload);
+      const newProduct = res.data.data || res.data; // Backend might return { data: {id, ...} } or {id, ...}
+      
+      toast.success(`Produk ${quickProductFormData.name} berhasil ditambahkan!`);
+      
+      // Refresh products list
+      const productsRes = await api.get('/products');
+      setProducts(productsRes.data);
+
+      // Auto-select for the current row
+      const newItems = [...formData.items];
+      newItems[currentRowIdx] = {
+        ...newItems[currentRowIdx],
+        product_id: newProduct.id.toString(),
+        harga_beli: purchasePrice.toString()
+      };
+      setFormData(prev => ({ ...prev, items: newItems }));
+
+      setIsQuickProductModalOpen(false);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Gagal menyimpan produk');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -601,7 +672,7 @@ export default function PembelianTab() {
       {/* Add Purchase Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-center justify-center p-3 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
             <div className="p-4 border-b border-gray-100 shrink-0">
               <h3 className="text-lg font-semibold text-gray-800">
                 {isEditMode ? 'Edit Pembelian' : 'Tambah Pembelian'}
@@ -665,40 +736,53 @@ export default function PembelianTab() {
                   {formData.items.length === 0 ? (
                     <p className="text-xs text-gray-500 text-center py-2">Tidak ada barang spesifik dicatat (Hanya mencatat total).</p>
                   ) : (
-                    <div className="space-y-2 max-h-[300px] min-h-[120px] overflow-y-auto pr-1">
+                    <div className="space-y-2 max-h-[400px] min-h-[120px] overflow-y-auto pr-1">
                       {formData.items.map((item, idx) => (
                         <div key={idx} className="flex gap-2 items-start bg-white p-2 border border-gray-200 rounded">
+                           <div className="pt-5 px-1 text-center">
+                            <span className="text-xs font-bold text-gray-400">{idx + 1}.</span>
+                          </div>
                           <div className="flex-1">
                             <label className="block text-[11px] text-gray-500 mb-1">Produk</label>
-                            <Select
-                              className="text-xs"
-                              options={products.map(p => ({ value: p.id.toString(), label: p.name }))}
-                              value={
-                                item.product_id
-                                  ? {
-                                    value: item.product_id.toString(),
-                                    label: products.find(p => p.id.toString() === item.product_id.toString())?.name || ''
-                                  }
-                                  : null
-                              }
-                              onChange={(selectedOption) => {
-                                if (selectedOption) {
-                                  handleItemChange(idx, 'product_id', selectedOption.value);
+                            <div className="flex gap-1 items-start">
+                              <Select
+                                className="text-xs flex-1"
+                                options={products.map(p => ({ value: p.id.toString(), label: p.name }))}
+                                value={
+                                  item.product_id
+                                    ? {
+                                      value: item.product_id.toString(),
+                                      label: products.find(p => p.id.toString() === item.product_id.toString())?.name || ''
+                                    }
+                                    : null
                                 }
-                              }}
-                              placeholder="Cari..."
-                              isSearchable
-                              menuPortalTarget={document.body}
-                              styles={{
-                                control: (base) => ({ ...base, minHeight: '30px', height: '30px' }),
-                                valueContainer: (base) => ({ ...base, padding: '0 8px' }),
-                                input: (base) => ({ ...base, margin: 0, padding: 0 }),
-                                option: (base) => ({ ...base, fontSize: '11px', padding: '6px 8px' }),
-                                singleValue: (base) => ({ ...base, fontSize: '11px' }),
-                                indicatorsContainer: (base) => ({ ...base, height: '30px' }),
-                                menuPortal: (base) => ({ ...base, zIndex: 9999 })
-                              }}
-                            />
+                                onChange={(selectedOption) => {
+                                  if (selectedOption) {
+                                    handleItemChange(idx, 'product_id', selectedOption.value);
+                                  }
+                                }}
+                                placeholder="Cari..."
+                                isSearchable
+                                menuPortalTarget={document.body}
+                                styles={{
+                                  control: (base) => ({ ...base, minHeight: '30px', height: '30px' }),
+                                  valueContainer: (base) => ({ ...base, padding: '0 8px' }),
+                                  input: (base) => ({ ...base, margin: 0, padding: 0 }),
+                                  option: (base) => ({ ...base, fontSize: '11px', padding: '6px 8px' }),
+                                  singleValue: (base) => ({ ...base, fontSize: '11px' }),
+                                  indicatorsContainer: (base) => ({ ...base, height: '30px' }),
+                                  menuPortal: (base) => ({ ...base, zIndex: 9999 })
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleOpenQuickProductModal(idx)}
+                                title="Tambah Produk Baru"
+                                className="h-[30px] w-8 flex items-center justify-center bg-blue-50 text-blue-600 border border-blue-100 rounded hover:bg-blue-100 transition-colors shrink-0"
+                              >
+                                <Plus size={16} />
+                              </button>
+                            </div>
                           </div>
                           <div className="w-20">
                             <label className="block text-[11px] text-gray-500 mb-1">Qty</label>
@@ -932,6 +1016,86 @@ export default function PembelianTab() {
                 Tutup
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Quick Add Product Modal */}
+      {isQuickProductModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-center justify-center p-3 z-[60]">
+          <div className="bg-white rounded-2xl shadow-2xl modal-content w-full max-w-md overflow-hidden flex flex-col">
+            <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-sm font-bold text-gray-800">Tambah Produk Cepat</h3>
+              <button 
+                onClick={() => setIsQuickProductModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={handleQuickProductSubmit} className="p-4 space-y-4">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  Nama Produk
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Cth: HDD External 1TB..."
+                  value={quickProductFormData.name}
+                  onChange={(e) => setQuickProductFormData({ ...quickProductFormData, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-gray-50"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  Kategori
+                </label>
+                <select
+                  required
+                  value={quickProductFormData.category_id}
+                  onChange={(e) => setQuickProductFormData({ ...quickProductFormData, category_id: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-gray-50"
+                >
+                  <option value="" disabled>Pilih Kategori</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  Harga Jual
+                </label>
+                <input
+                  type="number"
+                  required
+                  min="0"
+                  placeholder="Rp 0"
+                  value={quickProductFormData.harga_jual}
+                  onChange={(e) => setQuickProductFormData({ ...quickProductFormData, harga_jual: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-bold text-blue-600 bg-blue-50/30"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-50">
+                <button
+                  type="button"
+                  onClick={() => setIsQuickProductModalOpen(false)}
+                  className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg text-xs font-bold uppercase tracking-wider"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] disabled:opacity-50 text-xs font-bold uppercase tracking-wider flex items-center gap-2"
+                >
+                  {isSubmitting ? 'Memproses...' : 'Simpan Produk'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

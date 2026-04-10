@@ -99,11 +99,31 @@ export default function PenjualanPage() {
 
   useEffect(() => {
     if (lastSale && shouldPrint) {
-      setTimeout(() => {
-        window.print();
-        setShouldPrint(false);
-        toast.success('Transaksi Berhasil!');
-      }, 1000);
+      const handlePrint = () => {
+        const logoImg = document.querySelector('.faktur-print img') as HTMLImageElement;
+        
+        let isExecuted = false;
+        const executePrint = () => {
+          if (isExecuted) return;
+          isExecuted = true;
+          setTimeout(() => {
+            window.print();
+            setShouldPrint(false);
+            toast.success('Transaksi Berhasil!');
+          }, 500);
+        };
+
+        if (logoImg && !logoImg.complete) {
+          logoImg.onload = executePrint;
+          logoImg.onerror = executePrint; // fallback
+          // Safety timeout in case load takes too long
+          setTimeout(executePrint, 3000);
+        } else {
+          executePrint();
+        }
+      };
+      
+      handlePrint();
     }
   }, [lastSale, shouldPrint]);
   // History filters & pagination
@@ -320,6 +340,35 @@ export default function PenjualanPage() {
         i === idx ? { ...item, satuan: newSatuan } : item
       )
     );
+  };
+
+  const paketkanSemua = () => {
+    if (saleItems.length < 2) {
+      toast.error('Minimal harus ada 2 barang untuk dipaketkan');
+      return;
+    }
+    
+    // Calculate total price of everything
+    const total = saleItems.reduce((sum, item) => sum + (item.harga_jual_saat_itu * item.qty), 0);
+    
+    const newItems = saleItems.map((item, idx) => {
+      if (idx === 0) {
+        return { 
+          ...item, 
+          is_sub: false, 
+          harga_jual_saat_itu: total,
+          qty: 1 // If it's a package, header is usually 1 set
+        };
+      }
+      return { 
+        ...item, 
+        is_sub: true, 
+        harga_jual_saat_itu: 0 
+      };
+    });
+    
+    setSaleItems(newItems);
+    toast.success('Seluruh barang berhasil dipaketkan ke baris pertama');
   };
 
   const toggleSubItem = (idx: number) => {
@@ -630,6 +679,14 @@ export default function PenjualanPage() {
                   <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-100 shrink-0">
                     <h3 className="text-sm font-bold text-gray-800 uppercase tracking-tight">REVIEW E-FAKTUR</h3>
                     <div className="flex items-center gap-2">
+                       <button 
+                        onClick={paketkanSemua} 
+                        title="Gabungkan semua barang ke paket di baris pertama"
+                        className="text-[10px] bg-indigo-600 hover:bg-indigo-700 text-white py-1.5 px-2.5 rounded-md font-bold shadow-sm transition-all flex items-center gap-1"
+                       >
+                        <ShoppingCart size={12} />
+                        PAKETKAN SEMUA
+                       </button>
                       <button onClick={addManualItem} className="text-[10px] bg-gray-100 border border-gray-200 hover:bg-gray-200 py-1.5 px-2.5 rounded-md font-bold text-gray-700">+ BARIS MANUAL</button>
                       <select value={channel} onChange={(e) => setChannel(e.target.value)} className="text-[10px] bg-gray-100 border-none rounded-md px-2 py-1.5 outline-none font-bold text-gray-700">
                         {channels.map(c => <option key={c} value={c}>{c}</option>)}
@@ -659,6 +716,7 @@ export default function PenjualanPage() {
                         <tbody className="divide-y divide-gray-50">
                           {saleItems.map((item, idx) => {
                             const subtotal = item.harga_jual_saat_itu * item.qty;
+                            const displayNum = item.is_sub ? '' : (saleItems.slice(0, idx).filter(it => !it.is_sub).length + 1) + '.';
                             return (
                               <tr 
                                 key={idx} 
@@ -673,8 +731,8 @@ export default function PenjualanPage() {
                                   ${isTargetBlock(idx) ? 'bg-blue-100/70 border-y-2 border-blue-400' : ''}
                                 `}
                               >
-                                <td className="py-2 px-1.5 text-center text-xs font-medium text-gray-400">
-                                  {idx + 1}.
+                                <td className="py-2 px-1.5 text-center text-xs font-bold text-gray-400">
+                                  {displayNum}
                                 </td>
                                 <td className="py-2 px-1.5">
                                   <div className="flex items-center gap-1.5">
@@ -1252,11 +1310,13 @@ export default function PenjualanPage() {
               </thead>
               <tbody>
                 {(() => {
+                  let printCounter = 1;
                   return [...lastSale.items].map((item, idx) => {
                     const isSubItem = !!item.parent_id;
+                    const rowNum = isSubItem ? '' : `${printCounter++}.`;
                     return (
                       <tr key={idx} style={{ lineHeight: '1.15' }}>
-                        <td style={{ padding: '1px 2px', textAlign: 'center' }}>{idx + 1}.</td>
+                        <td style={{ padding: '1px 2px', textAlign: 'center' }}>{rowNum}</td>
                         <td style={{ padding: '1px 2px', paddingLeft: isSubItem ? '16px' : '2px' }}>
                           {item.product?.name || item.manual_name || 'Unit'}
                         </td>
@@ -1306,7 +1366,7 @@ export default function PenjualanPage() {
               </div>
             </div>
             {/* Signature Section */}
-            <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+            <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
               <div style={{ textAlign: 'center', width: '160px' }}>
                 <p>Hormat Kami,</p>
                 <div style={{ marginTop: '40px', textDecoration: 'underline', textTransform: 'uppercase' }}>{settings.store_name || 'Cahaya Komputer'}</div>
