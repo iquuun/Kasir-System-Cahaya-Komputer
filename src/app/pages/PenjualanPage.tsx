@@ -1597,6 +1597,6 @@ export default function PenjualanPage() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
