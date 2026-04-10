@@ -89,6 +89,11 @@ export default function PenjualanPage() {
   const [manualInvoice, setManualInvoice] = useState('');
   const [manualDate, setManualDate] = useState('');
 
+  // Template Management
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = useState(false);
+  const [templateName, setTemplateName] = useState('');
+
   useEffect(() => {
     if (activeTab === 'pos') {
       localStorage.setItem('draftKasir', JSON.stringify({
@@ -195,6 +200,92 @@ export default function PenjualanPage() {
       setSettings(res.data);
     } catch (err) {
       console.error('Failed to fetch settings', err);
+    }
+  };
+
+  const posTemplates = useMemo(() => {
+    try {
+      return settings.pos_templates ? JSON.parse(settings.pos_templates) : [];
+    } catch (e) {
+      return [];
+    }
+  }, [settings.pos_templates]);
+
+  const saveTemplate = async () => {
+    if (!templateName.trim()) {
+      toast.error('Masukkan nama template!');
+      return;
+    }
+    if (saleItems.length === 0) {
+      toast.error('Keranjang kosong!');
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const newTemplate = {
+        id: Date.now(),
+        name: templateName,
+        items: saleItems.map(it => ({
+          product_id: it.product.id,
+          qty: it.qty,
+          harga_jual_saat_itu: it.harga_jual_saat_itu,
+          satuan: it.satuan,
+          is_sub: it.is_sub,
+          manual_name: it.product.id < 0 ? it.product.name : undefined
+        }))
+      };
+
+      const updatedTemplates = [...posTemplates, newTemplate];
+      await api.post('/settings', { pos_templates: JSON.stringify(updatedTemplates) });
+      await fetchSettings();
+      setIsSaveTemplateModalOpen(false);
+      setTemplateName('');
+      toast.success('Template berhasil disimpan.');
+    } catch (e) {
+      toast.error('Gagal menyimpan template');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const loadTemplate = (templateItems: any[]) => {
+    const itemsToAdd = templateItems.map(it => {
+      let productObj: Product | undefined;
+      if (it.product_id >= 0) {
+        productObj = products.find(p => p.id === it.product_id);
+      }
+
+      const product = productObj || {
+        id: it.product_id < 0 ? it.product_id : (-Date.now() - Math.random()),
+        name: it.manual_name || 'Produk tidak ditemukan',
+        harga_jual: it.harga_jual_saat_itu,
+        stok_saat_ini: 999,
+        category_id: 0
+      };
+
+      return {
+        product,
+        qty: it.qty,
+        harga_jual_saat_itu: it.harga_jual_saat_itu,
+        satuan: it.satuan || 'PCS',
+        is_sub: !!it.is_sub
+      };
+    });
+
+    setSaleItems([...saleItems, ...itemsToAdd]);
+    setIsTemplateModalOpen(false);
+    toast.success('Template berhasil ditambahkan ke keranjang.');
+  };
+
+  const deleteTemplate = async (id: number) => {
+    if (!window.confirm('Hapus template ini?')) return;
+    try {
+      const updatedTemplates = posTemplates.filter((t: any) => t.id !== id);
+      await api.post('/settings', { pos_templates: JSON.stringify(updatedTemplates) });
+      await fetchSettings();
+      toast.success('Template berhasil dihapus.');
+    } catch (e) {
+      toast.error('Gagal menghapus template');
     }
   };
 
@@ -679,6 +770,20 @@ export default function PenjualanPage() {
                   <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-100 shrink-0">
                     <h3 className="text-sm font-bold text-gray-800 uppercase tracking-tight">REVIEW E-FAKTUR</h3>
                     <div className="flex items-center gap-2">
+                       <button 
+                        onClick={() => setIsTemplateModalOpen(true)}
+                        className="text-[10px] bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 px-2.5 rounded-md font-bold shadow-sm transition-all flex items-center gap-1"
+                       >
+                        <ShoppingCart size={12} />
+                        GUNAKAN TEMPLATE
+                       </button>
+                       <button 
+                        onClick={() => setIsSaveTemplateModalOpen(true)}
+                        className="text-[10px] bg-amber-500 hover:bg-amber-600 text-white py-1.5 px-2.5 rounded-md font-bold shadow-sm transition-all flex items-center gap-1"
+                       >
+                        <Save size={12} />
+                        SIMPAN TEMPLATE
+                       </button>
                        <button 
                         onClick={paketkanSemua} 
                         title="Gabungkan semua barang ke paket di baris pertama"
@@ -1424,6 +1529,74 @@ export default function PenjualanPage() {
           }
         }
       `}</style>
-    </>
+      {/* Template Modals */}
+      {isTemplateModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm no-print">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200">
+             <div className="p-4 bg-emerald-600 text-white flex justify-between items-center">
+                <h3 className="font-bold flex items-center gap-2"><ShoppingCart size={18}/> Pilih Template Transaksi</h3>
+                <button onClick={() => setIsTemplateModalOpen(false)} className="hover:bg-white/10 p-1 rounded transition-colors">&times;</button>
+             </div>
+             <div className="p-4 max-h-[60vh] overflow-y-auto no-scrollbar space-y-2 bg-gray-50/50">
+                {posTemplates.length === 0 ? (
+                  <div className="text-center py-10 text-gray-400 italic text-sm">Belum ada template yang disimpan.</div>
+                ) : (
+                  posTemplates.map((t: any) => (
+                    <div key={t.id} className="bg-white border border-gray-100 p-3 rounded-xl shadow-sm hover:border-emerald-300 transition-all flex justify-between items-center group">
+                       <div className="flex-1 cursor-pointer" onClick={() => loadTemplate(t.items)}>
+                          <p className="font-bold text-gray-800 text-sm">{t.name}</p>
+                          <p className="text-[10px] text-gray-500 uppercase font-medium">{t.items.length} Barang • Dibuat {new Date(t.id).toLocaleDateString('id-ID')}</p>
+                       </div>
+                       <button onClick={() => deleteTemplate(t.id)} className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100">
+                          <Trash2 size={14} />
+                       </button>
+                    </div>
+                  ))
+                )}
+             </div>
+             <div className="p-3 bg-gray-100 border-t border-gray-200 flex justify-end">
+                <button onClick={() => setIsTemplateModalOpen(false)} className="px-5 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 transition-colors">TUTUP</button>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {isSaveTemplateModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm no-print">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200">
+             <div className="p-4 bg-amber-500 text-white flex justify-between items-center">
+                <h3 className="font-bold flex items-center gap-2"><Save size={18}/> Simpan sbg Template Baru</h3>
+                <button onClick={() => setIsSaveTemplateModalOpen(false)} className="hover:bg-white/10 p-1 rounded transition-colors">&times;</button>
+             </div>
+             <div className="p-5 space-y-4">
+                <div>
+                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Nama Template</label>
+                   <input 
+                    type="text" 
+                    value={templateName}
+                    onChange={(e) => setTemplateName(e.target.value)}
+                    placeholder="Contoh: Paket Service A atau Paket PC Gaming..."
+                    className="w-full text-sm font-bold bg-gray-50 border border-gray-200 px-3 py-2.5 rounded-xl outline-none focus:ring-2 ring-amber-400/50 transition-all"
+                    autoFocus
+                   />
+                </div>
+                <p className="text-[10px] text-gray-500 italic bg-amber-50 p-2 rounded-lg border border-amber-100">
+                   Seluruh barang yang ada di keranjang ({saleItems.length} item) akan disimpan ke dalam template ini.
+                </p>
+             </div>
+             <div className="p-3 bg-gray-100 border-t border-gray-200 flex justify-end gap-2">
+                <button onClick={() => setIsSaveTemplateModalOpen(false)} className="px-4 py-2 text-xs font-bold text-gray-600 hover:text-gray-800 transition-colors">BATAL</button>
+                <button 
+                  onClick={saveTemplate} 
+                  disabled={isSubmitting}
+                  className="px-6 py-2 bg-amber-500 text-white rounded-lg text-xs font-bold hover:bg-amber-600 transition-all shadow-md shadow-amber-500/20 active:scale-95 disabled:opacity-50"
+                >
+                  SIMPAN SEKARANG
+                </button>
+             </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

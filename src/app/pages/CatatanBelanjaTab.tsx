@@ -83,17 +83,43 @@ export default function CatatanBelanjaTab() {
 
   const appendToNote = (productName: string) => {
     const lines = note.split('\n').filter(l => l.trim() !== '');
-    const nextNum = lines.length + 1;
-    const formattedLine = `${nextNum}. ${productName} - 1 pcs`;
-
-    const newNote = note.trim() === '' 
-      ? formattedLine 
-      : `${note.trim()}\n${formattedLine}`;
     
-    setNote(newNote);
+    let found = false;
+    // Regex matches: "1. Nama Barang - 1 pcs"
+    const listItemRegex = /^(\d+)\.\s*(.+?)\s*-\s*(\d+)\s*pcs.*$/;
+
+    const processedLines = lines.map(line => {
+      const match = line.match(listItemRegex);
+      if (match) {
+        const existingName = match[2].trim();
+        const existingQty = parseInt(match[3]);
+        if (existingName === productName) {
+          found = true;
+          return `${existingName} - ${existingQty + 1} pcs`;
+        }
+        return `${existingName} - ${existingQty} pcs`;
+      }
+      return line; // Keep manual text lines as-is
+    });
+
+    if (!found) {
+      processedLines.push(`${productName} - 1 pcs`);
+    }
+
+    // Re-index the lines that are part of the list
+    let counter = 1;
+    const finalizedLines = processedLines.map(line => {
+      // If it matches our item format (with or without index)
+      if (line.match(/ - \d+ pcs$/) || line.match(/^\d+\./)) {
+        const content = line.replace(/^\d+\.\s*/, '');
+        return `${counter++}. ${content}`;
+      }
+      return line;
+    });
+
+    setNote(finalizedLines.join('\n'));
     setShowProductDropdown(false);
     setSearchProduct('');
-    // textarea gets the value, user can type the QTY themselves at the end
   };
 
   const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchProduct.toLowerCase())).slice(0, 50);
