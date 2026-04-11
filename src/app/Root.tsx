@@ -20,7 +20,7 @@ export default function Root() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Topbar />
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background p-3 md:p-6 pb-20 md:pb-6 transition-colors duration-200">
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full max-w-full mx-auto pb-4 px-2 md:px-0">
             <Outlet />
           </div>
         </main>
