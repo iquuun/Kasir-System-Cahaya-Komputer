@@ -9,7 +9,10 @@ class CashFlowController extends Controller
 {
     public function index(Request $request)
     {
-        $query = DB::table('cash_flows')->orderBy('tanggal', 'desc');
+        $query = DB::table('cash_flows as cf')
+            ->leftJoin('app_users as u', 'cf.staff_user_id', '=', 'u.id')
+            ->select('cf.*', 'u.name as staff_name')
+            ->orderBy('cf.tanggal', 'desc');
 
         if ($request->has('tipe') && $request->tipe !== 'all') {
             $query->where('tipe', $request->tipe);
@@ -55,6 +58,7 @@ class CashFlowController extends Controller
             'sumber' => 'required|string',
             'nominal' => 'required|numeric|min:1',
             'keterangan' => 'nullable|string',
+            'staff_user_id' => 'nullable|exists:app_users,id',
         ]);
 
         $id = DB::table('cash_flows')->insertGetId([
@@ -63,6 +67,7 @@ class CashFlowController extends Controller
             'sumber' => $request->sumber,
             'nominal' => $request->nominal,
             'keterangan' => $request->keterangan,
+            'staff_user_id' => $request->staff_user_id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

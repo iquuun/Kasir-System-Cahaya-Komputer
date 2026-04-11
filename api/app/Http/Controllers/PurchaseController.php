@@ -6,6 +6,7 @@ use App\Models\Purchase;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\StockMovement;
 
 class PurchaseController extends Controller
 {
@@ -56,11 +57,20 @@ class PurchaseController extends Controller
                     $product->harga_beli = $item['harga_beli']; // Update to latest HPP
                     $product->save();
 
-                    // Save purchase item
                     $purchase->items()->create([
                         'product_id' => $item['product_id'],
                         'qty' => $item['qty'],
                         'harga_beli' => $item['harga_beli'],
+                    ]);
+
+                    // Log Stock Movement
+                    StockMovement::create([
+                        'product_id' => $item['product_id'],
+                        'tipe' => 'in',
+                        'sumber' => 'purchase',
+                        'reference_id' => $purchase->id,
+                        'qty' => $item['qty'],
+                        'keterangan' => 'Pembelian: ' . $purchase->invoice
                     ]);
                 }
             }
@@ -109,6 +119,9 @@ class PurchaseController extends Controller
                 
                 // Delete old items
                 $purchase->items()->delete();
+                
+                // Delete old stock movements
+                StockMovement::where('sumber', 'purchase')->where('reference_id', $purchase->id)->delete();
 
                 // 2. APPLY NEW STOCK & SAVE NEW ITEMS
                 foreach ($validated['items'] as $item) {
@@ -123,6 +136,16 @@ class PurchaseController extends Controller
                         'product_id' => $item['product_id'],
                         'qty' => $item['qty'],
                         'harga_beli' => $item['harga_beli'],
+                    ]);
+
+                    // Log New Stock Movement
+                    StockMovement::create([
+                        'product_id' => $item['product_id'],
+                        'tipe' => 'in',
+                        'sumber' => 'purchase',
+                        'reference_id' => $purchase->id,
+                        'qty' => $item['qty'],
+                        'keterangan' => 'Pembelian (Update): ' . $purchase->invoice
                     ]);
                 }
             }
@@ -162,6 +185,9 @@ class PurchaseController extends Controller
             }
 
             $purchase->delete();
+            
+            // Delete stock movements log
+            StockMovement::where('sumber', 'purchase')->where('reference_id', $purchase->id)->delete();
             DB::commit();
             return response()->json(['message' => 'Penghapusan berhasil dan stok telah dikoreksi']);
         } catch (\Exception $e) {

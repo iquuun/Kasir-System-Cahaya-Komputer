@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\StockMovement;
 
 class SaleController extends Controller
 {
@@ -137,6 +138,16 @@ class SaleController extends Controller
 
                 if ($item['product']) {
                     $item['product']->decrement('stok_saat_ini', $item['qty']);
+                    
+                    // Log Stock Movement
+                    StockMovement::create([
+                        'product_id' => $item['product_id'],
+                        'tipe' => 'out',
+                        'sumber' => 'sale',
+                        'reference_id' => $sale->id,
+                        'qty' => $item['qty'],
+                        'keterangan' => 'Penjualan: ' . $sale->invoice
+                    ]);
                 }
             }
 
@@ -233,6 +244,10 @@ class SaleController extends Controller
 
             // Delete all sale items first, then the sale
             $sale->items()->delete();
+            
+            // Delete stock movements log
+            StockMovement::where('sumber', 'sale')->where('reference_id', $sale->id)->delete();
+            
             $sale->delete();
 
             DB::commit();

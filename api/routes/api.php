@@ -17,6 +17,7 @@ use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SystemController;
+use App\Http\Controllers\StockMovementController;
 
 Route::post('/login', [AuthController::class , 'login']);
 Route::get('/settings', [SettingController::class , 'index']);
@@ -53,9 +54,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('cash-flows', [CashFlowController::class , 'store']);
     Route::delete('cash-flows/{id}', [CashFlowController::class , 'destroy']);
 
-    // Stock Opname
+    // Stock Opname & Movement
     Route::get('stok-opname', [StockOpnameController::class, 'index']);
     Route::post('stok-opname', [StockOpnameController::class, 'store']);
+    Route::get('stok-movements', [StockMovementController::class, 'index']);
 
     // Garansi
     Route::apiResource('warranties', WarrantyController::class);

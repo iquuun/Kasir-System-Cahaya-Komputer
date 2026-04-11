@@ -36,6 +36,7 @@ const navItems: NavItem[] = [
   { path: '/garansi', label: 'Garansi', icon: Wrench },
   { path: '/kalkulator', label: 'Kalkulator Rakitan', icon: Calculator },
   { path: '/cash-flow', label: 'Cash Flow', icon: DollarSign, ownerOnly: true },
+  { path: '/stok-history', label: 'Riwayat Stok', icon: Activity },
   { path: '/nilai-aset', label: 'Nilai Aset', icon: Wallet, ownerOnly: true },
   { path: '/pengaturan', label: 'Pengaturan Toko', icon: Settings, ownerOnly: true },
   { path: '/users', label: 'Manajemen Akun', icon: Users, ownerOnly: true },

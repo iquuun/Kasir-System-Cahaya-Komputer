@@ -10,6 +10,14 @@ interface CashFlow {
   sumber: string;
   nominal: number;
   keterangan: string | null;
+  staff_user_id: number | null;
+  staff_name: string | null;
+}
+
+interface User {
+  id: number;
+  name: string;
+  role: string;
 }
 
 const SUMBER_MASUK = [
@@ -24,6 +32,7 @@ const SUMBER_MASUK = [
 const SUMBER_KELUAR = [
   { value: 'bayar_distributor', label: 'Bayar Distributor / Hutang' },
   { value: 'biaya_operasional', label: 'Biaya Operasional' },
+  { value: 'gaji_karyawan', label: 'Gaji Karyawan' },
   { value: 'biaya_umum', label: 'Pengeluaran Lainnya' },
 ];
 
@@ -55,6 +64,7 @@ export default function MutasiRekeningTab() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
 
   // Filters & Pagination
   const [searchTerm, setSearchTerm] = useState('');
@@ -84,6 +94,7 @@ export default function MutasiRekeningTab() {
     sumber: 'offline',
     nominal: '',
     keterangan: '',
+    staff_user_id: '' as string | number,
   });
 
   const fetchData = useCallback(async () => {
@@ -114,6 +125,8 @@ export default function MutasiRekeningTab() {
 
   useEffect(() => {
     fetchData();
+    // Fetch users for staff selection
+    api.get('/users').then(res => setUsers(res.data)).catch(() => {});
   }, [fetchData]);
 
   useEffect(() => {
@@ -174,7 +187,7 @@ export default function MutasiRekeningTab() {
         nominal: Number(form.nominal),
       });
       setShowModal(false);
-      setForm({ tanggal: getCurrentLocalDateTime(), tipe: 'masuk', sumber: 'offline', nominal: '', keterangan: '' });
+      setForm({ tanggal: getCurrentLocalDateTime(), tipe: 'masuk', sumber: 'offline', nominal: '', keterangan: '', staff_user_id: '' });
       fetchData();
     } catch (err) {
       toast.error('Gagal menyimpan. Periksa kembali data yang diisi.');
@@ -412,13 +425,21 @@ export default function MutasiRekeningTab() {
                        {flow.sumber === 'biaya_operasional' && (
                          <span className="ml-2 inline-flex border border-amber-200 text-amber-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-amber-50">OPS</span>
                        )}
+                       {flow.sumber === 'gaji_karyawan' && (
+                         <span className="ml-2 inline-flex border border-purple-200 text-purple-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-purple-50">GAJI</span>
+                       )}
                     </td>
                     <td className="px-3 py-2 text-right text-xs">
                       <span className={`font-black text-sm ${flow.tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600'}`}>
                         {flow.tipe === 'masuk' ? '+' : '-'} Rp {Number(flow.nominal).toLocaleString('id-ID')}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-500 font-medium">{flow.keterangan || '-'}</td>
+                    <td className="px-4 py-3 text-xs text-gray-500 font-medium">
+                      {flow.keterangan || '-'}
+                      {flow.staff_name && (
+                        <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase italic">Staf: {flow.staff_name}</div>
+                      )}
+                    </td>
                     <td className="px-3 py-2 text-center text-xs">
                       <button
                         onClick={() => handleDelete(flow.id)}
@@ -534,6 +555,23 @@ export default function MutasiRekeningTab() {
                   ))}
                 </select>
               </div>
+
+              {form.sumber === 'gaji_karyawan' && (
+                <div className="animate-in slide-in-from-top-2 duration-300">
+                  <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-purple-600">Pilih Staf / Karyawan</label>
+                  <select
+                    value={form.staff_user_id}
+                    onChange={(e) => setForm({ ...form, staff_user_id: e.target.value })}
+                    className="w-full px-3 py-2.5 border border-purple-200 bg-purple-50 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-xs font-bold text-purple-700"
+                    required={form.sumber === 'gaji_karyawan'}
+                  >
+                    <option value="">-- PILIH STAF --</option>
+                    {users.map((u) => (
+                      <option key={u.id} value={u.id}>{u.name} ({u.role})</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nominal (Rp)</label>

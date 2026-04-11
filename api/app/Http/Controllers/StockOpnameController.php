@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\StockMovement;
 
 class StockOpnameController extends Controller
 {
@@ -45,6 +46,16 @@ class StockOpnameController extends Controller
                     if ($product) {
                         $product->stok_saat_ini = $itemData['stok_fisik'];
                         $product->save();
+
+                        // Log Stock Movement for adjustment
+                        StockMovement::create([
+                            'product_id' => $itemData['product_id'],
+                            'tipe' => 'adjustment',
+                            'sumber' => 'opname',
+                            'reference_id' => $opname->id,
+                            'qty' => $itemData['selisih'], // positif = nambah, negatif = kurang
+                            'keterangan' => 'Opname: ' . $opname->tanggal . ($request->keterangan ? ' - ' . $request->keterangan : '')
+                        ]);
                     }
                 }
 
