@@ -18,6 +18,8 @@ use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeSalaryController;
 
 Route::post('/login', [AuthController::class , 'login']);
 Route::get('/settings', [SettingController::class , 'index']);
@@ -47,12 +49,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('purchases', PurchaseController::class);
 
     Route::apiResource('sales', SaleController::class);
+    Route::post('sales/{id}/toggle-verify', [SaleController::class, 'toggleVerify']);
     Route::post('sales/{sale}/pelunasan', [SaleController::class, 'pelunasan']);
 
     // Cash Flow
     Route::get('cash-flows', [CashFlowController::class , 'index']);
     Route::post('cash-flows', [CashFlowController::class , 'store']);
     Route::delete('cash-flows/{id}', [CashFlowController::class , 'destroy']);
+
+    // Gaji & Karyawan
+    Route::apiResource('employees', EmployeeController::class);
+    Route::get('salaries', [EmployeeSalaryController::class, 'index']);
+    Route::post('salaries', [EmployeeSalaryController::class, 'store']);
+    Route::delete('salaries/{id}', [EmployeeSalaryController::class, 'destroy']);
 
     // Stock Opname & Movement
     Route::get('stok-opname', [StockOpnameController::class, 'index']);

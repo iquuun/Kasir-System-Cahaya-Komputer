@@ -257,4 +257,13 @@ class SaleController extends Controller
             return response()->json(['message' => 'Gagal membatalkan transaksi: ' . $e->getMessage()], 500);
         }
     }
+
+    public function toggleVerify($id)
+    {
+        $sale = \App\Models\Sale::findOrFail($id);
+        $sale->is_verified = !$sale->is_verified;
+        $sale->save();
+
+        return response()->json(['is_verified' => $sale->is_verified]);
+    }
 }

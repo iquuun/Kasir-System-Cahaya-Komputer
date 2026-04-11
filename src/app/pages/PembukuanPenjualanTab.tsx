@@ -15,6 +15,7 @@ interface Sale {
   masuk_dp: number | null;
   keluar_tf: number | null;
   status_pencairan: 'belum' | 'lunas';
+  is_verified: boolean;
   items: Array<{ qty: number }>;
 }
 
@@ -129,6 +130,16 @@ export default function PembukuanPenjualanTab() {
     }
   };
 
+  const toggleVerify = async (id: number) => {
+    try {
+      const res = await api.post(`/sales/${id}/toggle-verify`);
+      setSales(sales.map(s => s.id === id ? { ...s, is_verified: res.data.is_verified } : s));
+      toast.success(res.data.is_verified ? 'Invoice diverifikasi' : 'Verifikasi dibatalkan');
+    } catch (err) {
+      toast.error('Gagal memperbarui status verifikasi');
+    }
+  };
+
   // Filtering Logic
   const filteredSales = useMemo(() => {
     return sales.filter(s => {
@@ -218,11 +229,11 @@ export default function PembukuanPenjualanTab() {
       {/* Stats Summary Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
-          title="Total Harga Modal (HPP)"
-          value={`Rp ${totalHpp.toLocaleString('id-ID')}`}
-          subtitle="Modal stok barang terjual"
-          icon={ShoppingCart}
-          colorClass="from-slate-600 to-slate-700"
+          title="Total Omzet (Gross)"
+          value={`Rp ${totalOmzet.toLocaleString('id-ID')}`}
+          subtitle="Total nilai penjualan kotor"
+          icon={TrendingUp}
+          colorClass="from-blue-600 to-blue-700"
         />
         <StatCard
           title="Total Harga Modal (HPP)"
@@ -349,6 +360,7 @@ export default function PembukuanPenjualanTab() {
           <table className="w-full whitespace-nowrap">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
+                <th className="px-3 py-2 text-center text-[10px] uppercase font-bold text-gray-500 tracking-wider">Cek</th>
                 <th className="text-left px-3 py-2 text-[10px] uppercase font-bold text-gray-500 tracking-wider">Tgl / Inv</th>
                 <th className="text-left px-3 py-2 text-[10px] uppercase font-bold text-gray-500 tracking-wider">Nama Barang</th>
                 <th className="text-left px-3 py-2 text-[10px] uppercase font-bold text-gray-500 tracking-wider">Market / User</th>
@@ -386,7 +398,15 @@ export default function PembukuanPenjualanTab() {
                   const sisa = masukDP - keluarTF;
 
                   return (
-                    <tr key={sale.id} className="hover:bg-blue-50/10 text-xs">
+                    <tr key={sale.id} className={`transition-colors text-xs ${sale.is_verified ? 'bg-blue-50/70 hover:bg-blue-100/70' : 'hover:bg-blue-50/10'}`}>
+                      <td className="px-3 py-2 text-center">
+                         <input
+                           type="checkbox"
+                           checked={sale.is_verified}
+                           onChange={() => toggleVerify(sale.id)}
+                           className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                         />
+                      </td>
                       <td className="px-3 py-2">
                         <p className="text-xs font-black text-gray-900 uppercase leading-none">{sale.invoice}</p>
                         <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
