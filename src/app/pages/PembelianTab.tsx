@@ -51,6 +51,7 @@ export default function PembelianTab() {
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<'all' | 'lunas' | 'hutang'>('all');
   const [filterMonth, setFilterMonth] = useState<string>('');
+  const [selectedDistributorFilter, setSelectedDistributorFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -103,6 +104,27 @@ export default function PembelianTab() {
     items: [],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isSavingCategory, setIsSavingCategory] = useState(false);
+
+  const handleAddCategoryQuick = async () => {
+    if (!newCategoryName.trim()) return;
+    try {
+      setIsSavingCategory(true);
+      const res = await api.post('/categories', { name: newCategoryName });
+      const newCat = res.data.data || res.data;
+      setCategories(prev => [...prev, newCat]);
+      setQuickProductFormData(prev => ({ ...prev, category_id: newCat.id.toString() }));
+      setNewCategoryName('');
+      setIsAddingCategory(false);
+      toast.success(`Kategori "${newCat.name}" berhasil dibuat`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Gagal membuat kategori');
+    } finally {
+      setIsSavingCategory(false);
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -111,7 +133,7 @@ export default function PembelianTab() {
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, filter, filterMonth]);
+  }, [searchQuery, filter, filterMonth, selectedDistributorFilter]);
 
   const fetchData = async () => {
     try {
@@ -138,15 +160,16 @@ export default function PembelianTab() {
       .filter((p) => {
         const matchesFilter = filter === 'all' || p.status_pembayaran === filter;
         const matchesMonth = filterMonth === '' || p.tanggal.startsWith(filterMonth);
+        const matchesDistributor = selectedDistributorFilter === 'all' || p.distributor_id.toString() === selectedDistributorFilter;
         const searchLower = searchQuery.toLowerCase();
         const matchesSearch = 
           p.invoice?.toLowerCase().includes(searchLower) ||
           p.distributor?.name.toLowerCase().includes(searchLower);
         
-        return matchesFilter && matchesMonth && matchesSearch;
+        return matchesFilter && matchesMonth && matchesDistributor && matchesSearch;
       })
       .sort((a, b) => b.id - a.id);
-  }, [purchases, filter, filterMonth, searchQuery]);
+  }, [purchases, filter, filterMonth, selectedDistributorFilter, searchQuery]);
 
   const totalPages = Math.ceil(filteredPurchases.length / itemsPerPage) || 1;
   const currentItems = useMemo(() => {
@@ -303,8 +326,8 @@ export default function PembelianTab() {
       const payload = {
         name: quickProductFormData.name,
         category_id: parseInt(quickProductFormData.category_id),
-        harga_beli: purchasePrice,
-        harga_jual: parseFloat(quickProductFormData.harga_jual || '0'),
+        harga_beli: purchasePrice || 0,
+        harga_jual: parseFloat(quickProductFormData.harga_jual) || 0,
         stok_saat_ini: 0 // New product starts with 0 stock, will be increased by purchase
       };
 
@@ -507,6 +530,17 @@ export default function PembelianTab() {
                 className="bg-transparent border-none text-xs px-2 py-2 outline-none font-medium text-gray-700 w-full cursor-pointer"
               />
             </div>
+
+            <select
+              value={selectedDistributorFilter}
+              onChange={(e) => setSelectedDistributorFilter(e.target.value)}
+              className="bg-gray-50 border border-gray-200 rounded-lg text-xs px-2 py-2 outline-none font-medium text-gray-700 focus:ring-1 focus:ring-[#3B82F6]"
+            >
+              <option value="all">Semua Distributor</option>
+              {distributors.map(d => (
+                <option key={d.id} value={d.id.toString()}>{d.name}</option>
+              ))}
+            </select>
             
             <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-2 w-full sm:w-64 focus-within:ring-1 focus-within:ring-[#3B82F6] focus-within:border-[#3B82F6] transition-all">
               <Search size={14} className="text-gray-400 shrink-0" />
@@ -1054,21 +1088,62 @@ export default function PembelianTab() {
                 />
               </div>
 
-              <div>
+              <div className="col-span-full">
                 <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
-                  Kategori
+                  Kategori Produk
                 </label>
-                <select
-                  required
-                  value={quickProductFormData.category_id}
-                  onChange={(e) => setQuickProductFormData({ ...quickProductFormData, category_id: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-gray-50"
-                >
-                  <option value="" disabled>Pilih Kategori</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
+                <div className="flex gap-2">
+                  {isAddingCategory ? (
+                    <div className="flex-1 flex gap-1 animate-in slide-in-from-right-2 duration-200">
+                      <input 
+                        type="text"
+                        autoFocus
+                        placeholder="Nama kategori..."
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategoryQuick())}
+                        className="flex-1 px-3 py-2 border border-blue-400 rounded-lg text-xs outline-none bg-blue-50/50"
+                      />
+                      <button 
+                        type="button"
+                        onClick={handleAddCategoryQuick}
+                        disabled={isSavingCategory}
+                        className="p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 disabled:opacity-50"
+                      >
+                        <Check size={14} />
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => setIsAddingCategory(false)}
+                        className="p-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <select
+                        required
+                        value={quickProductFormData.category_id}
+                        onChange={(e) => setQuickProductFormData({ ...quickProductFormData, category_id: e.target.value })}
+                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-gray-50"
+                      >
+                        <option value="" disabled>Pilih Kategori</option>
+                        {categories.map(cat => (
+                          <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingCategory(true)}
+                        className="p-2 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg hover:bg-blue-100 transition-colors shrink-0"
+                        title="Tambah Kategori Baru"
+                      >
+                        <Plus size={18} />
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -1077,7 +1152,6 @@ export default function PembelianTab() {
                 </label>
                 <input
                   type="number"
-                  required
                   min="0"
                   placeholder="Rp 0"
                   value={quickProductFormData.harga_jual}

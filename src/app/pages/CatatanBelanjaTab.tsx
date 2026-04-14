@@ -19,6 +19,11 @@ export default function CatatanBelanjaTab() {
   const [searchProduct, setSearchProduct] = useState('');
   const [showProductDropdown, setShowProductDropdown] = useState(false);
 
+  // Bundling (Paket) states
+  const [isBundling, setIsBundling] = useState(false);
+  const [selectedBundledProducts, setSelectedBundledProducts] = useState<Product[]>([]);
+  const [searchBundle, setSearchBundle] = useState('');
+
   // Load dari Server Settings
   useEffect(() => {
     fetchNoteAndProducts();
@@ -122,7 +127,23 @@ export default function CatatanBelanjaTab() {
     setSearchProduct('');
   };
 
+  const createBundle = () => {
+    if (selectedBundledProducts.length === 0) return;
+    
+    const bundleName = selectedBundledProducts.map(p => p.name).join(' + ');
+    const bundleStr = `PAKET ${bundleName}`;
+    
+    // Use existing logic to append
+    appendToNote(bundleStr);
+    
+    // Reset
+    setSelectedBundledProducts([]);
+    setIsBundling(false);
+    setSearchBundle('');
+  };
+
   const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchProduct.toLowerCase())).slice(0, 50);
+  const filteredBundleProducts = products.filter(p => p.name.toLowerCase().includes(searchBundle.toLowerCase())).slice(0, 20);
 
   return (
     <div className="bg-card border border-border shadow-sm rounded-xl overflow-hidden flex flex-col h-[calc(100vh-200px)]">
@@ -167,48 +188,140 @@ export default function CatatanBelanjaTab() {
       </div>
 
       {/* QUICK PRODUCT PICKER BAR */}
-      <div className="bg-card border-b border-border p-3 flex items-center gap-3 relative z-10 shrink-0">
-         <span className="text-xs font-bold whitespace-nowrap hidden sm:block">Sisipkan Dari Gudang:</span>
-         <div className="relative w-full max-w-md">
-            <div 
-              className="flex items-center bg-input/20 border border-border rounded-lg p-1.5 focus-within:ring-2 ring-primary focus-within:bg-card transition-all cursor-text text-foreground"
-              onClick={() => setShowProductDropdown(true)}
-            >
-              <Search size={16} className="text-muted-foreground ml-2 mr-2" />
-              <input 
-                value={searchProduct}
-                onChange={e => { setSearchProduct(e.target.value); setShowProductDropdown(true); }}
-                onFocus={() => setShowProductDropdown(true)}
-                placeholder="Cari & klik nama stok barang untuk ditambah ke catatan..."
-                className="bg-transparent outline-none text-sm w-full font-medium"
-              />
-            </div>
-            
-            {showProductDropdown && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowProductDropdown(false)}></div>
-                <div className="absolute top-full mt-2 w-full max-w-lg bg-card border border-border rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto custom-scrollbar">
-                   {filteredProducts.length === 0 ? (
-                      <div className="p-4 text-center text-sm text-muted-foreground">Opps.. Barang tidak ditemukan.</div>
-                   ) : (
-                      <div className="p-1">
-                        {filteredProducts.map(p => (
-                          <div 
-                            key={p.id} 
-                            onClick={() => appendToNote(p.name)}
-                            className="flex items-center justify-between px-3 py-2.5 rounded hover:bg-accent cursor-pointer group border-b border-border last:border-b-0"
-                          >
-                            <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">{p.name}</span>
-                            <PlusCircle size={14} className="text-muted-foreground group-hover:text-primary" />
-                          </div>
-                        ))}
-                      </div>
-                   )}
-                </div>
-              </>
-            )}
+      <div className="bg-card border-b border-border p-3 flex items-center justify-between gap-3 relative z-10 shrink-0">
+         <div className="flex items-center gap-3 w-full">
+          <span className="text-xs font-bold whitespace-nowrap hidden sm:block">Sisipkan Dari Gudang:</span>
+          <div className="relative w-full max-w-md">
+              <div 
+                className="flex items-center bg-input/20 border border-border rounded-lg p-1.5 focus-within:ring-2 ring-primary focus-within:bg-card transition-all cursor-text text-foreground"
+                onClick={() => setShowProductDropdown(true)}
+              >
+                <Search size={16} className="text-muted-foreground ml-2 mr-2" />
+                <input 
+                  value={searchProduct}
+                  onChange={e => { setSearchProduct(e.target.value); setShowProductDropdown(true); }}
+                  onFocus={() => setShowProductDropdown(true)}
+                  placeholder="Cari & klik nama stok barang untuk ditambah ke catatan..."
+                  className="bg-transparent outline-none text-sm w-full font-medium"
+                />
+              </div>
+              
+              {showProductDropdown && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowProductDropdown(false)}></div>
+                  <div className="absolute top-full mt-2 w-full max-w-lg bg-card border border-border rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto custom-scrollbar">
+                    {filteredProducts.length === 0 ? (
+                        <div className="p-4 text-center text-sm text-muted-foreground">Opps.. Barang tidak ditemukan.</div>
+                    ) : (
+                        <div className="p-1">
+                          {filteredProducts.map(p => (
+                            <div 
+                              key={p.id} 
+                              onClick={() => appendToNote(p.name)}
+                              className="flex items-center justify-between px-3 py-2.5 rounded hover:bg-accent cursor-pointer group border-b border-border last:border-b-0"
+                            >
+                              <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">{p.name}</span>
+                              <PlusCircle size={14} className="text-muted-foreground group-hover:text-primary" />
+                            </div>
+                          ))}
+                        </div>
+                    )}
+                  </div>
+                </>
+              )}
+          </div>
+          <button 
+            onClick={() => setIsBundling(true)}
+            className="flex items-center gap-2 px-3 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500 hover:text-white rounded-lg text-xs font-bold transition-all border border-blue-200 shrink-0 shadow-sm"
+          >
+            <PlusCircle size={14} /> Buat Paket
+          </button>
          </div>
       </div>
+
+      {/* MODAL BUAT PAKET */}
+      {isBundling && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-3 animate-in fade-in duration-200">
+           <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
+              <div className="p-4 border-b border-border bg-muted/50 flex justify-between items-center">
+                 <div>
+                    <h3 className="text-sm font-bold text-foreground font-black uppercase tracking-wider">📦 Buat Paket Barang</h3>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mt-0.5">Gabungkan beberapa barang jadi 1 baris catatan</p>
+                 </div>
+                 <button onClick={() => setIsBundling(false)} className="text-muted-foreground hover:text-foreground p-1 transition-colors">&times;</button>
+              </div>
+
+              <div className="p-4 flex flex-col gap-4 overflow-hidden">
+                 {/* Preview */}
+                 <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-xl min-h-[60px] flex flex-wrap gap-1.5 items-center">
+                    {selectedBundledProducts.length === 0 ? (
+                       <span className="text-xs text-muted-foreground italic">Belum ada barang dipilih...</span>
+                    ) : (
+                       <>
+                         <span className="text-[10px] font-black bg-blue-500 text-white px-1.5 py-0.5 rounded leading-tight">PAKET</span>
+                         {selectedBundledProducts.map((p, i) => (
+                            <div key={p.id} className="flex items-center gap-1.5">
+                               {i > 0 && <span className="text-blue-500 font-bold text-xs">+</span>}
+                               <div className="flex items-center gap-1 bg-card border border-blue-200 dark:border-blue-900 px-2 py-1 rounded-lg shadow-sm">
+                                  <span className="text-xs font-bold">{p.name}</span>
+                                  <button onClick={() => setSelectedBundledProducts(prev => prev.filter(x => x.id !== p.id))} className="text-rose-500 hover:text-rose-700 transition-colors ml-1">&times;</button>
+                               </div>
+                            </div>
+                         ))}
+                       </>
+                    )}
+                 </div>
+
+                 {/* Search */}
+                 <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
+                    <input 
+                       autoFocus
+                       placeholder="Cari barang untuk dipaketkan..."
+                       value={searchBundle}
+                       onChange={e => setSearchBundle(e.target.value)}
+                       className="w-full pl-9 pr-3 py-2.5 bg-muted/30 border border-border rounded-xl text-xs outline-none focus:ring-2 ring-primary/20 transition-all font-medium"
+                    />
+                 </div>
+
+                 {/* List */}
+                 <div className="flex-1 overflow-y-auto pr-1 space-y-1 custom-scrollbar min-h-[200px]">
+                    {filteredBundleProducts.map(p => {
+                       const isSelected = selectedBundledProducts.some(x => x.id === p.id);
+                       return (
+                          <div 
+                             key={p.id}
+                             onClick={() => {
+                                if (isSelected) setSelectedBundledProducts(prev => prev.filter(x => x.id !== p.id));
+                                else setSelectedBundledProducts(prev => [...prev, p]);
+                             }}
+                             className={`flex items-center justify-between px-3 py-2.5 rounded-xl border cursor-pointer transition-all ${
+                                isSelected 
+                                ? 'bg-blue-500/10 border-blue-500 text-blue-600 shadow-sm' 
+                                : 'bg-card border-border hover:bg-muted text-foreground'
+                             }`}
+                          >
+                             <span className="text-xs font-bold">{p.name}</span>
+                             {isSelected ? <CheckCircle2 size={16} /> : <PlusCircle size={16} className="text-muted-foreground opacity-50" />}
+                          </div>
+                       )
+                    })}
+                 </div>
+              </div>
+
+              <div className="p-4 border-t border-border flex justify-end gap-3 bg-muted/30">
+                 <button onClick={() => setIsBundling(false)} className="px-5 py-2 text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors">Batal</button>
+                 <button 
+                  disabled={selectedBundledProducts.length === 0}
+                  onClick={createBundle}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-500/30 hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale"
+                 >
+                    + Tambah ke Catatan
+                 </button>
+              </div>
+           </div>
+        </div>
+      )}
 
       {/* TEXT AREA */}
       <div className="p-4 flex-1 flex flex-col bg-sidebar-primary/5">

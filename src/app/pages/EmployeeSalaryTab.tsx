@@ -164,7 +164,7 @@ export default function EmployeeSalaryTab() {
       return s.employee_id === employeeId && d.getMonth() === month && d.getFullYear() === year;
     });
 
-    const totalTaken = monthlyPayments.reduce((sum, s) => sum + Number(s.total), 0);
+    const totalTaken = monthlyPayments.reduce((sum, s) => sum + Math.abs(Number(s.total)), 0);
     return { monthlyPayments, totalTaken };
   };
 

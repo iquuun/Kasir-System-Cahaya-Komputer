@@ -143,39 +143,46 @@ class LaporanLabaController extends Controller
         // 8. Uang Kas = Rekening + Online (Hutang Market) + Aset - Total Hutang Aktif
         $uangKas = $uangRekening + $uangOnlinePending + $uangStok - $totalSisaHutang;
 
-        // 9. Margin 1 Bulan (Pendapatan - HPP - Biaya Operasional bulan ini)
-        $pendapatanBulanan = (float) DB::table('sales')
-            ->whereBetween('tanggal', [$bulanIni->toDateString(), $bulanIniEnd->toDateString()])
-            ->sum('total_penjualan');
+        // 9. Margin 1 Bulan (Bulan Ini vs Bulan Lalu)
+        // Perhitungan berdasarkan: Masuk DP (Net Sales) - Harga Modal Manual (HPP) - Biaya Operasional
+        
+        $getMonthlyMargin = function($start, $end) {
+            $pendapatan = (float) DB::table('sales')
+                ->whereBetween('tanggal', [$start, $end])
+                ->where('masuk_dp', '>', 0)
+                ->sum('masuk_dp');
 
-        $hppBulanan = DB::select("
-            SELECT SUM(si.qty * COALESCE(p.harga_beli, 0)) as total_hpp
-            FROM sales s
-            JOIN sale_items si ON s.id = si.sale_id
-            LEFT JOIN products p ON p.id = si.product_id
-            WHERE s.tanggal BETWEEN ? AND ?
-        ", [$bulanIni->toDateString(), $bulanIniEnd->toDateString()]);
-        $totalHppBulanan = (float) ($hppBulanan[0]->total_hpp ?? 0);
+            $hpp = (float) DB::table('sales')
+                ->whereBetween('tanggal', [$start, $end])
+                ->sum('harga_modal_manual');
 
-        $biayaOperasionalBulanan = (float) DB::table('cash_flows')
-            ->where('tipe', 'keluar')
-            ->where('sumber', 'biaya_operasional')
-            ->whereBetween('tanggal', [$bulanIni->toDateString(), $bulanIniEnd->toDateString()])
-            ->sum('nominal');
+            $ops = (float) DB::table('cash_flows')
+                ->where('tipe', 'keluar')
+                ->where('sumber', 'biaya_operasional')
+                ->whereBetween('tanggal', [$start, $end])
+                ->sum('nominal');
 
-        $admBulanan = (float) DB::table('sales')
-            ->where('channel', '!=', 'UMUM')
-            ->where('masuk_dp', '>', 0)
-            ->whereBetween('tanggal', [$bulanIni->toDateString(), $bulanIniEnd->toDateString()])
-            ->sum(DB::raw('total_penjualan - masuk_dp'));
+            $margin = $pendapatan - $hpp - $ops;
+            
+            return [
+                'pendapatan' => $pendapatan,
+                'hpp' => $hpp,
+                'biaya_operasional' => $ops,
+                'margin' => $margin,
+                'label' => Carbon::parse($start)->translatedFormat('F Y')
+            ];
+        };
 
-        $marginBulanan = $pendapatanBulanan - $totalHppBulanan - $biayaOperasionalBulanan - $admBulanan;
+        $marginBulanIni = $getMonthlyMargin($bulanIni->toDateString(), $bulanIniEnd->toDateString());
+        $marginBulanLalu = $getMonthlyMargin($bulanLalu->toDateString(), $bulanLaluEnd->toDateString());
+
 
         // 10. Pemasukan (Hari Ini / Bulan Ini / Tahun Ini / Seluruh)
         $tahunIni = $now->copy()->startOfYear();
         $tahunIniEnd = $now->copy()->endOfYear();
 
         $pemasukanHariIni = $pendapatanHariIni;
+        $pendapatanBulanan = $marginBulanIni['pendapatan'];
         $pemasukanBulanIni = $pendapatanBulanan;
         $pemasukanTahunIni = (float) DB::table('sales')
             ->whereBetween('tanggal', [$tahunIni->toDateString(), $tahunIniEnd->toDateString()])
@@ -266,11 +273,8 @@ class LaporanLabaController extends Controller
             'uang_kas' => $uangKas,
             'uang_di_luar' => $uangDiLuar,
             'margin_bulanan' => [
-                'pendapatan' => $pendapatanBulanan,
-                'hpp' => $totalHppBulanan,
-                'biaya_operasional' => $biayaOperasionalBulanan,
-                'adm' => $admBulanan,
-                'margin' => $marginBulanan,
+                'current' => $marginBulanIni,
+                'past' => $marginBulanLalu,
             ],
         ]);
     }

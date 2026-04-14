@@ -47,7 +47,7 @@ class EmployeeSalaryController extends Controller
             $cashFlowId = DB::table('cash_flows')->insertGetId([
                 'tanggal' => $tanggal,
                 'tipe' => 'keluar',
-                'sumber' => 'gaji_karyawan',
+                'sumber' => 'biaya_operasional',
                 'nominal' => abs($request->total),
                 'keterangan' => "Gaji {$employee->name}: " . ($request->keterangan ?? "Periode " . date('M Y', strtotime($request->tanggal))),
                 'created_at' => now(),

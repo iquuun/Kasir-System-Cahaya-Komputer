@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Upload, Tags, Package, Banknote, Box, Percent } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Upload, Tags, Package, Banknote, Box, Percent, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
+import { useThemeContext } from '../context/ThemeContext';
 import Select from 'react-select';
 import api from '../api';
 
@@ -20,10 +21,16 @@ interface Product {
 }
 
 export default function ProdukTab() {
+  const { theme } = useThemeContext();
   const [products, setProducts] = useState<Product[]>([]);
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // Category Creation state
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isSavingCategory, setIsSavingCategory] = useState(false);
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -177,6 +184,24 @@ export default function ProdukTab() {
     }
   };
 
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    try {
+      setIsSavingCategory(true);
+      const res = await api.post('/categories', { name: newCategoryName });
+      const newCat = res.data.data || res.data;
+      setCategoriesList(prev => [...prev, newCat]);
+      setFormData(prev => ({ ...prev, category_id: newCat.id.toString() }));
+      setNewCategoryName('');
+      setIsAddingCategory(false);
+      toast.success(`Kategori "${newCat.name}" berhasil dibuat`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Gagal membuat kategori');
+    } finally {
+      setIsSavingCategory(false);
+    }
+  };
+
   const handleOpenModal = (mode: 'add' | 'edit', product?: Product) => {
     setModalMode(mode);
     setCurrentProduct(product || null);
@@ -214,9 +239,9 @@ export default function ProdukTab() {
       const payload = {
         name: formData.name,
         category_id: parseInt(formData.category_id),
-        harga_beli: parseFloat(formData.harga_beli),
-        harga_jual: parseFloat(formData.harga_jual),
-        stok_saat_ini: parseInt(formData.stok_saat_ini)
+        harga_beli: parseFloat(formData.harga_beli) || 0,
+        harga_jual: parseFloat(formData.harga_jual) || 0,
+        stok_saat_ini: parseInt(formData.stok_saat_ini) || 0
       };
 
       if (modalMode === 'add') {
@@ -533,47 +558,103 @@ export default function ProdukTab() {
                   <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
                     Kategori Produk
                   </label>
-                  <div className="relative">
-                    <Tags className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10" size={14} />
-                    <Select
-                      required
-                      placeholder="Pilih Kategori..."
-                      value={categoriesList.find(c => c.id.toString() === formData.category_id) ? { 
-                        value: formData.category_id, 
-                        label: categoriesList.find(c => c.id.toString() === formData.category_id)?.name 
-                      } : null}
-                      onChange={(option: any) => setFormData({ ...formData, category_id: option?.value || '' })}
-                      options={categoriesList.map(cat => ({ value: cat.id.toString(), label: cat.name }))}
-                      menuPlacement="auto"
-                      styles={{
-                        control: (base) => ({ 
-                          ...base, 
-                          minHeight: '38px', 
-                          borderRadius: '8px', 
-                          borderColor: '#E5E7EB', 
-                          fontSize: '12px',
-                          backgroundColor: '#F9FAFB',
-                          paddingLeft: '28px'
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          fontSize: '11px',
-                          fontWeight: state.isSelected ? 'bold' : 'normal',
-                          padding: '8px 12px'
-                        }),
-                        singleValue: (base) => ({
-                          ...base,
-                          fontSize: '12px',
-                          fontWeight: '600',
-                          color: '#1F2937'
-                        }),
-                        placeholder: (base) => ({
-                          ...base,
-                          fontSize: '12px',
-                          color: '#9CA3AF'
-                        })
-                      }}
-                    />
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Tags className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10" size={14} />
+                      <Select
+                        required
+                        placeholder="Pilih Kategori..."
+                        value={categoriesList.find(c => c.id.toString() === formData.category_id) ? { 
+                          value: formData.category_id, 
+                          label: categoriesList.find(c => c.id.toString() === formData.category_id)?.name 
+                        } : null}
+                        onChange={(option: any) => setFormData({ ...formData, category_id: option?.value || '' })}
+                        options={categoriesList.map(cat => ({ value: cat.id.toString(), label: cat.name }))}
+                        menuPlacement="auto"
+                        styles={{
+                          control: (base) => ({ 
+                            ...base, 
+                            minHeight: '38px', 
+                            borderRadius: '8px', 
+                            borderColor: theme === 'dark' ? '#334155' : '#E5E7EB', 
+                            fontSize: '12px',
+                            backgroundColor: theme === 'dark' ? '#1e293b' : '#F9FAFB',
+                            paddingLeft: '28px',
+                            color: theme === 'dark' ? '#f8fafc' : '#1F2937'
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            backgroundColor: theme === 'dark' ? '#1e293b' : '#FFFFFF',
+                            borderColor: theme === 'dark' ? '#334155' : '#E5E7EB',
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected 
+                              ? '#3B82F6' 
+                              : state.isFocused 
+                                ? theme === 'dark' ? '#334155' : '#F3F4F6' 
+                                : 'transparent',
+                            color: state.isSelected ? '#FFFFFF' : theme === 'dark' ? '#f8fafc' : '#1F2937',
+                            fontSize: '11px',
+                            fontWeight: state.isSelected ? 'bold' : 'normal',
+                            padding: '8px 12px',
+                            cursor: 'pointer'
+                          }),
+                          singleValue: (base) => ({
+                            ...base,
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            color: theme === 'dark' ? '#f8fafc' : '#1F2937'
+                          }),
+                          input: (base) => ({
+                            ...base,
+                            color: theme === 'dark' ? '#f8fafc' : '#1F2937'
+                          }),
+                          placeholder: (base) => ({
+                            ...base,
+                            fontSize: '12px',
+                            color: '#9CA3AF'
+                          })
+                        }}
+                      />
+                    </div>
+                    {isAddingCategory ? (
+                      <div className="flex gap-1 animate-in slide-in-from-right-2 duration-200">
+                        <input 
+                          type="text"
+                          autoFocus
+                          placeholder="Nama kategori..."
+                          value={newCategoryName}
+                          onChange={(e) => setNewCategoryName(e.target.value)}
+                          onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                          className="w-32 px-2 py-1 border border-blue-400 rounded-lg text-xs outline-none bg-blue-50/50 dark:bg-blue-900/20 dark:text-blue-100"
+                        />
+                        <button 
+                          type="button"
+                          onClick={handleAddCategory}
+                          disabled={isSavingCategory}
+                          className="p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 disabled:opacity-50"
+                        >
+                          <Check size={14} />
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={() => setIsAddingCategory(false)}
+                          className="p-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingCategory(true)}
+                        className="p-2 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg hover:bg-blue-100 transition-colors shrink-0 dark:bg-blue-900/40 dark:border-blue-800 dark:text-blue-300"
+                        title="Tambah Kategori Baru"
+                      >
+                        <Plus size={18} />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -585,12 +666,11 @@ export default function ProdukTab() {
                     <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                     <input
                       type="number"
-                      required
                       min="0"
                       placeholder="Rp 0"
                       value={formData.harga_beli}
                       onChange={(e) => setFormData({ ...formData, harga_beli: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold text-gray-700 bg-gray-50/50"
+                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold text-gray-700 bg-gray-50/50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
                     />
                   </div>
                 </div>
@@ -603,12 +683,11 @@ export default function ProdukTab() {
                     <Percent className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                     <input
                       type="number"
-                      required
                       min="0"
                       placeholder="Rp 0"
                       value={formData.harga_jual}
                       onChange={(e) => setFormData({ ...formData, harga_jual: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none text-xs font-black text-blue-600 bg-blue-50/30"
+                      className="w-full pl-9 pr-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none text-xs font-black text-blue-600 bg-blue-50/30 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400"
                     />
                   </div>
                 </div>

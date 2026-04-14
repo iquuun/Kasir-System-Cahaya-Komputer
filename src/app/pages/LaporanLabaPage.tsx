@@ -22,7 +22,10 @@ interface DashboardKeuanganData {
   pendapatan_harian: { hari_ini: number; hari_kemarin: number };
   uang_kas: number;
   uang_di_luar: number;
-  margin_bulanan: { pendapatan: number; hpp: number; biaya_operasional: number; margin: number };
+  margin_bulanan: { 
+    current: { label: string; pendapatan: number; hpp: number; biaya_operasional: number; margin: number };
+    past: { label: string; pendapatan: number; hpp: number; biaya_operasional: number; margin: number };
+  };
 }
 
 function StatCard({ title, value, subtitle, icon: Icon, colorClass = "from-blue-600 to-blue-700" }: { title: string; value: string; subtitle: React.ReactNode; icon: React.ElementType; colorClass?: string }) {
@@ -213,18 +216,34 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
             colorClass="from-emerald-500 to-emerald-600"
           />
 
-          {/* 7. Margin 1 Bulan */}
-          <StatCard
-            title="Margin Oprasional 1 Bulan"
-            value={formatRp(data.margin_bulanan.margin)}
-            subtitle={
-              <span>
-                Omzet - HPP - ADM - Ops ({data.margin_bulanan.pendapatan > 0 ? ((data.margin_bulanan.margin / data.margin_bulanan.pendapatan) * 100).toFixed(1) : 0}%)
-              </span>
-            }
-            icon={Activity}
-            colorClass="from-teal-500 to-teal-600"
-          />
+          {/* 7. Laba Bersih 1 Bulan (Bulan Ini vs Bulan Lalu) */}
+          {(() => {
+            const current = data.margin_bulanan.current;
+            const past = data.margin_bulanan.past;
+            const diff = current.margin - past.margin;
+            const isUp = diff >= 0;
+            const percent = past.margin !== 0 ? Math.abs((diff / past.margin) * 100).toFixed(1) : 0;
+
+            return (
+              <StatCard
+                title={`Laba Bersih ${current.label}`}
+                value={formatRp(current.margin)}
+                subtitle={
+                  <div className="flex flex-col gap-1 text-[10px]">
+                    <div className="flex items-center gap-1">
+                      {isUp ? <ArrowUpRight size={10} className="text-emerald-400" /> : <ArrowDownRight size={10} className="text-rose-400" />}
+                      <span className={isUp ? 'text-emerald-400' : 'text-rose-400'}>
+                        {isUp ? 'Naik' : 'Turun'} {percent}% dari {past.label}
+                      </span>
+                    </div>
+                    <span className="opacity-70 text-[9px] italic">Laba bersih - ops ({formatRp(past.margin)} bulan lalu)</span>
+                  </div>
+                }
+                icon={Activity}
+                colorClass="from-teal-500 to-teal-600"
+              />
+            );
+          })()}
 
           {/* 8. Uang Piutang (Manual) */}
           <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl shadow-lg border-t border-white/20 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden text-white flex flex-col justify-between">
@@ -345,7 +364,8 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                     { name: 'Uang Online', nominal: data.uang_online.bulan_ini, fill: '#6366f1' },
                     { name: 'Rekening', nominal: data.uang_rekening, fill: '#3b82f6' },
                     { name: 'Stok', nominal: data.uang_stok, fill: '#f59e0b' },
-                    { name: 'Margin', nominal: data.margin_bulanan.margin, fill: '#14b8a6' },
+                    { name: 'Laba April', nominal: data.margin_bulanan.current.margin, fill: '#14b8a6' },
+                    { name: 'Laba Maret', nominal: data.margin_bulanan.past.margin, fill: '#0d9488' },
                     { name: 'Pendapatan', nominal: data.pendapatan_harian.hari_ini, fill: '#8b5cf6' },
                     { name: 'Piutang', nominal: data.uang_di_luar, fill: '#475569' },
                     { name: 'Hutang', nominal: data.hutang.total_aktif, fill: '#f43f5e' }

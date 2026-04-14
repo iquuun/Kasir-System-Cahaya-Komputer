@@ -68,6 +68,7 @@ export default function MutasiRekeningTab() {
   // Filters & Pagination
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'masuk' | 'keluar'>('all');
+  const [filterSumber, setFilterSumber] = useState('all');
   const [timeFilter, setTimeFilter] = useState<'today' | 'week' | 'month' | 'all'>('month');
   const getLocalYMD = (date: Date) => {
     const y = date.getFullYear();
@@ -130,11 +131,17 @@ export default function MutasiRekeningTab() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, filterType, timeFilter, filterValue]);
+  }, [searchTerm, filterType, filterSumber, timeFilter, filterValue]);
 
   // Dynamic Time Filter logic based on fetched data
   const filteredFlows = useMemo(() => {
     return cashFlows.filter(f => {
+      // Type Filter
+      if (filterType !== 'all' && f.tipe !== filterType) return false;
+
+      // Sumber Filter
+      if (filterSumber !== 'all' && f.sumber !== filterSumber) return false;
+
       // Time Filter
       const flowDateStr = f.tanggal.substring(0, 10); // YYYY-MM-DD
       const selectedDate = new Date(filterValue);
@@ -171,7 +178,7 @@ export default function MutasiRekeningTab() {
       const timeDiff = new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime();
       return timeDiff !== 0 ? timeDiff : b.id - a.id;
     });
-  }, [cashFlows, searchTerm, timeFilter, filterValue]);
+  }, [cashFlows, searchTerm, filterType, filterSumber, timeFilter, filterValue]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredFlows.length / itemsPerPage) || 1;
@@ -371,6 +378,20 @@ export default function MutasiRekeningTab() {
               </button>
             </div>
           )}
+
+          {/* SUMBER / KATEGORI FILTER */}
+          <div className="flex items-center gap-1 p-1 bg-gray-50 rounded-xl border border-gray-200">
+             <select 
+               value={filterSumber}
+               onChange={(e) => setFilterSumber(e.target.value)}
+               className="bg-transparent text-[10px] font-black text-blue-600 outline-none uppercase px-2 py-1 cursor-pointer"
+             >
+               <option value="all">SEMUA SUMBER</option>
+               {Array.from(new Set(cashFlows.map(f => f.sumber))).sort().map(s => (
+                 <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
+               ))}
+             </select>
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -424,12 +445,18 @@ export default function MutasiRekeningTab() {
                     </td>
                     <td className="px-4 py-3 text-xs font-bold text-gray-800 capitalize">
                        {flow.sumber.replace(/_/g, ' ')}
-                       {flow.sumber === 'biaya_operasional' && (
-                         <span className="ml-2 inline-flex border border-amber-200 text-amber-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-amber-50">OPS</span>
-                       )}
-                       {flow.sumber === 'gaji_karyawan' && (
-                         <span className="ml-2 inline-flex border border-purple-200 text-purple-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-purple-50">GAJI</span>
-                       )}
+                        {flow.sumber === 'biaya_operasional' && (
+                          <>
+                            {flow.keterangan && flow.keterangan.toLowerCase().includes('gaji') ? (
+                              <span className="ml-2 inline-flex border border-purple-200 text-purple-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-purple-50">GAJI</span>
+                            ) : (
+                              <span className="ml-2 inline-flex border border-amber-200 text-amber-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-amber-50">OPS</span>
+                            )}
+                          </>
+                        )}
+                        {flow.sumber === 'gaji_karyawan' && (
+                          <span className="ml-2 inline-flex border border-purple-200 text-purple-600 px-1.5 py-0.5 text-[9px] rounded uppercase bg-purple-50">GAJI</span>
+                        )}
                     </td>
                     <td className="px-3 py-2 text-right text-xs">
                       <span className={`font-black text-sm ${flow.tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600'}`}>
