@@ -81,24 +81,13 @@ class LaporanLabaController extends Controller
         // Rumus: Total Penjualan - HPP - ADM - Ops
         
         // --- HITUNG HARI INI ---
-        $pendapatanHariIni = (float) DB::table('sales')
+        $statsHariIni = DB::table('sales')
             ->whereDate('tanggal', $hariIni)
-            ->sum('total_penjualan');
-            
-        $hppHariIniSql = DB::select("
-            SELECT SUM(si.qty * COALESCE(p.harga_beli, 0)) as total_hpp
-            FROM sales s
-            JOIN sale_items si ON s.id = si.sale_id
-            LEFT JOIN products p ON p.id = si.product_id
-            WHERE DATE(s.tanggal) = ?
-        ", [$hariIni]);
-        $totalHppHariIni = (float) ($hppHariIniSql[0]->total_hpp ?? 0);
-        
-        $admHariIni = (float) DB::table('sales')
-            ->whereDate('tanggal', $hariIni)
-            ->where('channel', '!=', 'UMUM')
-            ->where('masuk_dp', '>', 0)
-            ->sum(DB::raw('total_penjualan - masuk_dp'));
+            ->selectRaw('SUM(masuk_dp) as pendapatan, SUM(harga_modal_manual) as hpp')
+            ->first();
+
+        $pendapatanHariIni = (float) ($statsHariIni->pendapatan ?? 0);
+        $totalHppHariIni = (float) ($statsHariIni->hpp ?? 0);
             
         $opsHariIni = (float) DB::table('cash_flows')
             ->where('tipe', 'keluar')
@@ -106,27 +95,16 @@ class LaporanLabaController extends Controller
             ->whereDate('tanggal', $hariIni)
             ->sum('nominal');
             
-        $labaBersihHariIni = $pendapatanHariIni - $totalHppHariIni - $admHariIni - $opsHariIni;
+        $labaBersihHariIni = $pendapatanHariIni - $totalHppHariIni - $opsHariIni;
 
         // --- HITUNG HARI KEMARIN ---
-        $pendapatanHariKemarin = (float) DB::table('sales')
+        $statsHariKemarin = DB::table('sales')
             ->whereDate('tanggal', $hariKemarin)
-            ->sum('total_penjualan');
-            
-        $hppHariKemarinSql = DB::select("
-            SELECT SUM(si.qty * COALESCE(p.harga_beli, 0)) as total_hpp
-            FROM sales s
-            JOIN sale_items si ON s.id = si.sale_id
-            LEFT JOIN products p ON p.id = si.product_id
-            WHERE DATE(s.tanggal) = ?
-        ", [$hariKemarin]);
-        $totalHppHariKemarin = (float) ($hppHariKemarinSql[0]->total_hpp ?? 0);
-        
-        $admHariKemarin = (float) DB::table('sales')
-            ->whereDate('tanggal', $hariKemarin)
-            ->where('channel', '!=', 'UMUM')
-            ->where('masuk_dp', '>', 0)
-            ->sum(DB::raw('total_penjualan - masuk_dp'));
+            ->selectRaw('SUM(masuk_dp) as pendapatan, SUM(harga_modal_manual) as hpp')
+            ->first();
+
+        $pendapatanHariKemarin = (float) ($statsHariKemarin->pendapatan ?? 0);
+        $totalHppHariKemarin = (float) ($statsHariKemarin->hpp ?? 0);
             
         $opsHariKemarin = (float) DB::table('cash_flows')
             ->where('tipe', 'keluar')
@@ -134,7 +112,7 @@ class LaporanLabaController extends Controller
             ->whereDate('tanggal', $hariKemarin)
             ->sum('nominal');
             
-        $labaBersihHariKemarin = $pendapatanHariKemarin - $totalHppHariKemarin - $admHariKemarin - $opsHariKemarin;
+        $labaBersihHariKemarin = $pendapatanHariKemarin - $totalHppHariKemarin - $opsHariKemarin;
 
         // 7. Uang di Luar (Piutang) — dari settings
         $piutangSetting = DB::table('settings')->where('key', 'piutang_pembeli')->first();
@@ -186,8 +164,8 @@ class LaporanLabaController extends Controller
         $pemasukanBulanIni = $pendapatanBulanan;
         $pemasukanTahunIni = (float) DB::table('sales')
             ->whereBetween('tanggal', [$tahunIni->toDateString(), $tahunIniEnd->toDateString()])
-            ->sum('total_penjualan');
-        $pemasukanSeluruh = (float) DB::table('sales')->sum('total_penjualan');
+            ->sum('masuk_dp');
+        $pemasukanSeluruh = (float) DB::table('sales')->sum('masuk_dp');
 
         // 11. Pengeluaran (Hari Ini / Bulan Ini / Tahun Ini / Seluruh)
         $pengeluaranHariIni = (float) DB::table('cash_flows')
@@ -215,21 +193,16 @@ class LaporanLabaController extends Controller
             $mEnd = Carbon::create($now->year, $m, 1)->endOfMonth();
 
             $salesQuery = DB::table('sales')->whereBetween('tanggal', [$mStart->toDateString(), $mEnd->toDateString()]);
-            $masuk = (float) $salesQuery->sum('total_penjualan');
-            $hpp = (float) $salesQuery->sum('total_hpp');
-            $labaKotor = $masuk - $hpp;
+            $masuk = (float) $salesQuery->sum('masuk_dp');
+            $hpp = (float) $salesQuery->sum('harga_modal_manual');
 
             $keluar = (float) DB::table('cash_flows')
                 ->where('tipe', 'keluar')
+                ->where('sumber', 'biaya_operasional')
                 ->whereBetween('tanggal', [$mStart->toDateString(), $mEnd->toDateString()])
                 ->sum('nominal');
 
-            $adm = (float) $salesQuery->clone()
-                ->where('channel', '!=', 'UMUM')
-                ->where('masuk_dp', '>', 0)
-                ->sum(DB::raw('total_penjualan - masuk_dp'));
-
-            $labaBersih = $labaKotor - $keluar - $adm;
+            $labaBersih = $masuk - $hpp - $keluar;
 
             $chartData[] = [
                 'bulan' => $bulanNames[$m - 1],

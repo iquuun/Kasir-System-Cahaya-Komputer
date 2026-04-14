@@ -21,7 +21,7 @@ interface DashboardData {
     total_transaksi: number;
   };
   chart_data: { name: string; value: number }[];
-  recent_transactions: { id: string; customer: string; total: number; time: string }[];
+  recent_transactions: { id: string; customer: string; total: number; date: string, time: string }[];
   low_stock: { id: number; name: string; stok: number; min: number }[];
 }
 
@@ -151,7 +151,7 @@ export default function Dashboard() {
         />
         {isOwner && (
           <StatCard
-            title="Laba Kotor"
+            title="Laba Bersih Transaksi"
             value={`Rp ${(data.stats.laba_kotor / 1000000).toFixed(1)} Jt`}
             subtitle={data.subtitle}
             icon={TrendingUp}
@@ -246,7 +246,7 @@ export default function Dashboard() {
                     <p className="font-black text-[#3B82F6]">
                       Rp {transaction.total.toLocaleString('id-ID')}
                     </p>
-                    <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-0.5">{transaction.time}</p>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">{transaction.date} | {transaction.time}</p>
                   </div>
                 </div>
               ))}

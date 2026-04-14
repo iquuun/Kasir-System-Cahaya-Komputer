@@ -23,22 +23,19 @@ class DashboardController extends Controller
 
         $startOfMonth = $now->copy()->startOfMonth();
 
-        // 1. Total Penjualan (Berdasarkan Range)
+        // 1. Total Penjualan (Berdasarkan Range - Menggunakan Net / Masuk DP sesuai diskusi laba manual)
         $totalPenjualan = DB::table('sales')
             ->whereBetween('tanggal', [$start, $end])
-            ->sum('total_penjualan');
+            ->sum('masuk_dp');
 
-        // 2. Laba Kotor (Berdasarkan Range)
-        $labaKotorRaw = DB::select("
-            SELECT SUM(si.qty * (si.harga_jual_saat_itu - COALESCE(p.harga_beli, 0))) as laba
-            FROM sales s
-            JOIN sale_items si ON s.id = si.sale_id
-            LEFT JOIN products p ON p.id = si.product_id
-            WHERE s.tanggal BETWEEN ? AND ?
-        ", [$start, $end]);
+        // 2. Laba Bersih (Profit Berdasarkan Range)
+        // Rumus: Masuk DP - Harga Modal Manual
+        $labaStats = DB::table('sales')
+            ->whereBetween('tanggal', [$start, $end])
+            ->selectRaw('SUM(masuk_dp) as pendapatan, SUM(harga_modal_manual) as modal')
+            ->first();
         
-        $labaKotorArray = (array) $labaKotorRaw[0];
-        $labaKotor = $labaKotorArray['laba'] ?? 0;
+        $labaKotor = (float) (($labaStats->pendapatan ?? 0) - ($labaStats->modal ?? 0));
 
         // 3. Saldo Kas (Dari Cash Flows)
         $saldoKasData = DB::table('cash_flows')->selectRaw("
@@ -48,7 +45,7 @@ class DashboardController extends Controller
         $saldoKas = $saldoKasData ? (float) $saldoKasData->saldo : 0;
 
         // 4. Hutang Distributor (Pembelian yang belum Lunas)
-        $hutangDistributorData = DB::select("SELECT SUM(total_pembelian - terbayar) as sisa_hutang FROM purchases WHERE status_pembayaran = 'belum_lunas'");
+        $hutangDistributorData = DB::select("SELECT SUM(total_pembelian - terbayar) as sisa_hutang FROM purchases WHERE status_pembayaran = 'hutang'");
         $hutangDistributorArray = (array) $hutangDistributorData[0];
         $hutangDistributor = $hutangDistributorArray['sisa_hutang'] ?? 0;
 
@@ -69,7 +66,7 @@ class DashboardController extends Controller
             $date = $graphStart->copy()->addDays($i);
             $dailyTotal = DB::table('sales')
                 ->whereDate('tanggal', $date->toDateString())
-                ->sum('total_penjualan');
+                ->sum('masuk_dp');
             
             $grafikData[] = [
                 'name' => substr($days[$i], 0, 3), 
@@ -86,7 +83,8 @@ class DashboardController extends Controller
                 return [
                     'id' => isset($sale->invoice) ? $sale->invoice : '-',
                     'customer' => 'UMUM',
-                    'total' => (float) $sale->total_penjualan,
+                    'total' => (float) $sale->masuk_dp, // Use net for consistency
+                    'date' => Carbon::parse($sale->tanggal)->format('d M Y'),
                     'time' => Carbon::parse($sale->tanggal)->format('H:i')
                 ];
             });
