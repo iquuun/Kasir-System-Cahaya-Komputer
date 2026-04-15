@@ -127,6 +127,7 @@ export default function KalkulatorPage() {
     const [modalSatuan, setModalSatuan] = useState<number[]>([0]);
     const [packingSatuan, setPackingSatuan] = useState<number>(1000);
     const [marginSatuan, setMarginSatuan] = useState<number>(5000);
+    const [marginSatuanType, setMarginSatuanType] = useState<'flat' | 'percent'>('flat');
 
     // Rakitan State with LocalStorage mapping
     const [rakitanItems, setRakitanItems] = useState<RakitanItem[]>(() => {
@@ -148,6 +149,7 @@ export default function KalkulatorPage() {
 
     const [packingRakitan, setPackingRakitan] = useState<number>(() => Number(localStorage.getItem('kalkulator_packing')) || 25000);
     const [marginRakitan, setMarginRakitan] = useState<number>(() => Number(localStorage.getItem('kalkulator_margin')) || 500000);
+    const [marginRakitanType, setMarginRakitanType] = useState<'flat' | 'percent'>(() => (localStorage.getItem('kalkulator_margin_type') as 'flat' | 'percent') || 'flat');
     const [screenshotMode, setScreenshotMode] = useState(false);
     const [confirmAction, setConfirmAction] = useState<{title: string, desc: string, onConfirm: () => void} | null>(null);
 
@@ -155,6 +157,7 @@ export default function KalkulatorPage() {
     useEffect(() => localStorage.setItem('kalkulator_rakitan_state', JSON.stringify(rakitanItems)), [rakitanItems]);
     useEffect(() => localStorage.setItem('kalkulator_packing', packingRakitan.toString()), [packingRakitan]);
     useEffect(() => localStorage.setItem('kalkulator_margin', marginRakitan.toString()), [marginRakitan]);
+    useEffect(() => localStorage.setItem('kalkulator_margin_type', marginRakitanType), [marginRakitanType]);
 
     const resetRakitan = () => {
         setConfirmAction({
@@ -390,7 +393,8 @@ export default function KalkulatorPage() {
 
     const renderSatuan = () => {
         const totalModal = modalSatuan.reduce((a, b) => a + Number(b), 0);
-        const result = hitungEcommerce(totalModal, packingSatuan, marginSatuan);
+        const effectiveMarginSatuan = marginSatuanType === 'percent' ? Math.round(totalModal * (marginSatuan / 100)) : marginSatuan;
+        const result = hitungEcommerce(totalModal, packingSatuan, effectiveMarginSatuan);
 
         return (
             <div className="animate-in fade-in slide-in-from-bottom-2">
@@ -435,8 +439,18 @@ export default function KalkulatorPage() {
                                 <input type="number" min="0" value={packingSatuan} onChange={(e) => setPackingSatuan(Math.max(0, Number(e.target.value)))} className="w-full text-sm px-3 py-2 border bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#3B82F6]" />
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-emerald-700 mb-1">Target Margin Bersih (Rp)</label>
-                                <input type="number" min="0" value={marginSatuan} onChange={(e) => setMarginSatuan(Math.max(0, Number(e.target.value)))} className="w-full text-sm px-3 py-2 border border-emerald-300 bg-emerald-50 focus:bg-white rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold" />
+                                <label className="block text-xs font-semibold text-emerald-700 mb-1">Target Margin Bersih</label>
+                                <div className="flex gap-1">
+                                    <input type="number" min="0" value={marginSatuan} onChange={(e) => setMarginSatuan(Math.max(0, Number(e.target.value)))} className="flex-1 text-sm px-3 py-2 border border-emerald-300 bg-emerald-50 focus:bg-white rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold" />
+                                    <button
+                                        onClick={() => setMarginSatuanType(marginSatuanType === 'flat' ? 'percent' : 'flat')}
+                                        className={`px-3 py-2 rounded-lg text-xs font-black border transition-all shrink-0 ${marginSatuanType === 'percent' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100'}`}
+                                        title="Klik untuk ganti mode: Rp (flat) atau % (persen dari modal)"
+                                    >
+                                        {marginSatuanType === 'percent' ? '%' : 'Rp'}
+                                    </button>
+                                </div>
+                                {marginSatuanType === 'percent' && <p className="text-[10px] text-emerald-600 mt-1">= Rp {effectiveMarginSatuan.toLocaleString('id-ID')} ({marginSatuan}% dari modal)</p>}
                             </div>
                         </div>
                     </div>
@@ -486,7 +500,8 @@ export default function KalkulatorPage() {
 
     const renderRakitan = () => {
         const totalModalComponent = rakitanItems.reduce((a, b) => a + (b.qty * b.modal), 0);
-        const result = hitungEcommerce(totalModalComponent, packingRakitan, marginRakitan);
+        const effectiveMarginRakitan = marginRakitanType === 'percent' ? Math.round(totalModalComponent * (marginRakitan / 100)) : marginRakitan;
+        const result = hitungEcommerce(totalModalComponent, packingRakitan, effectiveMarginRakitan);
         
         // Extract unique categories from products
         const dbCategories = Array.from(new Set(products.map(p => p.category?.name).filter(Boolean))).sort();
@@ -589,8 +604,18 @@ export default function KalkulatorPage() {
                                     <input type="number" min="0" value={packingRakitan} onChange={(e) => setPackingRakitan(Math.max(0, Number(e.target.value)))} className="w-full text-sm px-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#3B82F6]" />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-semibold text-emerald-700 mb-1">Target Margin Bersih (Rp)</label>
-                                    <input type="number" min="0" value={marginRakitan} onChange={(e) => setMarginRakitan(Math.max(0, Number(e.target.value)))} className="w-full text-sm px-3 py-2 border border-emerald-300 bg-emerald-50 focus:bg-white rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold" />
+                                    <label className="block text-xs font-semibold text-emerald-700 mb-1">Target Margin Bersih</label>
+                                    <div className="flex gap-1">
+                                        <input type="number" min="0" value={marginRakitan} onChange={(e) => setMarginRakitan(Math.max(0, Number(e.target.value)))} className="flex-1 text-sm px-3 py-2 border border-emerald-300 bg-emerald-50 focus:bg-white rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold" />
+                                        <button
+                                            onClick={() => setMarginRakitanType(marginRakitanType === 'flat' ? 'percent' : 'flat')}
+                                            className={`px-3 py-2 rounded-lg text-xs font-black border transition-all shrink-0 ${marginRakitanType === 'percent' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100'}`}
+                                            title="Klik untuk ganti mode: Rp (flat) atau % (persen dari modal)"
+                                        >
+                                            {marginRakitanType === 'percent' ? '%' : 'Rp'}
+                                        </button>
+                                    </div>
+                                    {marginRakitanType === 'percent' && <p className="text-[10px] text-emerald-600 mt-1">= Rp {effectiveMarginRakitan.toLocaleString('id-ID')} ({marginRakitan}% dari total modal)</p>}
                                 </div>
                             </div>
                             

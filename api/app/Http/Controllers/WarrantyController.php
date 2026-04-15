@@ -20,9 +20,11 @@ class WarrantyController extends Controller
             'customer_phone' => 'required|string',
             'product_name' => 'required|string',
             'tanggal_masuk' => 'required|date',
-            'status' => 'required|in:diterima_customer,dikirim_distributor,diterima_dari_distributor,dikirim_ke_customer',
+            'status' => 'required|in:diterima_toko,proses_distributor,dikirim_ke_customer',
             'catatan' => 'nullable|string',
             'nomor_resi' => 'nullable|string',
+            'distributor_name' => 'nullable|string',
+            'tanggal_kirim_distributor' => 'nullable|date',
         ]);
 
         $warranty = Warranty::create([
@@ -40,9 +42,11 @@ class WarrantyController extends Controller
             'customer_phone' => 'required|string',
             'product_name' => 'required|string',
             'tanggal_masuk' => 'required|date',
-            'status' => 'required|in:diterima_customer,dikirim_distributor,diterima_dari_distributor,dikirim_ke_customer',
+            'status' => 'required|in:diterima_toko,proses_distributor,dikirim_ke_customer',
             'catatan' => 'nullable|string',
             'nomor_resi' => 'nullable|string',
+            'distributor_name' => 'nullable|string',
+            'tanggal_kirim_distributor' => 'nullable|date',
         ]);
 
         $warranty->update($request->all());

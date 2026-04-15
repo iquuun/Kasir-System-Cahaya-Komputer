@@ -9,27 +9,33 @@ interface Warranty {
   customer_phone: string;
   product_name: string;
   tanggal_masuk: string;
-  status: 'diterima_customer' | 'dikirim_distributor' | 'diterima_dari_distributor' | 'dikirim_ke_customer';
+  status: 'diterima_toko' | 'proses_distributor' | 'dikirim_ke_customer';
   nomor_resi?: string | null;
   catatan: string;
+  distributor_name?: string | null;
+  tanggal_kirim_distributor?: string | null;
+}
+
+interface Distributor {
+  id: number;
+  name: string;
 }
 
 const statusColors: Record<Warranty['status'], string> = {
-  diterima_customer: 'bg-blue-100 text-blue-700',
-  dikirim_distributor: 'bg-purple-100 text-purple-700',
-  diterima_dari_distributor: 'bg-orange-100 text-orange-700',
+  diterima_toko: 'bg-blue-100 text-blue-700',
+  proses_distributor: 'bg-orange-100 text-orange-700',
   dikirim_ke_customer: 'bg-green-100 text-green-700',
 };
 
 const statusLabels: Record<Warranty['status'], string> = {
-  diterima_customer: 'Diterima',
-  dikirim_distributor: 'Dikirim ke Distributor',
-  diterima_dari_distributor: 'Diterima dari Distributor',
+  diterima_toko: 'Diterima Toko',
+  proses_distributor: 'Proses Distributor',
   dikirim_ke_customer: 'Dikirim ke Customer',
 };
 
 export default function GaransiPage() {
   const [warranties, setWarranties] = useState<Warranty[]>([]);
+  const [distributors, setDistributors] = useState<Distributor[]>([]);
   const [filter, setFilter] = useState<Warranty['status'] | 'all'>('all');
   const [loading, setLoading] = useState(true);
 
@@ -44,13 +50,16 @@ export default function GaransiPage() {
     customer_phone: '',
     product_name: '',
     tanggal_masuk: new Date().toISOString().split('T')[0],
-    status: 'diterima_customer' as Warranty['status'],
+    status: 'diterima_toko' as Warranty['status'],
     nomor_resi: '',
     catatan: '',
+    distributor_name: '',
+    tanggal_kirim_distributor: '',
   });
 
   useEffect(() => {
     fetchWarranties();
+    fetchDistributors();
   }, []);
 
   const fetchWarranties = async () => {
@@ -62,6 +71,15 @@ export default function GaransiPage() {
       toast.error('Gagal memuat data garansi');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchDistributors = async () => {
+    try {
+      const res = await api.get('/distributors');
+      setDistributors(res.data);
+    } catch (err) {
+      console.error('Gagal memuat distributor:', err);
     }
   };
 
@@ -77,6 +95,8 @@ export default function GaransiPage() {
         status: warranty.status,
         nomor_resi: warranty.nomor_resi || '',
         catatan: warranty.catatan || '',
+        distributor_name: warranty.distributor_name || '',
+        tanggal_kirim_distributor: warranty.tanggal_kirim_distributor || '',
       });
     } else {
       setCurrentId(null);
@@ -85,9 +105,11 @@ export default function GaransiPage() {
         customer_phone: '',
         product_name: '',
         tanggal_masuk: new Date().toISOString().split('T')[0],
-        status: 'diterima_customer',
+        status: 'diterima_toko',
         nomor_resi: '',
         catatan: '',
+        distributor_name: '',
+        tanggal_kirim_distributor: '',
       });
     }
     setIsModalOpen(true);
@@ -162,7 +184,7 @@ export default function GaransiPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {Object.entries(statusLabels).map(([status, label]) => {
           const count = warranties.filter((w) => w.status === status).length;
           return (
@@ -211,7 +233,9 @@ export default function GaransiPage() {
               <tr>
                 <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Customer</th>
                 <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Produk</th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Tanggal Masuk</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Distributor</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Tgl Masuk</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Tgl Kirim Dist.</th>
                 <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Status</th>
                 <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Catatan</th>
                 <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Aksi</th>
@@ -225,16 +249,29 @@ export default function GaransiPage() {
                     <p className="text-[10px] text-gray-500">{warranty.customer_phone}</p>
                   </td>
                   <td className="px-3 py-2 text-xs font-medium text-gray-700">{warranty.product_name}</td>
+                  <td className="px-3 py-2 text-xs">
+                    {warranty.distributor_name ? (
+                      <span className="font-medium text-gray-700">{warranty.distributor_name}</span>
+                    ) : (
+                      <span className="text-gray-400">-</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2 text-xs text-gray-600">
                     {new Date(warranty.tanggal_masuk).toLocaleDateString('id-ID')}
+                  </td>
+                  <td className="px-3 py-2 text-xs text-gray-600">
+                    {warranty.tanggal_kirim_distributor
+                      ? new Date(warranty.tanggal_kirim_distributor).toLocaleDateString('id-ID')
+                      : <span className="text-gray-400">-</span>
+                    }
                   </td>
                   <td className="px-3 py-2">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
-                        statusColors[warranty.status]
+                        statusColors[warranty.status] || 'bg-gray-100 text-gray-600'
                       }`}
                     >
-                      {statusLabels[warranty.status]}
+                      {statusLabels[warranty.status] || warranty.status}
                     </span>
                     {warranty.nomor_resi && (
                       <p className="text-[10px] text-gray-500 mt-1 font-medium">
@@ -257,7 +294,7 @@ export default function GaransiPage() {
               ))}
               {filteredWarranties.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500 text-xs">Belum ada garansi!</td>
+                  <td colSpan={8} className="px-4 py-8 text-center text-gray-500 text-xs">Belum ada garansi!</td>
                 </tr>
               )}
             </tbody>
@@ -274,7 +311,7 @@ export default function GaransiPage() {
                 {modalMode === 'add' ? 'Tambah Data Garansi' : 'Edit Garansi'}
               </h3>
             </div>
-            <form onSubmit={handleSubmit} className="p-4 space-y-3">
+            <form onSubmit={handleSubmit} className="p-4 space-y-3 max-h-[70vh] overflow-y-auto">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Nama Customer</label>
@@ -309,9 +346,24 @@ export default function GaransiPage() {
                 />
               </div>
 
+              {/* Distributor */}
+              <div>
+                <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Distributor Tujuan Garansi</label>
+                <select
+                  value={formData.distributor_name}
+                  onChange={(e) => setFormData({ ...formData, distributor_name: e.target.value })}
+                  className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium"
+                >
+                  <option value="">-- Pilih Distributor --</option>
+                  {distributors.map(d => (
+                    <option key={d.id} value={d.name}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Tgl Masuk</label>
+                  <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Tgl Masuk ke Toko</label>
                   <input
                     type="date"
                     required
@@ -334,16 +386,28 @@ export default function GaransiPage() {
                 </div>
               </div>
 
-              {formData.status === 'dikirim_ke_customer' && (
-                <div>
-                  <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Nomor Resi (Opsional)</label>
-                  <input
-                    type="text"
-                    value={formData.nomor_resi}
-                    onChange={(e) => setFormData({ ...formData, nomor_resi: e.target.value })}
-                    className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
-                    placeholder="Contoh: JNT123456789"
-                  />
+              {/* Tanggal kirim distributor — tampil jika proses_distributor atau dikirim_ke_customer */}
+              {(formData.status === 'proses_distributor' || formData.status === 'dikirim_ke_customer') && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Tgl Kirim ke Distributor</label>
+                    <input
+                      type="date"
+                      value={formData.tanggal_kirim_distributor}
+                      onChange={(e) => setFormData({ ...formData, tanggal_kirim_distributor: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Nomor Resi (Opsional)</label>
+                    <input
+                      type="text"
+                      value={formData.nomor_resi}
+                      onChange={(e) => setFormData({ ...formData, nomor_resi: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
+                      placeholder="Contoh: JNT123456789"
+                    />
+                  </div>
                 </div>
               )}
 

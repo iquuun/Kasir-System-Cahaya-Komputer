@@ -1515,7 +1515,7 @@ export default function PenjualanPage() {
           }
 
           @page {
-            size: 21.00cm 13.97cm;
+            size: auto;
             margin: 0;
           }
         }

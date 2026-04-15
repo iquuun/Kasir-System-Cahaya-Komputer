@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -42,10 +42,52 @@ const navItems: NavItem[] = [
   { path: '/users', label: 'Manajemen Akun', icon: Users, ownerOnly: true },
 ];
 
+// Tooltip component for collapsed sidebar — uses fixed positioning to avoid scroll issues
+function SidebarTooltip({ children, label, show }: { children: React.ReactNode; label: string; show: boolean }) {
+  const [hovered, setHovered] = useState(false);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+  const ref = useRef<HTMLDivElement>(null);
+
+  if (!show) return <>{children}</>;
+
+  const handleMouseEnter = () => {
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      setPos({
+        top: rect.top + rect.height / 2,
+        left: rect.right + 10,
+      });
+    }
+    setHovered(true);
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {children}
+      {hovered && (
+        <div
+          className="fixed z-[9999] pointer-events-none"
+          style={{ top: pos.top, left: pos.left, transform: 'translateY(-50%)' }}
+        >
+          <div className="bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap border border-white/10 animate-in fade-in slide-in-from-left-2 duration-150">
+            {label}
+            {/* Arrow pointing left */}
+            <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[6px] border-r-gray-900" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Sidebar() {
   const { isOwner, logout, user } = useAuth();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); // DEFAULT: collapsed
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -81,13 +123,14 @@ export default function Sidebar() {
             <X size={22} />
           </button>
         ) : (
-          <button 
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 hover:bg-sidebar-foreground/20 rounded transition-colors text-sidebar-foreground shrink-0"
-            title={isCollapsed ? "Perbesar Menu" : "Perkecil Menu"}
-          >
-            {isCollapsed ? <Menu size={22} /> : <ChevronLeft size={22} />}
-          </button>
+          <SidebarTooltip label={isCollapsed ? "Perbesar Menu" : "Perkecil Menu"} show={isCollapsed}>
+            <button 
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-1 hover:bg-sidebar-foreground/20 rounded transition-colors text-sidebar-foreground shrink-0"
+            >
+              {isCollapsed ? <Menu size={22} /> : <ChevronLeft size={22} />}
+            </button>
+          </SidebarTooltip>
         )}
       </div>
 
@@ -97,7 +140,7 @@ export default function Sidebar() {
 
           const Icon = item.icon;
 
-          return (
+          const link = (
             <NavLink
               key={item.path}
               to={item.path}
@@ -108,24 +151,34 @@ export default function Sidebar() {
                   : 'text-sidebar-foreground/80 hover:bg-sidebar-foreground/10 font-medium'
                 } ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`
               }
-              title={(isCollapsed && !isMobile) ? item.label : undefined}
             >
               <Icon size={18} className="shrink-0" />
               {(!isCollapsed || isMobile) && <span className="truncate">{item.label}</span>}
             </NavLink>
           );
+
+          if (isCollapsed && !isMobile) {
+            return (
+              <SidebarTooltip key={item.path} label={item.label} show={true}>
+                {link}
+              </SidebarTooltip>
+            );
+          }
+
+          return link;
         })}
       </nav>
 
       <div className="p-3 border-t border-white/10 shrink-0">
-        <button
-          onClick={() => setIsLogoutModalOpen(true)}
-          className={`flex items-center px-3 py-2 rounded-md w-full text-sidebar-foreground/80 hover:bg-sidebar-foreground/10 transition-all text-xs font-medium ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`}
-          title={(isCollapsed && !isMobile) ? "Keluar" : undefined}
-        >
-          <LogOut size={18} className="shrink-0" />
-          {(!isCollapsed || isMobile) && <span className="truncate">Keluar</span>}
-        </button>
+        <SidebarTooltip label="Keluar" show={isCollapsed && !isMobile}>
+          <button
+            onClick={() => setIsLogoutModalOpen(true)}
+            className={`flex items-center px-3 py-2 rounded-md w-full text-sidebar-foreground/80 hover:bg-sidebar-foreground/10 transition-all text-xs font-medium ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`}
+          >
+            <LogOut size={18} className="shrink-0" />
+            {(!isCollapsed || isMobile) && <span className="truncate">Keluar</span>}
+          </button>
+        </SidebarTooltip>
       </div>
     </>
   );
