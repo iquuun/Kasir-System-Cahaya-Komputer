@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
   Plus, Eye, CheckCircle, Download, Search, ChevronLeft, ChevronRight, 
-  Trash2, Calendar, Edit2, Package, AlertCircle, CreditCard, ShoppingBag, DollarSign
+  Trash2, Calendar, Edit2, Package, AlertCircle, CreditCard, ShoppingBag, DollarSign,
+  Check, X
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import Select from 'react-select';
