@@ -21,69 +21,87 @@ class DashboardController extends Controller
             $end = $now->copy()->endOfWeek();
         }
 
-        $startOfMonth = $now->copy()->startOfMonth();
+        // Previous period for comparison
+        $prevStart = $start->copy()->subDays($start->diffInDays($end) + 1);
+        $prevEnd = $start->copy()->subSecond();
 
-        // 1. Total Penjualan (Berdasarkan Range - Menggunakan Net / Masuk DP sesuai diskusi laba manual)
-        $totalPenjualan = DB::table('sales')
-            ->whereBetween('tanggal', [$start, $end])
-            ->sum('masuk_dp');
-
-        // 2. Laba Bersih (Profit Berdasarkan Range)
-        // Rumus: Masuk DP - Harga Modal Manual
-        $labaStats = DB::table('sales')
-            ->whereBetween('tanggal', [$start, $end])
-            ->selectRaw('SUM(masuk_dp) as pendapatan, SUM(harga_modal_manual) as modal')
+        // Optimized Stats Query (Single scan for current and previous period)
+        $stats = DB::table('sales')
+            ->whereBetween('tanggal', [$prevStart, $end])
+            ->selectRaw("
+                SUM(CASE WHEN tanggal >= ? THEN masuk_dp ELSE 0 END) as curr_penjualan,
+                SUM(CASE WHEN tanggal < ? THEN masuk_dp ELSE 0 END) as prev_penjualan,
+                SUM(CASE WHEN tanggal >= ? THEN (masuk_dp - harga_modal_manual) ELSE 0 END) as curr_laba,
+                SUM(CASE WHEN tanggal < ? THEN (masuk_dp - harga_modal_manual) ELSE 0 END) as prev_laba,
+                COUNT(CASE WHEN tanggal >= ? THEN 1 END) as curr_count,
+                COUNT(CASE WHEN tanggal < ? THEN 1 END) as prev_count
+            ", [$start, $start, $start, $start, $start, $start])
             ->first();
-        
-        $labaKotor = (float) (($labaStats->pendapatan ?? 0) - ($labaStats->modal ?? 0));
 
-        // 3. Saldo Kas (Dari Cash Flows)
+        $totalPenjualan = (float) ($stats->curr_penjualan ?? 0);
+        $prevTotalPenjualan = (float) ($stats->prev_penjualan ?? 0);
+        $trendPenjualan = $prevTotalPenjualan > 0 ? round((($totalPenjualan - $prevTotalPenjualan) / $prevTotalPenjualan) * 100, 1) : 0;
+
+        $labaKotor = (float) ($stats->curr_laba ?? 0);
+        $prevLabaKotor = (float) ($stats->prev_laba ?? 0);
+        $trendLaba = $prevLabaKotor > 0 ? round((($labaKotor - $prevLabaKotor) / $prevLabaKotor) * 100, 1) : 0;
+
+        $totalTransaksi = (int) ($stats->curr_count ?? 0);
+        $prevTotalTransaksi = (int) ($stats->prev_count ?? 0);
+        $trendTransaksi = $prevTotalTransaksi > 0 ? round((($totalTransaksi - $prevTotalTransaksi) / $prevTotalTransaksi) * 100, 1) : 0;
+
+        // Other Stats
         $saldoKasData = DB::table('cash_flows')->selectRaw("
             SUM(CASE WHEN tipe = 'masuk' THEN nominal ELSE 0 END) -
             SUM(CASE WHEN tipe = 'keluar' THEN nominal ELSE 0 END) as saldo
         ")->first();
-        $saldoKas = $saldoKasData ? (float) $saldoKasData->saldo : 0;
+        $saldoKas = (float) ($saldoKasData->saldo ?? 0);
 
-        // 4. Hutang Distributor (Pembelian yang belum Lunas)
-        $hutangDistributorData = DB::select("SELECT SUM(total_pembelian - terbayar) as sisa_hutang FROM purchases WHERE status_pembayaran = 'hutang'");
-        $hutangDistributorArray = (array) $hutangDistributorData[0];
-        $hutangDistributor = $hutangDistributorArray['sisa_hutang'] ?? 0;
+        $hutangDistributor = (float) DB::table('purchases')
+            ->where('status_pembayaran', 'hutang')
+            ->sum(DB::raw('total_pembelian - terbayar'));
 
-        // 5. Nilai Aset (Total Stok * HPP / Harga Modal Saat Ini)
-        $nilaiAset = DB::table('products')->sum(DB::raw('stok_saat_ini * harga_beli'));
+        $nilaiAset = (float) DB::table('products')
+            ->whereNull('deleted_at')
+            ->sum(DB::raw('stok_saat_ini * harga_beli'));
 
-        // 6. Total Transaksi (Berdasarkan Range)
-        $totalTransaksi = DB::table('sales')
+        // Chart Data (Optimized with GROUP BY)
+        $chartDataRaw = DB::table('sales')
             ->whereBetween('tanggal', [$start, $end])
-            ->count();
+            ->selectRaw("DATE(tanggal) as tgl, SUM(masuk_dp) as total")
+            ->groupBy('tgl')
+            ->get()
+            ->pluck('total', 'tgl');
 
-        // 7. Data Grafik Penjualan 7 Hari Terakhir (Tetap 7 hari terakhir agar visual konsisten)
         $grafikData = [];
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-        $graphStart = $now->copy()->startOfWeek();
-        
-        for ($i = 0; $i < 7; $i++) {
-            $date = $graphStart->copy()->addDays($i);
-            $dailyTotal = DB::table('sales')
-                ->whereDate('tanggal', $date->toDateString())
-                ->sum('masuk_dp');
+        for ($i = 0; $i < ($range === 'monthly' ? $now->daysInMonth : 7); $i++) {
+            $dateObj = $start->copy()->addDays($i);
+            $dateStr = $dateObj->toDateString();
             
-            $grafikData[] = [
-                'name' => substr($days[$i], 0, 3), 
-                'value' => (float) $dailyTotal
-            ];
+            if ($range === 'monthly') {
+                $grafikData[] = [
+                    'name' => $dateObj->format('d'),
+                    'value' => (float) ($chartDataRaw[$dateStr] ?? 0)
+                ];
+            } else {
+                $grafikData[] = [
+                    'name' => $days[$i] ?? $dateObj->format('D'),
+                    'value' => (float) ($chartDataRaw[$dateStr] ?? 0)
+                ];
+            }
         }
 
-        // 8. Transaksi Terbaru (5 Teratas)
+        // Recent Transactions
         $transaksiTerbaru = DB::table('sales')
             ->orderBy('tanggal', 'desc')
             ->limit(5)
             ->get()
             ->map(function ($sale) {
                 return [
-                    'id' => isset($sale->invoice) ? $sale->invoice : '-',
+                    'id' => $sale->invoice ?? '-',
                     'customer' => 'UMUM',
-                    'total' => (float) $sale->masuk_dp, // Use net for consistency
+                    'total' => (float) $sale->masuk_dp,
                     'date' => Carbon::parse($sale->tanggal)->format('d M Y'),
                     'time' => Carbon::parse($sale->tanggal)->format('H:i')
                 ];
@@ -91,16 +109,19 @@ class DashboardController extends Controller
 
         return response()->json([
             'stats' => [
-                'total_penjualan' => (float) $totalPenjualan,
-                'laba_kotor' => (float) $labaKotor,
-                'saldo_kas' => (float) $saldoKas,
-                'hutang_distributor' => (float) $hutangDistributor,
-                'nilai_aset' => (float) $nilaiAset,
+                'total_penjualan' => $totalPenjualan,
+                'trend_penjualan' => $trendPenjualan,
+                'laba_kotor' => $labaKotor,
+                'trend_laba' => $trendLaba,
+                'saldo_kas' => $saldoKas,
+                'hutang_distributor' => $hutangDistributor,
+                'nilai_aset' => $nilaiAset,
                 'total_transaksi' => $totalTransaksi,
+                'trend_transaksi' => $trendTransaksi,
             ],
             'chart_data' => $grafikData,
             'recent_transactions' => $transaksiTerbaru,
-            'low_stock' => [],
+            'low_stock' => [], // Add logic if needed
             'range' => $range,
             'subtitle' => $range === 'weekly'
                 ? $start->translatedFormat('j M') . ' — ' . $end->translatedFormat('j M Y')

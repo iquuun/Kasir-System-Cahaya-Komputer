@@ -365,8 +365,8 @@ export default function KalkulatorPage() {
                                 </div>
                                 
                                 {rule.type === 'percent' && (
-                                    <div className="relative flex-1 bg-gray-50 rounded border border-gray-100">
-                                        <span className="absolute left-1.5 top-1 text-[8px] font-bold text-gray-400">MAX:</span>
+                                    <div className="relative flex-1 bg-gray-50 rounded border border-gray-100 group/max">
+                                        <span className="absolute left-1.5 top-1.5 text-[7px] font-black text-gray-400 uppercase tracking-tighter">MAX</span>
                                         <input 
                                             type="number" 
                                             min="0"
@@ -377,8 +377,8 @@ export default function KalkulatorPage() {
                                                 n[idx].capRp = val;
                                                 setActiveFeeRules(n);
                                             }} 
-                                            className="w-full text-[11px] pl-7 pr-1 py-1 bg-transparent outline-none focus:bg-white" 
-                                            placeholder="~"
+                                            className="w-full text-[10px] pl-[32px] pr-1 py-1 bg-transparent outline-none focus:bg-white font-bold" 
+                                            placeholder="0"
                                             title="Batas maksimal potongan (Rp). 0 = Tanpa batas"
                                         />
                                     </div>

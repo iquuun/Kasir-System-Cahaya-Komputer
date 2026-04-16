@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical, Edit2, Save } from 'lucide-react';
+import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical, Edit2, Save, Settings } from 'lucide-react';
+import StoreProfileModal from '../components/StoreProfileModal';
 import * as XLSX from 'xlsx';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -92,6 +93,7 @@ export default function PenjualanPage() {
   // Template Management
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [templateName, setTemplateName] = useState('');
 
   useEffect(() => {
@@ -681,6 +683,13 @@ export default function PenjualanPage() {
             >
               <History size={16} />
               Riwayat Penjualan
+            </button>
+            <button
+              onClick={() => setIsProfileModalOpen(true)}
+              className="px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-gray-500 hover:bg-gray-50"
+            >
+              <Settings size={16} />
+              Profil Toko
             </button>
           </div>
 
@@ -1588,6 +1597,13 @@ export default function PenjualanPage() {
           </div>
         </div>
       )}
+      <StoreProfileModal 
+        isOpen={isProfileModalOpen} 
+        onClose={() => {
+          setIsProfileModalOpen(false);
+          fetchSettings(); 
+        }} 
+      />
     </>
   );
 }

@@ -2,23 +2,31 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
   TrendingUp,
+  TrendingDown,
   DollarSign,
   Wallet,
   CreditCard,
   Package,
   ShoppingCart,
+  PlusCircle,
+  ClipboardCheck,
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { motion, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router';
 import api from '../api';
 
 interface DashboardData {
   stats: {
     total_penjualan: number;
+    trend_penjualan: number;
     laba_kotor: number;
+    trend_laba: number;
     saldo_kas: number;
     hutang_distributor: number;
     nilai_aset: number;
     total_transaksi: number;
+    trend_transaksi: number;
   };
   chart_data: { name: string; value: number }[];
   recent_transactions: { id: string; customer: string; total: number; date: string, time: string }[];
@@ -30,15 +38,28 @@ interface StatCardProps {
   value: string;
   subtitle: string;
   icon: React.ElementType;
+  trend?: number;
 }
 
-function StatCard({ title, value, subtitle, icon: Icon }: StatCardProps) {
+function StatCard({ title, value, subtitle, icon: Icon, trend }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-lg hover:shadow-[#3B82F6]/5 hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-lg hover:shadow-[#3B82F6]/5 hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden"
+    >
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#3B82F6] to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">{title}</p>
+          <div className="flex items-center gap-2 mb-0.5">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{title}</p>
+            {trend !== undefined && trend !== 0 && (
+              <span className={`flex items-center gap-0.5 text-[9px] font-black px-1.5 py-0.5 rounded-full ${trend > 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                {trend > 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                {Math.abs(trend)}%
+              </span>
+            )}
+          </div>
           <p className="text-xl font-bold tracking-tight text-gray-800 mb-1 group-hover:text-[#3B82F6] transition-colors">{value}</p>
           <p className="text-[10px] text-gray-400 font-medium">{subtitle}</p>
         </div>
@@ -46,6 +67,39 @@ function StatCard({ title, value, subtitle, icon: Icon }: StatCardProps) {
           <Icon className="text-[#3B82F6] group-hover:text-white transition-colors" size={20} />
         </div>
       </div>
+    </motion.div>
+  );
+}
+
+function QuickActions() {
+  const actions = [
+    { label: 'Jual Barang', icon: ShoppingCart, path: '/penjualan', color: 'bg-blue-600' },
+    { label: 'Tambah Stok', icon: PlusCircle, path: '/pembelian', color: 'bg-emerald-600' },
+    { label: 'Stok Opname', icon: ClipboardCheck, path: '/stok-opname', color: 'bg-orange-600' },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {actions.map((action, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: i * 0.05 }}
+          whileHover={{ y: -4, transition: { duration: 0.2 } }}
+        >
+          <Link
+            to={action.path}
+            className={`flex items-center justify-between p-3 ${action.color} text-white rounded-xl shadow-lg hover:brightness-110 transition-all active:scale-95 group overflow-hidden relative`}
+          >
+            <div className="relative z-10">
+              <p className="text-[10px] font-black uppercase tracking-widest opacity-80">Aksi Cepat</p>
+              <p className="text-sm font-black">{action.label}</p>
+            </div>
+            <action.icon size={28} className="opacity-20 group-hover:scale-125 transition-transform duration-500 absolute -right-2 -bottom-2" />
+          </Link>
+        </motion.div>
+      ))}
     </div>
   );
 }
@@ -120,7 +174,11 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Top Header with Filters */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
         <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100 w-fit">
           <button
             onClick={() => setRange('weekly')}
@@ -139,7 +197,10 @@ export default function Dashboard() {
           <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
           <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Data Real-Time {range === 'weekly' ? 'Mingguan' : 'Bulanan'}</p>
         </div>
-      </div>
+      </motion.div>
+
+      {/* Quick Actions */}
+      <QuickActions />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -148,6 +209,7 @@ export default function Dashboard() {
           value={`Rp ${(data.stats.total_penjualan / 1000000).toFixed(1)} Jt`}
           subtitle={data.subtitle}
           icon={ShoppingCart}
+          trend={data.stats.trend_penjualan}
         />
         {isOwner && (
           <StatCard
@@ -155,6 +217,7 @@ export default function Dashboard() {
             value={`Rp ${(data.stats.laba_kotor / 1000000).toFixed(1)} Jt`}
             subtitle={data.subtitle}
             icon={TrendingUp}
+            trend={data.stats.trend_laba}
           />
         )}
         {isOwner && (
@@ -186,6 +249,7 @@ export default function Dashboard() {
           value={data.stats.total_transaksi.toLocaleString('id-ID')}
           subtitle={data.subtitle}
           icon={DollarSign}
+          trend={data.stats.trend_transaksi}
         />
       </div>
 

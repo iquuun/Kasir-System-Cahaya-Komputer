@@ -11,7 +11,10 @@ class NilaiAsetController extends Controller
     {
         // Get all categories and calculate sum of stok and nilai aset per category
         $asetPerKategori = DB::table('categories as c')
-            ->leftJoin('products as p', 'c.id', '=', 'p.category_id')
+            ->leftJoin('products as p', function($join) {
+                $join->on('c.id', '=', 'p.category_id')
+                    ->whereNull('p.deleted_at');
+            })
             ->selectRaw('
                 c.name as kategori,
                 COALESCE(SUM(p.stok_saat_ini), 0) as total_stok,

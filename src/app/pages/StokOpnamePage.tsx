@@ -7,6 +7,7 @@ import api from '../api';
 interface OpnameItem {
   product_id: number;
   product_name: string;
+  category_name: string;
   stok_sistem: number;
   stok_fisik: number | '';
   selisih: number;
@@ -29,6 +30,8 @@ export default function StokOpnamePage() {
   const [historyMonth, setHistoryMonth] = useState(new Date().toISOString().slice(0, 7));
   const [historyPage, setHistoryPage] = useState(1);
   const [historyLastPage, setHistoryLastPage] = useState(1);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [historyTotal, setHistoryTotal] = useState(0);
 
   // Pagination
@@ -36,7 +39,10 @@ export default function StokOpnamePage() {
   const itemsPerPage = 20;
 
   useEffect(() => {
-    if (activeTab === 'opname') fetchProducts();
+    if (activeTab === 'opname') {
+      fetchProducts();
+      fetchCategories();
+    }
     else fetchHistory();
   }, [activeTab]);
 
@@ -51,6 +57,7 @@ export default function StokOpnamePage() {
       const items = res.data.map((p: any) => ({
         product_id: p.id,
         product_name: p.name,
+        category_name: p.category?.name || 'TANPA KATEGORI',
         stok_sistem: p.stok_saat_ini,
         stok_fisik: p.stok_saat_ini,
         selisih: 0,
@@ -60,6 +67,15 @@ export default function StokOpnamePage() {
       toast.error('Gagal memuat data produk');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get('/categories');
+      setCategories(res.data);
+    } catch (err) {
+      console.error("Gagal load kategori", err);
     }
   };
 
@@ -142,6 +158,11 @@ export default function StokOpnamePage() {
       result = result.filter((item) => item.stok_sistem > 0);
     }
 
+    // Category filter
+    if (selectedCategory !== 'all') {
+      result = result.filter(item => item.category_name === selectedCategory);
+    }
+
     // Sorting logic
     result.sort((a, b) => {
       if (sortByStock) {
@@ -155,7 +176,7 @@ export default function StokOpnamePage() {
     });
 
     return result;
-  }, [opnameItems, searchTerm, sortByStock, showOnlyWithStock]);
+  }, [opnameItems, searchTerm, sortByStock, showOnlyWithStock, selectedCategory]);
 
   // Reset pagination when search changes
   useEffect(() => {
@@ -261,8 +282,8 @@ export default function StokOpnamePage() {
           {/* Sisa konten opname (Stats, Form, Table) diletakkan di sini */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
-               <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5">Total Item Diperiksa</p>
-               <p className="text-xl font-bold text-[#3B82F6]">{opnameItems.length}</p>
+               <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5">Total Terfilter</p>
+               <p className="text-xl font-bold text-[#3B82F6]">{filteredItems.length}</p>
              </div>
              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
                <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5">Item Selisih</p>
@@ -275,16 +296,40 @@ export default function StokOpnamePage() {
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[10px] font-bold uppercase text-gray-500 mb-1">Keterangan</label>
                 <input type="text" value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs outline-none bg-gray-50 focus:ring-1 focus:ring-blue-500" />
               </div>
+              <div className="flex flex-col">
+                <label className="block text-[10px] font-bold uppercase text-gray-500 mb-1">Filter Kategori</label>
+                <select 
+                  value={selectedCategory} 
+                  onChange={(e) => setSelectedCategory(e.target.value)} 
+                  className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs outline-none bg-gray-50 focus:ring-1 focus:ring-blue-500 font-bold"
+                >
+                  <option value="all">SEMUA KATEGORI</option>
+                  {categories.map(c => (
+                    <option key={c.id} value={c.name}>{c.name.toUpperCase()}</option>
+                  ))}
+                  <option value="TANPA KATEGORI">TANPA KATEGORI</option>
+                </select>
+                <div className="flex items-center gap-2 mt-2">
+                  <input 
+                    type="checkbox" 
+                    id="stockOnly" 
+                    checked={showOnlyWithStock} 
+                    onChange={(e) => setShowOnlyWithStock(e.target.checked)}
+                    className="w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="stockOnly" className="text-[11px] font-bold text-gray-600 cursor-pointer select-none">Hanya barang ada stok</label>
+                </div>
+              </div>
               <div>
-                <label className="block text-[10px] font-bold uppercase text-gray-500 mb-1">Search</label>
+                <label className="block text-[10px] font-bold uppercase text-gray-500 mb-1">Cari Produk</label>
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
-                  <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-lg text-xs outline-none bg-gray-50 focus:ring-1 focus:ring-blue-500" />
+                  <input type="text" placeholder="Ketik nama produk..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-lg text-xs outline-none bg-gray-50 focus:ring-1 focus:ring-blue-500" />
                 </div>
               </div>
             </div>
