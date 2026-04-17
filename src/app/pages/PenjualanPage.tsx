@@ -163,6 +163,66 @@ export default function PenjualanPage() {
     }
   };
 
+  // Edit Invoice state
+  const [editTarget, setEditTarget] = useState<Sale | null>(null);
+  const [editForm, setEditForm] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const openEditModal = (sale: Sale) => {
+    setEditTarget(sale);
+    setEditForm({
+      items: sale.items.map(item => ({
+        id: item.id,
+        harga_jual_saat_itu: item.harga_jual_saat_itu,
+        manual_name: item.manual_name || item.product?.name || ''
+      })),
+      username_pembeli: sale.username_pembeli || '',
+      alamat_pembeli: sale.alamat_pembeli || '',
+      telepon_pembeli: sale.telepon_pembeli || '',
+      channel: sale.channel || 'Offline',
+      pembayaran: sale.pembayaran || 0,
+    });
+  };
+
+  const submitEditInvoice = async () => {
+    if (!editTarget || !editForm) return;
+    try {
+      setIsEditing(true);
+
+      // Recalculate total
+      let newTotal = 0;
+      editTarget.items.forEach((origItem, idx) => {
+        const editedItem = editForm.items[idx];
+        newTotal += (Number(editedItem.harga_jual_saat_itu) * origItem.qty);
+      });
+      // add tax
+      const taxAmount = (newTotal * (editTarget.tax_percent || 0)) / 100;
+      const finalTotal = newTotal + taxAmount;
+
+      const payload = {
+        ...editForm,
+        total_penjualan: finalTotal,
+        tax_percent: editTarget.tax_percent || 0,
+      };
+
+      const res = await api.put(`/sales/${editTarget.id}/invoice-details`, payload);
+      toast.success('Faktur berhasil diupdate!');
+      
+      // Update local state
+      setSales(sales.map(s => s.id === editTarget.id ? res.data : s));
+      setEditTarget(null);
+      
+      // Optionally print the updated invoice
+      setLastSale(res.data);
+      setShouldPrint(true);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Gagal update faktur');
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
+
   // Pelunasan DP modal state
   const [pelunasanTarget, setPelunasanTarget] = useState<Sale | null>(null);
   const [pelunasanInput, setPelunasanInput] = useState('');
@@ -1165,6 +1225,9 @@ export default function PenjualanPage() {
                                   <button onClick={() => { setLastSale(sale); setTimeout(() => window.print(), 100); }} className="p-1.5 text-gray-400 hover:text-[#3B82F6] hover:bg-blue-50 rounded-md transition-colors" title="Cetak Faktur">
                                     <Printer size={15} />
                                   </button>
+                                  <button onClick={() => openEditModal(sale)} className="p-1.5 text-gray-400 hover:text-amber-500 hover:bg-amber-50 rounded-md transition-colors" title="Edit Harga / Info Faktur">
+                                    <Edit2 size={15} />
+                                  </button>
                                   <button onClick={() => setVoidTarget(sale)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Void / Batalkan Transaksi">
                                     <Ban size={15} />
                                   </button>
@@ -1292,6 +1355,120 @@ export default function PenjualanPage() {
                   {isVoiding ? 'Memproses...' : 'Ya, Void Transaksi'}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ====== EDIT INVOICE MODAL ====== */}
+      {editTarget && editForm && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in">
+            <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-center shrink-0">
+              <h3 className="text-white font-bold text-sm">Edit Faktur: {editTarget.invoice}</h3>
+              <p className="text-amber-100 text-[11px] mt-0.5">Ubah harga atau data pelanggan tanpa membatalkan transaksi</p>
+            </div>
+            <div className="p-5 overflow-y-auto flex-1 custom-scrollbar">
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div className="space-y-3">
+                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Data Pelanggan</h4>
+                  <div>
+                    <label className="text-xs text-gray-600">Nama Pembeli</label>
+                    <input type="text" value={editForm.username_pembeli} onChange={e => setEditForm({...editForm, username_pembeli: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-600">Alamat</label>
+                    <textarea value={editForm.alamat_pembeli} onChange={e => setEditForm({...editForm, alamat_pembeli: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400 h-16 resize-none" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-600">No HP</label>
+                    <input type="text" value={editForm.telepon_pembeli} onChange={e => setEditForm({...editForm, telepon_pembeli: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400" />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Pembayaran & Channel</h4>
+                  <div>
+                    <label className="text-xs text-gray-600">Channel Penjualan</label>
+                    <select value={editForm.channel} onChange={e => setEditForm({...editForm, channel: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400">
+                      {channels.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-600">Terima Pembayaran (Tunai/Transfer)</label>
+                    <input type="number" value={editForm.pembayaran} onChange={e => setEditForm({...editForm, pembayaran: Number(e.target.value)})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400 font-bold text-green-600" />
+                    <p className="text-[9px] text-gray-400 mt-1">Ubah jika harga berubah dan uang yang diterima juga beda.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Daftar Barang (Hanya ubah harga)</h4>
+                <div className="border border-gray-100 rounded-lg overflow-hidden">
+                  <table className="w-full text-left">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase">Barang</th>
+                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase text-center">Qty</th>
+                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase text-right">Harga Baru</th>
+                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase text-right">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {editTarget.items.map((origItem, idx) => {
+                        const formItem = editForm.items[idx];
+                        const subtotal = origItem.qty * Number(formItem.harga_jual_saat_itu);
+                        return (
+                          <tr key={origItem.id}>
+                            <td className="p-2 text-xs">
+                              <p className="font-bold text-gray-700">{formItem.manual_name}</p>
+                            </td>
+                            <td className="p-2 text-xs text-center text-gray-500">{origItem.qty} {origItem.satuan}</td>
+                            <td className="p-2 text-right">
+                              <input 
+                                type="number" 
+                                value={formItem.harga_jual_saat_itu} 
+                                onChange={(e) => {
+                                  const val = Number(e.target.value);
+                                  const newItems = [...editForm.items];
+                                  newItems[idx].harga_jual_saat_itu = val;
+                                  setEditForm({...editForm, items: newItems});
+                                }}
+                                className="w-24 text-right text-xs border border-gray-200 rounded p-1 outline-none focus:border-amber-400"
+                              />
+                            </td>
+                            <td className="p-2 text-xs text-right font-bold text-amber-600">Rp {subtotal.toLocaleString('id-ID')}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-center">
+                  <span className="text-xs font-bold text-amber-800">Total Keseluruhan (Termasuk Pajak {editTarget.tax_percent || 0}%):</span>
+                  <span className="text-base font-black text-amber-600">
+                    Rp {
+                      (() => {
+                        let t = 0;
+                        editForm.items.forEach((fi: any, i: number) => {
+                          t += (Number(fi.harga_jual_saat_itu) * editTarget.items[i].qty);
+                        });
+                        return (t + (t * (editTarget.tax_percent || 0)/100)).toLocaleString('id-ID');
+                      })()
+                    }
+                  </span>
+                </div>
+              </div>
+
+            </div>
+            
+            <div className="p-4 bg-gray-50 border-t border-gray-200 flex gap-2 shrink-0">
+              <button onClick={() => setEditTarget(null)} disabled={isEditing} className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-100 transition-colors">Batal</button>
+              <button onClick={submitEditInvoice} disabled={isEditing} className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-lg text-xs font-bold hover:bg-amber-600 shadow-md transition-colors flex items-center justify-center gap-2">
+                <Save size={14} /> {isEditing ? 'Menyimpan...' : 'Simpan & Cetak Ulang'}
+              </button>
             </div>
           </div>
         </div>

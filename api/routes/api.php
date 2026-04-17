@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('sales', SaleController::class);
     Route::post('sales/{id}/toggle-verify', [SaleController::class, 'toggleVerify']);
     Route::post('sales/{sale}/pelunasan', [SaleController::class, 'pelunasan']);
+    Route::put('sales/{sale}/invoice-details', [SaleController::class, 'updateInvoiceDetails']);
 
     // Cash Flow
     Route::get('cash-flows', [CashFlowController::class , 'index']);

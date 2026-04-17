@@ -266,4 +266,79 @@ class SaleController extends Controller
 
         return response()->json(['is_verified' => $sale->is_verified]);
     }
+
+    public function updateInvoiceDetails(Request $request, Sale $sale)
+    {
+        $validated = $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|exists:sale_items,id',
+            'items.*.harga_jual_saat_itu' => 'required|numeric|min:0',
+            'items.*.manual_name' => 'nullable|string',
+            'username_pembeli' => 'nullable|string',
+            'alamat_pembeli' => 'nullable|string',
+            'telepon_pembeli' => 'nullable|string',
+            'channel' => 'required|string',
+            'pembayaran' => 'required|numeric|min:0',
+            'total_penjualan' => 'required|numeric|min:0',
+            'tax_percent' => 'nullable|numeric|min:0',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $totalHpp = 0;
+            $existingItemIds = $sale->items->pluck('id')->toArray();
+            
+            foreach ($validated['items'] as $itemData) {
+                if (!in_array($itemData['id'], $existingItemIds)) {
+                    throw new \Exception("Item ID {$itemData['id']} tidak valid untuk transaksi ini.");
+                }
+                
+                $saleItem = \App\Models\SaleItem::find($itemData['id']);
+                $saleItem->harga_jual_saat_itu = $itemData['harga_jual_saat_itu'];
+                if (array_key_exists('manual_name', $itemData)) {
+                    $saleItem->manual_name = $itemData['manual_name'];
+                }
+                $saleItem->save();
+                
+                if ($saleItem->product_id) {
+                    $product = \App\Models\Product::find($saleItem->product_id);
+                    if ($product) {
+                        $totalHpp += ($product->harga_beli * $saleItem->qty);
+                    }
+                }
+            }
+            
+            $totalPenjualan = $validated['total_penjualan'];
+            $taxPercent = $validated['tax_percent'] ?? 0;
+            $taxAmount = ($totalPenjualan * $taxPercent) / 100;
+            
+            $pembayaran = $validated['pembayaran'];
+            $isDP = $pembayaran < $totalPenjualan;
+            $kembalian = $isDP ? 0 : ($pembayaran - $totalPenjualan);
+            $sisaBayar = $isDP ? ($totalPenjualan - $pembayaran) : 0;
+            $statusBayar = $isDP ? 'dp' : 'lunas';
+
+            $sale->update([
+                'total_penjualan' => $totalPenjualan,
+                'total_hpp' => $totalHpp,
+                'laba_kotor' => $totalPenjualan - $totalHpp - $taxAmount,
+                'tax_percent' => $taxPercent,
+                'tax_amount' => $taxAmount,
+                'username_pembeli' => $validated['username_pembeli'] ?? null,
+                'alamat_pembeli' => $validated['alamat_pembeli'] ?? null,
+                'telepon_pembeli' => $validated['telepon_pembeli'] ?? null,
+                'channel' => $validated['channel'],
+                'pembayaran' => $pembayaran,
+                'kembalian' => $kembalian,
+                'status_bayar' => $statusBayar,
+                'sisa_bayar' => $sisaBayar,
+            ]);
+
+            DB::commit();
+            return response()->json($sale->load(['items.product', 'user']));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Gagal update faktur: ' . $e->getMessage()], 500);
+        }
+    }
 }
