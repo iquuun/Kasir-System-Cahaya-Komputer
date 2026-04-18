@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use App\Models\Product;
+use App\Models\SaleItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -260,7 +261,7 @@ class SaleController extends Controller
 
     public function toggleVerify($id)
     {
-        $sale = \App\Models\Sale::findOrFail($id);
+        $sale = Sale::findOrFail($id);
         $sale->is_verified = !$sale->is_verified;
         $sale->save();
 
@@ -281,6 +282,7 @@ class SaleController extends Controller
             'pembayaran' => 'required|numeric|min:0',
             'total_penjualan' => 'required|numeric|min:0',
             'tax_percent' => 'nullable|numeric|min:0',
+            'tanggal' => 'nullable|date',
         ]);
 
         DB::beginTransaction();
@@ -293,7 +295,7 @@ class SaleController extends Controller
                     throw new \Exception("Item ID {$itemData['id']} tidak valid untuk transaksi ini.");
                 }
                 
-                $saleItem = \App\Models\SaleItem::find($itemData['id']);
+                $saleItem = SaleItem::find($itemData['id']);
                 $saleItem->harga_jual_saat_itu = $itemData['harga_jual_saat_itu'];
                 if (array_key_exists('manual_name', $itemData)) {
                     $saleItem->manual_name = $itemData['manual_name'];
@@ -301,7 +303,7 @@ class SaleController extends Controller
                 $saleItem->save();
                 
                 if ($saleItem->product_id) {
-                    $product = \App\Models\Product::find($saleItem->product_id);
+                    $product = Product::find($saleItem->product_id);
                     if ($product) {
                         $totalHpp += ($product->harga_beli * $saleItem->qty);
                     }
@@ -332,6 +334,7 @@ class SaleController extends Controller
                 'kembalian' => $kembalian,
                 'status_bayar' => $statusBayar,
                 'sisa_bayar' => $sisaBayar,
+                'tanggal' => $validated['tanggal'] ?? $sale->tanggal,
             ]);
 
             DB::commit();

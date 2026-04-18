@@ -30,18 +30,18 @@ interface DashboardKeuanganData {
 
 function StatCard({ title, value, subtitle, icon: Icon, colorClass = "from-blue-600 to-blue-700" }: { title: string; value: string; subtitle: React.ReactNode; icon: React.ElementType; colorClass?: string }) {
   return (
-    <div className={`bg-gradient-to-br ${colorClass} rounded-2xl shadow-lg border-t border-white/20 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden text-white flex flex-col justify-between`}>
-      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-500">
-        <Icon size={64} strokeWidth={1.5} />
+    <div className={`bg-gradient-to-br ${colorClass} rounded-xl shadow-md border border-white/10 p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden text-white flex flex-col justify-between`}>
+      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-110 transition-transform duration-500">
+        <Icon size={48} strokeWidth={1.5} />
       </div>
-      <div className="relative z-10 mb-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-1">{title}</p>
-        <p className="text-2xl font-black tracking-tight mb-2">{value}</p>
+      <div className="relative z-10 mb-3">
+        <p className="text-[9px] font-black uppercase tracking-wider opacity-80 mb-0.5">{title}</p>
+        <p className="text-xl font-black tracking-tight mb-1 truncate">{value}</p>
       </div>
       <div className="relative z-10 mt-auto">
-        <div className="flex items-center gap-1.5 py-1.5 px-3 bg-white/10 rounded-lg w-fit backdrop-blur-sm border border-white/5">
-           <Icon size={12} className="opacity-70 flex-shrink-0" />
-           <p className="text-[10px] font-bold opacity-90">{subtitle}</p>
+        <div className="flex items-center gap-1.5 py-1 px-2 bg-white/10 rounded w-fit backdrop-blur-sm border border-white/5">
+           <Icon size={10} className="opacity-70 flex-shrink-0" />
+           <p className="text-[9px] font-bold opacity-90">{subtitle}</p>
         </div>
       </div>
     </div>
@@ -246,13 +246,13 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
           })()}
 
           {/* 8. Uang Piutang (Manual) */}
-          <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl shadow-lg border-t border-white/20 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden text-white flex flex-col justify-between">
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-500">
-              <DollarSign size={64} strokeWidth={1.5} />
+          <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl shadow-md border border-white/10 p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden text-white flex flex-col justify-between">
+            <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-110 transition-transform duration-500">
+              <DollarSign size={48} strokeWidth={1.5} />
             </div>
-            <div className="relative z-10 mb-4">
+            <div className="relative z-10 mb-3">
               <div className="flex justify-between items-start">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-1">Uang di Luar (Piutang)</p>
+                <p className="text-[9px] font-black uppercase tracking-wider opacity-80 mb-0.5">Uang di Luar (Piutang)</p>
                 {!isEditingPiutang ? (
                   <button onClick={() => setIsEditingPiutang(true)} className="p-1 hover:bg-white/20 rounded transition-colors text-white/70 hover:text-white">
                      <Edit2 size={12} />
@@ -266,7 +266,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                      type="number" 
                      value={piutangInput}
                      onChange={(e) => setPiutangInput(e.target.value)}
-                     className="w-full bg-slate-900/50 border border-slate-600 rounded px-2 py-1 text-sm outline-none focus:border-blue-400"
+                     className="w-full bg-slate-900/50 border border-slate-600 rounded px-2 py-1 text-xs outline-none focus:border-blue-400"
                      placeholder="Nominal..."
                    />
                    <button onClick={handleSavePiutang} disabled={savingPiutang} className="p-1.5 bg-emerald-500 hover:bg-emerald-600 rounded transition-colors disabled:opacity-50 text-white flex-shrink-0">
@@ -277,13 +277,13 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                    </button>
                  </div>
               ) : (
-                 <p className="text-2xl font-black tracking-tight mb-2">{formatRp(data.uang_di_luar)}</p>
+                 <p className="text-xl font-black tracking-tight mb-1 truncate">{formatRp(data.uang_di_luar)}</p>
               )}
             </div>
             <div className="relative z-10 mt-auto">
-              <div className="flex items-center gap-1.5 py-1.5 px-3 bg-white/10 rounded-lg w-fit backdrop-blur-sm border border-white/5">
-                <DollarSign size={12} className="opacity-70 flex-shrink-0" />
-                <p className="text-[10px] font-bold opacity-90">Piutang Pembeli (Manual)</p>
+              <div className="flex items-center gap-1.5 py-1 px-2 bg-white/10 rounded w-fit backdrop-blur-sm border border-white/5">
+                <DollarSign size={10} className="opacity-70 flex-shrink-0" />
+                <p className="text-[9px] font-bold opacity-90">Piutang Pembeli (Manual)</p>
               </div>
             </div>
           </div>
@@ -386,7 +386,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                       { name: 'Uang Online', nominal: data.uang_online.bulan_ini, fill: '#6366f1' },
                       { name: 'Rekening', nominal: data.uang_rekening, fill: '#3b82f6' },
                       { name: 'Stok', nominal: data.uang_stok, fill: '#f59e0b' },
-                      { name: 'Margin', nominal: data.margin_bulanan.margin, fill: '#14b8a6' },
+                      { name: 'Margin', nominal: data.margin_bulanan.current.margin, fill: '#14b8a6' },
                       { name: 'Pendapatan', nominal: data.pendapatan_harian.hari_ini, fill: '#8b5cf6' },
                       { name: 'Piutang', nominal: data.uang_di_luar, fill: '#475569' },
                       { name: 'Hutang', nominal: data.hutang.total_aktif, fill: '#f43f5e' }

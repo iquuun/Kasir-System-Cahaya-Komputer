@@ -170,6 +170,15 @@ export default function PenjualanPage() {
 
   const openEditModal = (sale: Sale) => {
     setEditTarget(sale);
+    
+    // Format date for datetime-local input safely
+    let formattedDate = '';
+    if (sale.tanggal) {
+      const d = new Date(sale.tanggal);
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      formattedDate = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
     setEditForm({
       items: sale.items.map(item => ({
         id: item.id,
@@ -181,6 +190,7 @@ export default function PenjualanPage() {
       telepon_pembeli: sale.telepon_pembeli || '',
       channel: sale.channel || 'Offline',
       pembayaran: sale.pembayaran || 0,
+      tanggal: formattedDate,
     });
   };
 
@@ -1364,41 +1374,45 @@ export default function PenjualanPage() {
       {editTarget && editForm && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in">
-            <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-center shrink-0">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 text-center shrink-0">
               <h3 className="text-white font-bold text-sm">Edit Faktur: {editTarget.invoice}</h3>
-              <p className="text-amber-100 text-[11px] mt-0.5">Ubah harga atau data pelanggan tanpa membatalkan transaksi</p>
+              <p className="text-blue-100 text-[10px] mt-0.5">Ubah harga atau data pelanggan tanpa membatalkan transaksi</p>
             </div>
-            <div className="p-5 overflow-y-auto flex-1 custom-scrollbar">
+            <div className="p-4 overflow-y-auto flex-1 custom-scrollbar">
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Data Pelanggan</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                <div className="flex flex-col gap-1.5">
+                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Data Pelanggan</h4>
                   <div>
-                    <label className="text-xs text-gray-600">Nama Pembeli</label>
-                    <input type="text" value={editForm.username_pembeli} onChange={e => setEditForm({...editForm, username_pembeli: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400" />
+                    <label className="block text-[10px] text-gray-500 mb-0.5">Nama Pembeli</label>
+                    <input type="text" value={editForm.username_pembeli} onChange={e => setEditForm({...editForm, username_pembeli: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">Alamat</label>
-                    <textarea value={editForm.alamat_pembeli} onChange={e => setEditForm({...editForm, alamat_pembeli: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400 h-16 resize-none" />
+                    <label className="block text-[10px] text-gray-500 mb-0.5">Alamat</label>
+                    <input type="text" value={editForm.alamat_pembeli} onChange={e => setEditForm({...editForm, alamat_pembeli: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">No HP</label>
-                    <input type="text" value={editForm.telepon_pembeli} onChange={e => setEditForm({...editForm, telepon_pembeli: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400" />
+                    <label className="block text-[10px] text-gray-500 mb-0.5">No HP</label>
+                    <input type="text" value={editForm.telepon_pembeli} onChange={e => setEditForm({...editForm, telepon_pembeli: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Pembayaran & Channel</h4>
+                <div className="flex flex-col gap-1.5">
+                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Pembayaran & Waktu</h4>
                   <div>
-                    <label className="text-xs text-gray-600">Channel Penjualan</label>
-                    <select value={editForm.channel} onChange={e => setEditForm({...editForm, channel: e.target.value})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400">
+                    <label className="block text-[10px] text-gray-500 mb-0.5">Tanggal & Jam Transaksi</label>
+                    <input type="datetime-local" value={editForm.tanggal} onChange={e => setEditForm({...editForm, tanggal: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] text-gray-500 mb-0.5">Channel Penjualan</label>
+                    <select value={editForm.channel} onChange={e => setEditForm({...editForm, channel: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400">
                       {channels.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">Terima Pembayaran (Tunai/Transfer)</label>
-                    <input type="number" value={editForm.pembayaran} onChange={e => setEditForm({...editForm, pembayaran: Number(e.target.value)})} className="w-full text-xs border border-gray-200 rounded p-1.5 outline-none focus:border-amber-400 font-bold text-green-600" />
-                    <p className="text-[9px] text-gray-400 mt-1">Ubah jika harga berubah dan uang yang diterima juga beda.</p>
+                    <label className="block text-[10px] text-gray-500 mb-0.5">Terima Pembayaran (Tunai/Transfer)</label>
+                    <input type="number" value={editForm.pembayaran} onChange={e => setEditForm({...editForm, pembayaran: Number(e.target.value)})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400 font-bold text-green-600" />
+                    <p className="text-[9px] text-gray-400 mt-0.5 leading-tight">Ubah jika ada selisih total & uang pas disesuaikan.</p>
                   </div>
                 </div>
               </div>
@@ -1409,10 +1423,10 @@ export default function PenjualanPage() {
                   <table className="w-full text-left">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase">Barang</th>
-                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase text-center">Qty</th>
-                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase text-right">Harga Baru</th>
-                        <th className="p-2 text-[10px] font-bold text-gray-500 uppercase text-right">Subtotal</th>
+                        <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase">Barang</th>
+                        <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase text-center w-16">Qty</th>
+                        <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase text-right w-28">Harga Baru</th>
+                        <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase text-right w-28">Subtotal</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -1420,12 +1434,12 @@ export default function PenjualanPage() {
                         const formItem = editForm.items[idx];
                         const subtotal = origItem.qty * Number(formItem.harga_jual_saat_itu);
                         return (
-                          <tr key={origItem.id}>
-                            <td className="p-2 text-xs">
-                              <p className="font-bold text-gray-700">{formItem.manual_name}</p>
+                          <tr key={origItem.id} className="hover:bg-gray-50 transition-colors">
+                            <td className="py-1 px-2 text-[11px]">
+                              <p className="font-bold text-gray-700 leading-tight">{formItem.manual_name}</p>
                             </td>
-                            <td className="p-2 text-xs text-center text-gray-500">{origItem.qty} {origItem.satuan}</td>
-                            <td className="p-2 text-right">
+                            <td className="py-1 px-2 text-[11px] text-center text-gray-500 whitespace-nowrap">{origItem.qty} {origItem.satuan}</td>
+                            <td className="py-1 px-2 text-right">
                               <input 
                                 type="number" 
                                 value={formItem.harga_jual_saat_itu} 
@@ -1435,10 +1449,10 @@ export default function PenjualanPage() {
                                   newItems[idx].harga_jual_saat_itu = val;
                                   setEditForm({...editForm, items: newItems});
                                 }}
-                                className="w-24 text-right text-xs border border-gray-200 rounded p-1 outline-none focus:border-amber-400"
+                                className="w-[85px] text-right text-[11px] border border-gray-200 rounded px-1.5 py-0.5 outline-none focus:border-blue-400"
                               />
                             </td>
-                            <td className="p-2 text-xs text-right font-bold text-amber-600">Rp {subtotal.toLocaleString('id-ID')}</td>
+                            <td className="py-1 px-2 text-[11px] text-right font-bold text-blue-600 whitespace-nowrap">Rp {subtotal.toLocaleString('id-ID')}</td>
                           </tr>
                         );
                       })}
@@ -1446,9 +1460,9 @@ export default function PenjualanPage() {
                   </table>
                 </div>
                 
-                <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-center">
-                  <span className="text-xs font-bold text-amber-800">Total Keseluruhan (Termasuk Pajak {editTarget.tax_percent || 0}%):</span>
-                  <span className="text-base font-black text-amber-600">
+                <div className="mt-3 p-2 bg-blue-50 border border-blue-100 rounded-lg flex justify-between items-center">
+                  <span className="text-[11px] font-bold text-blue-800">Total Keseluruhan (Termasuk Pajak {editTarget.tax_percent || 0}%):</span>
+                  <span className="text-[15px] font-black text-blue-600">
                     Rp {
                       (() => {
                         let t = 0;
@@ -1464,10 +1478,10 @@ export default function PenjualanPage() {
 
             </div>
             
-            <div className="p-4 bg-gray-50 border-t border-gray-200 flex gap-2 shrink-0">
-              <button onClick={() => setEditTarget(null)} disabled={isEditing} className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-100 transition-colors">Batal</button>
-              <button onClick={submitEditInvoice} disabled={isEditing} className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-lg text-xs font-bold hover:bg-amber-600 shadow-md transition-colors flex items-center justify-center gap-2">
-                <Save size={14} /> {isEditing ? 'Menyimpan...' : 'Simpan & Cetak Ulang'}
+            <div className="p-3 bg-gray-50 border-t border-gray-200 flex gap-2 shrink-0">
+              <button onClick={() => setEditTarget(null)} disabled={isEditing} className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-[11px] font-bold hover:bg-gray-100 transition-colors">Batal</button>
+              <button onClick={submitEditInvoice} disabled={isEditing} className="flex-1 px-4 py-2 bg-[#3B82F6] text-white rounded-lg text-[11px] font-bold hover:bg-blue-600 shadow-md transition-colors flex items-center justify-center gap-1.5">
+                <Save size={13} /> {isEditing ? 'Menyimpan...' : 'Simpan & Cetak Ulang'}
               </button>
             </div>
           </div>
@@ -1529,7 +1543,7 @@ export default function PenjualanPage() {
                         <img
                           src={`http://${window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname}:8000/storage/${settings.store_logo}`}
                           alt="Logo"
-                          style={{ height: '52px', width: '52px', objectFit: 'contain' }}
+                          style={{ height: '70px', width: '70px', objectFit: 'contain' }}
                         />
                       )}
                       <div>
@@ -1539,8 +1553,11 @@ export default function PenjualanPage() {
                       </div>
                     </div>
                   </td>
-                  <td style={{ width: '40%', verticalAlign: 'bottom', textAlign: 'right', padding: '0', paddingBottom: '2px' }}>
+                  <td style={{ width: '40%', verticalAlign: 'top', textAlign: 'right', padding: '0', paddingBottom: '2px' }}>
                     <div style={{ fontSize: '24px', fontWeight: 'bold', textTransform: 'uppercase', lineHeight: '1.1', display: 'inline-block', whiteSpace: 'nowrap' }}>FAKTUR PENJUALAN</div>
+                    <div style={{ fontSize: '13px', marginTop: '4px' }}>
+                      {new Date(lastSale.tanggal).toLocaleDateString('id-ID')} {new Date(lastSale.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -1553,22 +1570,23 @@ export default function PenjualanPage() {
                   <td style={{ width: '60%', verticalAlign: 'top', padding: '0' }}>
                     <div>
                       <div style={{ marginBottom: '2px' }}>
-                        <div>Kepada Yth. :</div>
-                        <div style={{ fontSize: '14px', textTransform: 'uppercase', fontWeight: '600', marginTop: '1px' }}>{lastSale.username_pembeli || 'UMUM'}</div>
+                        <span style={{ fontSize: '13px' }}>Kepada Yth. : </span>
+                        <span style={{ fontSize: '14px', textTransform: 'uppercase', fontWeight: 'normal' }}>
+                          {lastSale.username_pembeli || 'UMUM'}
+                          {lastSale.telepon_pembeli && lastSale.telepon_pembeli !== '-' ? ` (${lastSale.telepon_pembeli})` : ''}
+                        </span>
                       </div>
-                      <table className="border-collapse" style={{ fontSize: '13px', marginTop: '1px' }}>
-                        <tbody>
-                          <tr><td style={{ width: '68px' }}>Alamat</td><td style={{ width: '10px' }}>:</td><td>{lastSale.alamat_pembeli || '-'}</td></tr>
-                          <tr><td>No. HP</td><td>:</td><td>{lastSale.telepon_pembeli || '-'}</td></tr>
-                        </tbody>
-                      </table>
+                      <div style={{ fontSize: '13px', marginTop: '1px', display: 'flex' }}>
+                        <span style={{ minWidth: '82px' }}>Alamat</span>
+                        <span style={{ marginRight: '4px' }}>:</span>
+                        <span style={{ flex: 1 }}>{lastSale.alamat_pembeli || '-'}</span>
+                      </div>
                     </div>
                   </td>
                   <td style={{ width: '40%', verticalAlign: 'top', padding: '0' }}>
                     <table className="w-full border-collapse" style={{ fontSize: '13px', textAlign: 'left', lineHeight: '1.2' }}>
                       <tbody>
-                        <tr><td style={{ width: '90px' }}>Tanggal/Jam</td><td style={{ width: '10px' }}>:</td><td style={{ whiteSpace: 'nowrap' }}>{new Date(lastSale.tanggal).toLocaleDateString('id-ID')} {new Date(lastSale.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</td></tr>
-                        <tr><td>No. Faktur</td><td>:</td><td className="uppercase" style={{ whiteSpace: 'nowrap' }}>{lastSale.invoice}</td></tr>
+                        <tr><td style={{ width: '90px' }}>No. Faktur</td><td style={{ width: '10px' }}>:</td><td className="uppercase" style={{ whiteSpace: 'nowrap' }}>{lastSale.invoice}</td></tr>
                         <tr><td>Kasir</td><td>:</td><td className="uppercase" style={{ whiteSpace: 'nowrap' }}>{lastSale.user?.name || user?.name || 'ADMIN'}</td></tr>
                         <tr><td>Pemesanan</td><td>:</td><td className="uppercase" style={{ whiteSpace: 'nowrap' }}>{lastSale.channel}</td></tr>
                       </tbody>

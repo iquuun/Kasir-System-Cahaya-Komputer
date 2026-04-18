@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $range = $request->get('range', 'weekly');
+        $range = $request->input('range', 'weekly');
         $now = Carbon::now();
         
         if ($range === 'monthly') {

@@ -811,86 +811,91 @@ export default function PembelianTab() {
                   {formData.items.length === 0 ? (
                     <p className="text-xs text-gray-500 text-center py-2">Tidak ada barang spesifik dicatat (Hanya mencatat total).</p>
                   ) : (
-                    <div className="space-y-2 max-h-[400px] min-h-[120px] overflow-y-auto pr-1">
-                      {formData.items.map((item, idx) => (
-                        <div key={idx} className="flex gap-2 items-start bg-white p-2 border border-gray-200 rounded">
-                           <div className="pt-5 px-1 text-center">
-                            <span className="text-xs font-bold text-gray-400">{idx + 1}.</span>
-                          </div>
-                          <div className="flex-1">
-                            <label className="block text-[11px] text-gray-500 mb-1">Produk</label>
-                            <div className="flex gap-1 items-start">
-                              <Select
-                                className="text-xs flex-1"
-                                options={products.map(p => ({ value: p.id.toString(), label: p.name }))}
-                                value={
-                                  item.product_id
-                                    ? {
-                                      value: item.product_id.toString(),
-                                      label: products.find(p => p.id.toString() === item.product_id.toString())?.name || ''
-                                    }
-                                    : null
-                                }
-                                onChange={(selectedOption) => {
-                                  if (selectedOption) {
-                                    handleItemChange(idx, 'product_id', selectedOption.value);
-                                  }
-                                }}
-                                placeholder="Cari..."
-                                isSearchable
-                                menuPortalTarget={document.body}
-                                styles={{
-                                  control: (base) => ({ ...base, minHeight: '30px', height: '30px' }),
-                                  valueContainer: (base) => ({ ...base, padding: '0 8px' }),
-                                  input: (base) => ({ ...base, margin: 0, padding: 0 }),
-                                  option: (base) => ({ ...base, fontSize: '11px', padding: '6px 8px' }),
-                                  singleValue: (base) => ({ ...base, fontSize: '11px' }),
-                                  indicatorsContainer: (base) => ({ ...base, height: '30px' }),
-                                  menuPortal: (base) => ({ ...base, zIndex: 9999 })
-                                }}
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleOpenQuickProductModal(idx)}
-                                title="Tambah Produk Baru"
-                                className="h-[30px] w-8 flex items-center justify-center bg-blue-50 text-blue-600 border border-blue-100 rounded hover:bg-blue-100 transition-colors shrink-0"
-                              >
-                                <Plus size={16} />
-                              </button>
+                    <div className="bg-white border border-gray-200 rounded max-h-[400px] min-h-[120px] overflow-y-auto">
+                      <div className="flex gap-2 items-center bg-gray-50/80 px-2 py-1.5 border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm">
+                        <div className="w-5 text-center text-[10px] font-bold text-gray-500 uppercase tracking-wider">No</div>
+                        <div className="flex-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Produk</div>
+                        <div className="w-16 text-[10px] font-bold text-gray-500 uppercase tracking-wider text-center">Qty</div>
+                        <div className="w-28 text-[10px] font-bold text-gray-500 uppercase tracking-wider text-right">Harga Satuan</div>
+                        <div className="w-6"></div>
+                      </div>
+                      
+                      <div className="divide-y divide-gray-100">
+                        {formData.items.map((item, idx) => (
+                          <div key={idx} className="flex gap-2 items-center p-1.5 hover:bg-gray-50/50 transition-colors">
+                             <div className="w-5 text-center">
+                              <span className="text-[10px] font-bold text-gray-400">{idx + 1}.</span>
                             </div>
+                            <div className="flex-1 flex gap-1 items-center">
+                                <Select
+                                  className="text-xs flex-1"
+                                  options={products.map(p => ({ value: p.id.toString(), label: p.name }))}
+                                  value={
+                                    item.product_id
+                                      ? {
+                                        value: item.product_id.toString(),
+                                        label: products.find(p => p.id.toString() === item.product_id.toString())?.name || ''
+                                      }
+                                      : null
+                                  }
+                                  onChange={(selectedOption) => {
+                                    if (selectedOption) {
+                                      handleItemChange(idx, 'product_id', selectedOption.value);
+                                    }
+                                  }}
+                                  placeholder="Cari..."
+                                  isSearchable
+                                  menuPortalTarget={document.body}
+                                  styles={{
+                                    control: (base) => ({ ...base, minHeight: '28px', height: '28px' }),
+                                    valueContainer: (base) => ({ ...base, padding: '0 6px' }),
+                                    input: (base) => ({ ...base, margin: 0, padding: 0 }),
+                                    option: (base) => ({ ...base, fontSize: '11px', padding: '6px 8px' }),
+                                    singleValue: (base) => ({ ...base, fontSize: '11px' }),
+                                    indicatorsContainer: (base) => ({ ...base, height: '28px' }),
+                                    menuPortal: (base) => ({ ...base, zIndex: 9999 })
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenQuickProductModal(idx)}
+                                  title="Tambah Produk Baru"
+                                  className="h-[28px] w-7 flex items-center justify-center bg-blue-50 text-blue-600 border border-blue-100 rounded hover:bg-blue-100 transition-colors shrink-0"
+                                >
+                                  <Plus size={14} />
+                                </button>
+                            </div>
+                            <div className="w-16">
+                              <input
+                                type="number"
+                                min="1"
+                                required
+                                value={item.qty}
+                                onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
+                                className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-center"
+                              />
+                            </div>
+                            <div className="w-28">
+                              <input
+                                type="number"
+                                min="0"
+                                required
+                                value={item.harga_beli}
+                                onChange={(e) => handleItemChange(idx, 'harga_beli', e.target.value)}
+                                className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-right"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveItem(idx)}
+                              className="w-6 h-7 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                              title="Hapus"
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </div>
-                          <div className="w-20">
-                            <label className="block text-[11px] text-gray-500 mb-1">Qty</label>
-                            <input
-                              type="number"
-                              min="1"
-                              required
-                              value={item.qty}
-                              onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
-                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs"
-                            />
-                          </div>
-                          <div className="w-32">
-                            <label className="block text-[11px] text-gray-500 mb-1">Harga Satuan</label>
-                            <input
-                              type="number"
-                              min="0"
-                              required
-                              value={item.harga_beli}
-                              onChange={(e) => handleItemChange(idx, 'harga_beli', e.target.value)}
-                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs"
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveItem(idx)}
-                            className="mt-4 p-1.5 text-red-500 hover:bg-red-50 rounded"
-                            title="Hapus"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
