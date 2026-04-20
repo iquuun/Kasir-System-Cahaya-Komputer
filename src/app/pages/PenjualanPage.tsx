@@ -6,6 +6,30 @@ import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 
+/**
+ * Helper to convert number to Indonesian words (Terbilang)
+ */
+const terbilang = (n: number): string => {
+  const units = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+  if (n === 0) return "";
+  if (n < 12) return units[n];
+  if (n < 20) return terbilang(n - 10) + " belas";
+  if (n < 100) return (Math.floor(n / 10) === 1 ? "sepuluh" : units[Math.floor(n / 10)] + " puluh") + " " + terbilang(n % 10);
+  if (n < 200) return "seratus " + terbilang(n - 100);
+  if (n < 1000) return (Math.floor(n / 100) === 1 ? "seratus" : units[Math.floor(n / 100)] + " ratus") + " " + terbilang(n % 100);
+  if (n < 2000) return "seribu " + terbilang(n - 1000);
+  if (n < 1000000) return terbilang(Math.floor(n / 1000)) + " ribu " + terbilang(n % 1000);
+  if (n < 1000000000) return terbilang(Math.floor(n / 1000000)) + " juta " + terbilang(n % 1000000);
+  if (n < 1000000000000) return terbilang(Math.floor(n / 1000000000)) + " milyar " + terbilang(n % 1000000000);
+  return "";
+};
+
+const formatTerbilang = (n: number): string => {
+  if (n === 0) return "nolrupiah";
+  const result = terbilang(Math.floor(n));
+  return (result + "rupiah").replace(/\s+/g, '').trim();
+};
+
 interface Category {
   id: number;
   name: string;
@@ -1642,8 +1666,13 @@ export default function PenjualanPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'stretch', marginTop: '4px' }}>
               <div style={{ width: '55%', fontSize: '13px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
                 
+                {/* Nominal in words (Terbilang) */}
+                <div style={{ fontSize: '11px', fontStyle: 'italic', marginBottom: '2px', color: '#000', fontWeight: 'normal' }}>
+                   {formatTerbilang(lastSale?.total_penjualan || 0)}
+                </div>
+
                 {/* Signature Section - Placed on the bottom left aligned with the totals end */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginTop: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginTop: '6px' }}>
                   <div style={{ textAlign: 'center', width: '48%' }}>
                     <p>Hormat Kami,</p>
                     <div style={{ marginTop: '25px', textDecoration: 'underline', textTransform: 'uppercase' }}>{settings.store_name || 'Cahaya Komputer'}</div>

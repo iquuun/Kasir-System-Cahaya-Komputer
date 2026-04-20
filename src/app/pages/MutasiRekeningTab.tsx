@@ -535,23 +535,23 @@ export default function MutasiRekeningTab() {
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-center justify-center z-50 p-3">
         <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-md overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100">
-              <h3 className="text-base font-bold text-gray-800">Tambah Transaksi Operasional / Kas</h3>
+            <div className="flex items-center justify-between p-3 border-b border-gray-100">
+              <h3 className="text-sm font-bold text-gray-800">Tambah Transaksi Operasional / Kas</h3>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                <X size={22} />
+                <X size={18} />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-4 space-y-4">
+            <form onSubmit={handleSubmit} className="p-3 space-y-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tipe Transaksi</label>
-                <div className="flex gap-3">
+                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Tipe Transaksi</label>
+                <div className="flex gap-2">
                   {(['masuk', 'keluar'] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setForm({ ...form, tipe: t, sumber: t === 'masuk' ? 'offline' : 'biaya_operasional' })}
-                      className={`flex-1 py-3 rounded-lg font-black text-xs transition-colors tracking-wider ${form.tipe === t
-                          ? t === 'masuk' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200' : 'bg-rose-500 text-white shadow-md shadow-rose-200'
+                      className={`flex-1 py-1.5 rounded-lg font-black text-[11px] transition-colors tracking-wider ${form.tipe === t
+                          ? t === 'masuk' ? 'bg-emerald-500 text-white shadow-md' : 'bg-rose-500 text-white shadow-md'
                           : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                         }`}
                     >
@@ -562,22 +562,22 @@ export default function MutasiRekeningTab() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tanggal & Waktu</label>
+                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Tanggal & Waktu</label>
                 <input
                   type="datetime-local"
                   value={form.tanggal}
                   onChange={(e) => setForm({ ...form, tanggal: e.target.value })}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs font-medium"
+                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Sumber / Kategori</label>
+                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Sumber / Kategori</label>
                 <select
                   value={form.sumber}
                   onChange={(e) => setForm({ ...form, sumber: e.target.value })}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs font-medium capitalize"
+                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium capitalize"
                 >
                   {sumberOptions.map((s) => (
                     <option key={s.value} value={s.value}>{s.label}</option>
@@ -587,11 +587,11 @@ export default function MutasiRekeningTab() {
 
               {form.sumber === 'gaji_karyawan' && (
                 <div className="animate-in slide-in-from-top-2 duration-300">
-                  <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-purple-600">Pilih Staf / Karyawan</label>
+                  <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider text-purple-600">Pilih Staf / Karyawan</label>
                   <select
                     value={form.staff_user_id}
                     onChange={(e) => setForm({ ...form, staff_user_id: e.target.value })}
-                    className="w-full px-3 py-2.5 border border-purple-200 bg-purple-50 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-xs font-bold text-purple-700"
+                    className="w-full px-2.5 py-1.5 border border-purple-200 bg-purple-50 rounded-lg focus:ring-1 focus:ring-purple-500 outline-none text-xs font-bold text-purple-700"
                     required={form.sumber === 'gaji_karyawan'}
                   >
                     <option value="">-- PILIH STAF --</option>
@@ -603,41 +603,41 @@ export default function MutasiRekeningTab() {
               )}
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nominal (Rp)</label>
+                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Nominal (Rp)</label>
                 <input
                   type="number"
                   value={form.nominal}
                   onChange={(e) => setForm({ ...form, nominal: e.target.value })}
                   placeholder="Contoh: 500000"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-base font-bold"
+                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm font-bold"
                   min={1}
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Keterangan Tambahan</label>
+                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Keterangan Tambahan</label>
                 <input
                   type="text"
                   value={form.keterangan}
                   onChange={(e) => setForm({ ...form, keterangan: e.target.value })}
                   placeholder="Misal: Pembayaran listrik bulan Maret"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs font-medium"
+                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium"
                 />
               </div>
 
-              <div className="flex gap-3 pt-3 border-t border-gray-100">
+              <div className="flex gap-2 pt-2 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 py-3 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 font-bold text-xs uppercase tracking-wider transition-colors"
+                  className="flex-1 py-1.5 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 font-bold text-[11px] uppercase tracking-wider transition-colors"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 py-3 rounded-lg bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 disabled:bg-gray-300 transition-colors uppercase tracking-wider shadow-md shadow-blue-200"
+                  className="flex-1 py-1.5 rounded-lg bg-blue-600 text-white font-bold text-[11px] hover:bg-blue-700 disabled:bg-gray-300 transition-colors uppercase tracking-wider shadow-md shadow-blue-200"
                 >
                   {saving ? 'MENYIMPAN...' : 'SIMPAN TRANSAKSI'}
                 </button>
