@@ -1664,7 +1664,7 @@ export default function PenjualanPage() {
 
             {/* Info Pembayaran */}
             {settings.store_bank_accounts && (
-              <div style={{ fontSize: '10px', marginTop: '2px', marginBottom: '2px', color: '#000' }}>
+              <div style={{ fontSize: '11px', marginTop: '2px', marginBottom: '2px', color: '#000' }}>
                  PEMBAYARAN: {settings.store_bank_accounts}
                  {settings.store_bank_account_name && (
                     (settings.store_bank_accounts.includes(',') || settings.store_bank_accounts.includes('|'))
