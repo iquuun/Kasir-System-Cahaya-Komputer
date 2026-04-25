@@ -74,6 +74,19 @@ interface Sale {
   alamat_pembeli?: string;
   telepon_pembeli?: string;
 }
+const formatNumber = (value: number | string | undefined): string => {
+  if (value === undefined || value === null) return '';
+  if (value === 0 || value === '0' || value === '') return '';
+  const num = typeof value === 'string' ? parseInt(value.replace(/[^0-9]/g, ''), 10) : value;
+  if (isNaN(num) || num === 0) return '';
+  return num.toLocaleString('id-ID');
+};
+
+const parseNumber = (text: string): number => {
+  if (!text) return 0;
+  const num = parseInt(text.replace(/[^0-9]/g, ''), 10);
+  return isNaN(num) ? 0 : num;
+};
 
 export default function PenjualanPage() {
   const { user } = useAuth();
@@ -980,10 +993,10 @@ export default function PenjualanPage() {
                                   <div className="flex items-center justify-end gap-1">
                                     <span className="text-[10px] text-gray-400">Rp</span>
                                     <input
-                                      type="number"
-                                      value={item.harga_jual_saat_itu}
-                                      onChange={(e) => updateItemPrice(idx, parseFloat(e.target.value) || 0)}
-                                      className="w-20 bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5 text-xs font-bold text-gray-800 text-right outline-none focus:ring-1 focus:ring-[#3B82F6]"
+                                        type="text"
+                                        value={formatNumber(item.harga_jual_saat_itu)}
+                                        onChange={(e) => updateItemPrice(idx, parseNumber(e.target.value))}
+                                        className="w-28 bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5 text-xs font-bold text-gray-800 text-right outline-none focus:ring-1 focus:ring-[#3B82F6]"
                                     />
                                   </div>
                                 </td>
@@ -1016,9 +1029,9 @@ export default function PenjualanPage() {
                         <div className="flex items-center justify-between text-xs bg-gray-50 border border-gray-100 text-gray-600 px-3 py-2 rounded-lg">
                           <span className="font-semibold">Pajak / Fee (%) :</span>
                           <input
-                            type="number"
-                            value={taxPercent}
-                            onChange={(e) => setTaxPercent(parseFloat(e.target.value) || 0)}
+                            type="text"
+                            value={formatNumber(taxPercent)}
+                            onChange={(e) => setTaxPercent(parseNumber(e.target.value))}
                             className="w-12 bg-white border border-gray-200 rounded px-1.5 py-0.5 text-right outline-none focus:border-[#3B82F6] font-bold"
                           />
                         </div>
@@ -1030,9 +1043,9 @@ export default function PenjualanPage() {
                         <div className="flex items-center gap-2 bg-[#3B82F6]/5 rounded-lg px-4 py-2 border border-[#3B82F6]/20">
                           <span className="text-base font-bold text-[#3B82F6]">Rp</span>
                           <input
-                            type="number"
-                            value={customTotal}
-                            onChange={(e) => setCustomTotal(parseFloat(e.target.value) || 0)}
+                            type="text"
+                            value={formatNumber(customTotal)}
+                            onChange={(e) => setCustomTotal(parseNumber(e.target.value))}
                             className="text-right font-black text-2xl text-[#3B82F6] w-36 bg-transparent outline-none"
                           />
                         </div>
@@ -1435,7 +1448,7 @@ export default function PenjualanPage() {
                   </div>
                   <div>
                     <label className="block text-[10px] text-gray-500 mb-0.5">Terima Pembayaran (Tunai/Transfer)</label>
-                    <input type="number" value={editForm.pembayaran} onChange={e => setEditForm({...editForm, pembayaran: Number(e.target.value)})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400 font-bold text-green-600" />
+                    <input type="text" value={formatNumber(editForm.pembayaran)} onChange={e => setEditForm({...editForm, pembayaran: parseNumber(e.target.value)})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400 font-bold text-green-600" />
                     <p className="text-[9px] text-gray-400 mt-0.5 leading-tight">Ubah jika ada selisih total & uang pas disesuaikan.</p>
                   </div>
                 </div>
@@ -1465,15 +1478,15 @@ export default function PenjualanPage() {
                             <td className="py-1 px-2 text-[11px] text-center text-gray-500 whitespace-nowrap">{origItem.qty} {origItem.satuan}</td>
                             <td className="py-1 px-2 text-right">
                               <input 
-                                type="number" 
-                                value={formItem.harga_jual_saat_itu} 
+                                type="text" 
+                                value={formatNumber(formItem.harga_jual_saat_itu)} 
                                 onChange={(e) => {
-                                  const val = Number(e.target.value);
+                                  const val = parseNumber(e.target.value);
                                   const newItems = [...editForm.items];
                                   newItems[idx].harga_jual_saat_itu = val;
                                   setEditForm({...editForm, items: newItems});
                                 }}
-                                className="w-[85px] text-right text-[11px] border border-gray-200 rounded px-1.5 py-0.5 outline-none focus:border-blue-400"
+                                className="w-[110px] text-right text-[11px] border border-gray-200 rounded px-1.5 py-0.5 outline-none focus:border-blue-400"
                               />
                             </td>
                             <td className="py-1 px-2 text-[11px] text-right font-bold text-blue-600 whitespace-nowrap">Rp {subtotal.toLocaleString('id-ID')}</td>

@@ -29,10 +29,10 @@ class DashboardController extends Controller
         $stats = DB::table('sales')
             ->whereBetween('tanggal', [$prevStart, $end])
             ->selectRaw("
-                SUM(CASE WHEN tanggal >= ? THEN masuk_dp ELSE 0 END) as curr_penjualan,
-                SUM(CASE WHEN tanggal < ? THEN masuk_dp ELSE 0 END) as prev_penjualan,
-                SUM(CASE WHEN tanggal >= ? THEN (masuk_dp - harga_modal_manual) ELSE 0 END) as curr_laba,
-                SUM(CASE WHEN tanggal < ? THEN (masuk_dp - harga_modal_manual) ELSE 0 END) as prev_laba,
+                SUM(CASE WHEN tanggal >= ? THEN total_penjualan ELSE 0 END) as curr_penjualan,
+                SUM(CASE WHEN tanggal < ? THEN total_penjualan ELSE 0 END) as prev_penjualan,
+                SUM(CASE WHEN tanggal >= ? THEN (total_penjualan - harga_modal_manual) ELSE 0 END) as curr_laba,
+                SUM(CASE WHEN tanggal < ? THEN (total_penjualan - harga_modal_manual) ELSE 0 END) as prev_laba,
                 COUNT(CASE WHEN tanggal >= ? THEN 1 END) as curr_count,
                 COUNT(CASE WHEN tanggal < ? THEN 1 END) as prev_count
             ", [$start, $start, $start, $start, $start, $start])
@@ -68,7 +68,7 @@ class DashboardController extends Controller
         // Chart Data (Optimized with GROUP BY)
         $chartDataRaw = DB::table('sales')
             ->whereBetween('tanggal', [$start, $end])
-            ->selectRaw("DATE(tanggal) as tgl, SUM(masuk_dp) as total")
+            ->selectRaw("DATE(tanggal) as tgl, SUM(total_penjualan) as total")
             ->groupBy('tgl')
             ->get()
             ->pluck('total', 'tgl');
@@ -101,7 +101,7 @@ class DashboardController extends Controller
                 return [
                     'id' => $sale->invoice ?? '-',
                     'customer' => 'UMUM',
-                    'total' => (float) $sale->masuk_dp,
+                    'total' => (float) $sale->total_penjualan,
                     'date' => Carbon::parse($sale->tanggal)->format('d M Y'),
                     'time' => Carbon::parse($sale->tanggal)->format('H:i')
                 ];

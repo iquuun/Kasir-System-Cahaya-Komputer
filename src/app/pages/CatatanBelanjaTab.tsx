@@ -113,6 +113,19 @@ export default function CatatanBelanjaTab() {
     toast.success('Disalin ke Clipboard! Tinggal Paste di WhatsApp.');
   };
 
+  const handleSortAZ = () => {
+    if (!note.trim()) return;
+    const parsed = parseLines(note);
+    
+    // Pisahkan item belanja dengan teks biasa (biar teks manual ditaruh bawah)
+    const items = parsed.filter(p => p.isItem).sort((a, b) => a.name.localeCompare(b.name));
+    const nonItems = parsed.filter(p => !p.isItem && p.raw.trim() !== '');
+    
+    const sortedParsed = [...items, ...nonItems];
+    setNote(rebuildNote(sortedParsed));
+    toast.success('Daftar berhasil diurutkan A-Z!');
+  };
+
   // ----------- PARSE & MANIPULATE NOTE LINES -----------
   const parseLines = (text: string): ParsedLine[] => {
     const lines = text.split('\n');
@@ -250,6 +263,12 @@ export default function CatatanBelanjaTab() {
         
         <div className="flex flex-col items-end gap-2">
           <div className="flex gap-2">
+            <button 
+              onClick={handleSortAZ}
+              className="bg-accent text-foreground hover:bg-muted px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 border border-border transition active:scale-95"
+            >
+              Sortir A-Z
+            </button>
             <button 
               onClick={handleCopy}
               className="bg-accent text-foreground hover:bg-muted px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 border border-border transition active:scale-95"

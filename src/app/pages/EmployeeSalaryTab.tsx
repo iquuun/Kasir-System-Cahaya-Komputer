@@ -21,8 +21,21 @@ interface Salary {
   keterangan: string | null;
   employee?: Employee;
 }
-
 export default function EmployeeSalaryTab() {
+  const formatNumber = (value: number | string | undefined): string => {
+    if (value === undefined || value === null) return '';
+    if (value === 0 || value === '0' || value === '') return '';
+    const num = typeof value === 'string' ? parseInt(value.replace(/[^0-9]/g, ''), 10) : value;
+    if (isNaN(num) || num === 0) return '';
+    return num.toLocaleString('id-ID');
+  };
+  
+  const parseNumber = (text: string): number => {
+    if (!text) return 0;
+    const num = parseInt(text.replace(/[^0-9]/g, ''), 10);
+    return isNaN(num) ? 0 : num;
+  };
+
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [salaries, setSalaries] = useState<Salary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -390,9 +403,9 @@ export default function EmployeeSalaryTab() {
                           <DollarSign size={10} /> Gaji Pokok
                         </label>
                         <input
-                          type="number"
-                          value={form.gaji_pokok}
-                          onChange={(e) => setForm({...form, gaji_pokok: e.target.value})}
+                          type="text"
+                          value={formatNumber(form.gaji_pokok)}
+                          onChange={(e) => setForm({...form, gaji_pokok: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
                           className="w-full px-3 py-2 border border-purple-100 bg-purple-50/30 rounded-lg text-xs font-bold text-purple-700 outline-none focus:ring-2 focus:ring-purple-500 font-bold"
                         />
@@ -402,9 +415,9 @@ export default function EmployeeSalaryTab() {
                           <Gift size={10} /> Bonus / Tambahan
                         </label>
                         <input
-                          type="number"
-                          value={form.bonus}
-                          onChange={(e) => setForm({...form, bonus: e.target.value})}
+                          type="text"
+                          value={formatNumber(form.bonus)}
+                          onChange={(e) => setForm({...form, bonus: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
                           className="w-full px-3 py-2 border border-emerald-100 bg-emerald-50/30 rounded-lg text-xs font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-500 font-bold"
                         />
@@ -414,9 +427,9 @@ export default function EmployeeSalaryTab() {
                           <MinusCircle size={10} /> Potongan / Pinjam
                         </label>
                         <input
-                          type="number"
-                          value={form.potongan}
-                          onChange={(e) => setForm({...form, potongan: e.target.value})}
+                          type="text"
+                          value={formatNumber(form.potongan)}
+                          onChange={(e) => setForm({...form, potongan: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
                           className="w-full px-3 py-2 border border-rose-100 bg-rose-50/30 rounded-lg text-xs font-bold text-rose-700 outline-none focus:ring-2 focus:ring-rose-500 font-bold"
                         />
@@ -493,11 +506,11 @@ export default function EmployeeSalaryTab() {
                   <div className="relative">
                     <span className="absolute left-3 top-2.5 text-xs text-gray-400 font-bold">Rp</span>
                     <input
-                      type="number"
+                      type="text"
                       required
-                      value={promptModal.base_salary}
-                      onChange={(e) => setPromptModal({...promptModal, base_salary: e.target.value})}
-                      placeholder="Contoh: 2500000"
+                      value={formatNumber(promptModal.base_salary)}
+                      onChange={(e) => setPromptModal({...promptModal, base_salary: parseNumber(e.target.value).toString()})}
+                      placeholder="Contoh: 2.500.000"
                       className="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-purple-500 font-bold text-gray-700 dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                     />
                   </div>

@@ -54,6 +54,20 @@ function StatCard({ title, value, subtitle, icon: Icon, colorClass = "from-blue-
 }
 
 export default function MutasiRekeningTab() {
+  const formatNumber = (value: number | string | undefined): string => {
+    if (value === undefined || value === null) return '';
+    if (value === 0 || value === '0' || value === '') return '';
+    const num = typeof value === 'string' ? parseInt(value.replace(/[^0-9]/g, ''), 10) : value;
+    if (isNaN(num) || num === 0) return '';
+    return num.toLocaleString('id-ID');
+  };
+  
+  const parseNumber = (text: string): number => {
+    if (!text) return 0;
+    const num = parseInt(text.replace(/[^0-9]/g, ''), 10);
+    return isNaN(num) ? 0 : num;
+  };
+
   const [cashFlows, setCashFlows] = useState<CashFlow[]>([]);
   const [totalMasuk, setTotalMasuk] = useState(0);
   const [totalKeluar, setTotalKeluar] = useState(0);
@@ -605,12 +619,11 @@ export default function MutasiRekeningTab() {
               <div>
                 <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Nominal (Rp)</label>
                 <input
-                  type="number"
-                  value={form.nominal}
-                  onChange={(e) => setForm({ ...form, nominal: e.target.value })}
-                  placeholder="Contoh: 500000"
+                  type="text"
+                  value={formatNumber(form.nominal)}
+                  onChange={(e) => setForm({ ...form, nominal: parseNumber(e.target.value).toString() })}
+                  placeholder="Contoh: 500.000"
                   className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm font-bold"
-                  min={1}
                   required
                 />
               </div>

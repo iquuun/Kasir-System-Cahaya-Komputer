@@ -48,6 +48,20 @@ function StatCard({ title, value, subtitle, icon: Icon, colorClass = "from-blue-
 }
 
 export default function PembukuanPenjualanTab() {
+  const formatNumber = (value: number | string | undefined): string => {
+    if (value === undefined || value === null) return '';
+    if (value === 0 || value === '0' || value === '') return '';
+    const num = typeof value === 'string' ? parseInt(value.replace(/[^0-9]/g, ''), 10) : value;
+    if (isNaN(num) || num === 0) return '';
+    return num.toLocaleString('id-ID');
+  };
+  
+  const parseNumber = (text: string): number => {
+    if (!text) return 0;
+    const num = parseInt(text.replace(/[^0-9]/g, ''), 10);
+    return isNaN(num) ? 0 : num;
+  };
+
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -571,9 +585,9 @@ export default function PembukuanPenjualanTab() {
                       <td className="px-3 py-2 text-right">
                         {isEditing ? (
                           <input
-                            type="number"
-                            value={editForm.harga_modal_manual}
-                            onChange={(e) => setEditForm({ ...editForm, harga_modal_manual: Number(e.target.value) })}
+                            type="text"
+                            value={formatNumber(editForm.harga_modal_manual)}
+                            onChange={(e) => setEditForm({ ...editForm, harga_modal_manual: parseNumber(e.target.value) })}
                             className="w-24 px-2 py-1 border border-blue-300 rounded text-xs outline-none text-right"
                           />
                         ) : (
@@ -591,9 +605,9 @@ export default function PembukuanPenjualanTab() {
                       <td className="px-3 py-2 text-right bg-blue-50/30">
                         {isEditing ? (
                           <input
-                            type="number"
-                            value={editForm.masuk_dp}
-                            onChange={(e) => setEditForm({ ...editForm, masuk_dp: Number(e.target.value) })}
+                            type="text"
+                            value={formatNumber(editForm.masuk_dp)}
+                            onChange={(e) => setEditForm({ ...editForm, masuk_dp: parseNumber(e.target.value) })}
                             className="w-24 px-2 py-1 border border-blue-300 rounded text-xs outline-none text-right"
                           />
                         ) : (
@@ -603,9 +617,9 @@ export default function PembukuanPenjualanTab() {
                       <td className="px-3 py-2 text-right bg-purple-50/30">
                         {isEditing ? (
                           <input
-                            type="number"
-                            value={editForm.keluar_tf}
-                            onChange={(e) => setEditForm({ ...editForm, keluar_tf: Number(e.target.value) })}
+                            type="text"
+                            value={formatNumber(editForm.keluar_tf)}
+                            onChange={(e) => setEditForm({ ...editForm, keluar_tf: parseNumber(e.target.value) })}
                             className="w-24 px-2 py-1 border border-blue-300 rounded text-xs outline-none text-right"
                           />
                         ) : (

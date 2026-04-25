@@ -64,6 +64,19 @@ function StatCard({ title, value, subtitle, icon: Icon, colorClass = "from-blue-
     </div>
   );
 }
+const formatNumber = (value: number | string | undefined): string => {
+  if (value === undefined || value === null) return '';
+  if (value === 0 || value === '0' || value === '') return '';
+  const num = typeof value === 'string' ? parseInt(value.replace(/[^0-9]/g, ''), 10) : value;
+  if (isNaN(num) || num === 0) return '';
+  return num.toLocaleString('id-ID');
+};
+
+const parseNumber = (text: string): number => {
+  if (!text) return 0;
+  const num = parseInt(text.replace(/[^0-9]/g, ''), 10);
+  return isNaN(num) ? 0 : num;
+};
 
 export default function PembelianTab() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
@@ -829,7 +842,7 @@ export default function PembelianTab() {
                             <div className="flex-1 flex gap-1 items-center">
                                 <Select
                                   className="text-xs flex-1"
-                                  options={products.map(p => ({ value: p.id.toString(), label: p.name }))}
+                                  options={[...products].sort((a, b) => a.name.localeCompare(b.name)).map(p => ({ value: p.id.toString(), label: p.name }))}
                                   value={
                                     item.product_id
                                       ? {
@@ -867,21 +880,19 @@ export default function PembelianTab() {
                             </div>
                             <div className="w-16">
                               <input
-                                type="number"
-                                min="1"
+                                type="text"
                                 required
-                                value={item.qty}
-                                onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
+                                value={formatNumber(item.qty)}
+                                onChange={(e) => handleItemChange(idx, 'qty', parseNumber(e.target.value).toString())}
                                 className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-center"
                               />
                             </div>
                             <div className="w-28">
                               <input
-                                type="number"
-                                min="0"
+                                type="text"
                                 required
-                                value={item.harga_beli}
-                                onChange={(e) => handleItemChange(idx, 'harga_beli', e.target.value)}
+                                value={formatNumber(item.harga_beli)}
+                                onChange={(e) => handleItemChange(idx, 'harga_beli', parseNumber(e.target.value).toString())}
                                 className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-right"
                               />
                             </div>
@@ -904,22 +915,20 @@ export default function PembelianTab() {
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Total Pembelian (Rp)</label>
                     <input
-                      type="number"
-                      min="0"
+                      type="text"
                       required
-                      value={formData.total_pembelian}
-                      onChange={(e) => setFormData({ ...formData, total_pembelian: e.target.value })}
+                      value={formatNumber(formData.total_pembelian)}
+                      onChange={(e) => setFormData({ ...formData, total_pembelian: parseNumber(e.target.value).toString() })}
                       className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none bg-gray-50"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Jumlah Terbayar (Rp)</label>
                     <input
-                      type="number"
-                      min="0"
+                      type="text"
                       required
-                      value={formData.terbayar}
-                      onChange={(e) => setFormData({ ...formData, terbayar: e.target.value })}
+                      value={formatNumber(formData.terbayar)}
+                      onChange={(e) => setFormData({ ...formData, terbayar: parseNumber(e.target.value).toString() })}
                       className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none"
                     />
                   </div>
@@ -978,12 +987,14 @@ export default function PembelianTab() {
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Nominal Pembayaran (Rp)</label>
                 <input
-                  type="number"
-                  min="0"
-                  max={Number(selectedPurchase.total_pembelian) - Number(selectedPurchase.terbayar)}
+                  type="text"
                   required
-                  value={payAmount}
-                  onChange={(e) => setPayAmount(e.target.value)}
+                  value={formatNumber(payAmount)}
+                  onChange={(e) => {
+                    const parsed = parseNumber(e.target.value);
+                    const max = Number(selectedPurchase.total_pembelian) - Number(selectedPurchase.terbayar);
+                    setPayAmount(Math.min(parsed, max).toString());
+                  }}
                   className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-green-500 outline-none"
                 />
               </div>
