@@ -7,6 +7,7 @@ interface Warranty {
   id: string;
   customer_name: string;
   customer_phone: string;
+  customer_address?: string | null;
   product_name: string;
   tanggal_pembelian?: string | null;
   tanggal_masuk: string;
@@ -60,6 +61,7 @@ export default function GaransiPage() {
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_phone: '',
+    customer_address: '',
     product_name: '',
     tanggal_pembelian: '',
     tanggal_masuk: new Date().toISOString().split('T')[0],
@@ -124,6 +126,7 @@ export default function GaransiPage() {
       setFormData({
         customer_name: warranty.customer_name,
         customer_phone: warranty.customer_phone,
+        customer_address: warranty.customer_address || '',
         product_name: warranty.product_name,
         tanggal_pembelian: warranty.tanggal_pembelian ? warranty.tanggal_pembelian.substring(0, 10) : '',
         tanggal_masuk: warranty.tanggal_masuk.substring(0, 10),
@@ -139,6 +142,7 @@ export default function GaransiPage() {
       setFormData({
         customer_name: '',
         customer_phone: '',
+        customer_address: '',
         product_name: '',
         tanggal_pembelian: '',
         tanggal_masuk: new Date().toISOString().split('T')[0],
@@ -171,6 +175,7 @@ export default function GaransiPage() {
       };
 
       if (formData.tanggal_pembelian) payload.tanggal_pembelian = formData.tanggal_pembelian;
+      if (formData.customer_address) payload.customer_address = formData.customer_address;
       if (formData.catatan) payload.catatan = formData.catatan;
       if (formData.nomor_resi) payload.nomor_resi = formData.nomor_resi;
       if (formData.distributor_name) payload.distributor_name = formData.distributor_name;
@@ -406,6 +411,18 @@ export default function GaransiPage() {
                     className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
                   />
                 </div>
+              </div>
+
+              {/* Alamat Customer */}
+              <div>
+                <label className="block text-[11px] font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Alamat Customer</label>
+                <input
+                  type="text"
+                  value={formData.customer_address}
+                  onChange={(e) => setFormData({ ...formData, customer_address: e.target.value })}
+                  className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
+                  placeholder="Alamat customer..."
+                />
               </div>
 
               {/* Product Name - searchable from database */}

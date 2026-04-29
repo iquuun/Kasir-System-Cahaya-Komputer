@@ -18,6 +18,7 @@ class WarrantyController extends Controller
         $request->validate([
             'customer_name' => 'nullable|string',
             'customer_phone' => 'nullable|string',
+            'customer_address' => 'nullable|string',
             'product_name' => 'required|string',
             'tanggal_pembelian' => 'nullable|date',
             'tanggal_masuk' => 'required|date',
@@ -29,7 +30,7 @@ class WarrantyController extends Controller
         ]);
 
         $data = $request->only([
-            'customer_name', 'customer_phone', 'product_name', 'tanggal_pembelian',
+            'customer_name', 'customer_phone', 'customer_address', 'product_name', 'tanggal_pembelian',
             'tanggal_masuk', 'status', 'catatan', 'nomor_resi',
             'distributor_name', 'tanggal_kirim_distributor',
         ]);
@@ -45,6 +46,7 @@ class WarrantyController extends Controller
         $request->validate([
             'customer_name' => 'nullable|string',
             'customer_phone' => 'nullable|string',
+            'customer_address' => 'nullable|string',
             'product_name' => 'required|string',
             'tanggal_pembelian' => 'nullable|date',
             'tanggal_masuk' => 'required|date',
@@ -56,7 +58,7 @@ class WarrantyController extends Controller
         ]);
 
         $data = $request->only([
-            'customer_name', 'customer_phone', 'product_name', 'tanggal_pembelian',
+            'customer_name', 'customer_phone', 'customer_address', 'product_name', 'tanggal_pembelian',
             'tanggal_masuk', 'status', 'catatan', 'nomor_resi',
             'distributor_name', 'tanggal_kirim_distributor',
         ]);
