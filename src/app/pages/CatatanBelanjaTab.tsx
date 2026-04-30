@@ -54,9 +54,10 @@ export default function CatatanBelanjaTab() {
   const fetchNoteAndProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await api.get('/settings');
-      if (res.data && res.data.catatan_belanja) {
-        setNote(res.data.catatan_belanja);
+      // Load catatan dari localStorage (tanpa server, lebih cepat)
+      const savedNote = localStorage.getItem('catatan_belanja');
+      if (savedNote) {
+        setNote(savedNote);
       }
       
       const prodRes = await api.get('/products');
@@ -71,18 +72,18 @@ export default function CatatanBelanjaTab() {
         setCategories(catRes.data);
       }
     } catch (err) {
-      console.error('Gagal memuat catatan belanja:', err);
+      console.error('Gagal memuat data:', err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setIsSaving(true);
     try {
-      await api.post('/settings', { catatan_belanja: note });
+      localStorage.setItem('catatan_belanja', note);
       setLastSaved(new Date());
-      toast.success('Catatan berhasil disimpan ke Database Utama.');
+      toast.success('Catatan berhasil disimpan.');
     } catch (err) {
       toast.error('Gagal menyimpan catatan');
     } finally {
@@ -90,16 +91,14 @@ export default function CatatanBelanjaTab() {
     }
   };
 
-  // Auto save tiap 5 detik jika ada perubahan dan tidak sedang ngetik (didiamkan 3 detik)
+  // Auto save ke localStorage tiap 3 detik setelah berhenti ngetik
   useEffect(() => {
-    if (isLoading) return; // Jangan autosave saat loading pertama
+    if (isLoading) return;
     
     const timeoutId = setTimeout(() => {
-      // Kita langsung save tapi tanpa ngasih notifikasi biar ga berisik (silent save)
-      api.post('/settings', { catatan_belanja: note }).then(() => {
-         setLastSaved(new Date());
-      }).catch(e => console.error(e));
-    }, 5000); // 5 detik setelah berhenti ngetik
+      localStorage.setItem('catatan_belanja', note);
+      setLastSaved(new Date());
+    }, 3000);
     
     return () => clearTimeout(timeoutId);
   }, [note]);
@@ -263,7 +262,7 @@ export default function CatatanBelanjaTab() {
             Catatan Belanja & Permintaan
           </h2>
           <p className="text-xs text-muted-foreground mt-1 hidden md:block">
-            Terhubung langsung ke server database, semua komputer bisa saling melengkapi daftar.
+            Catatan tersimpan lokal di perangkat ini, ringan & cepat.
           </p>
         </div>
         
