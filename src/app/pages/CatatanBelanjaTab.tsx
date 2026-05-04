@@ -345,7 +345,16 @@ export default function CatatanBelanjaTab() {
                                key={p.id} 
                                className="flex items-center justify-between px-3 py-2 rounded hover:bg-accent group border-b border-border last:border-b-0 gap-2"
                              >
-                               <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors flex-1 truncate">{p.name}</span>
+                               <div className="flex-1 min-w-0 flex items-center gap-2">
+                                 <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">{p.name}</span>
+                                 <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                                   p.stok_saat_ini < 10
+                                     ? 'bg-red-100 text-red-600'
+                                     : 'bg-emerald-100 text-emerald-600'
+                                 }`}>
+                                   Stok: {p.stok_saat_ini}
+                                 </span>
+                               </div>
                                <div className="flex items-center gap-1 shrink-0">
                                  <button
                                    onClick={(e) => { e.stopPropagation(); setDropdownQty(prev => ({ ...prev, [p.id]: Math.max(1, (prev[p.id] || 1) - 1) })); }}
