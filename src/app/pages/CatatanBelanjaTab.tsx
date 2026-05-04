@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Save, FileText, CheckCircle2, Copy, Search, PlusCircle, Plus, Minus, Package, X, Loader2 } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Save, FileText, CheckCircle2, Copy, Search, PlusCircle, Plus, Minus, Package, X, Loader2, Box } from 'lucide-react';
 import api from '../api';
 import { toast } from 'sonner';
 
 interface Product {
   id: number;
   name: string;
+  stok_saat_ini: number;
+  category?: { id: number; name: string };
 }
 
 interface Category {
@@ -45,6 +47,9 @@ export default function CatatanBelanjaTab() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [newProduct, setNewProduct] = useState({ name: '', category_id: '', harga_beli: '', harga_jual: '' });
   const [isCreatingProduct, setIsCreatingProduct] = useState(false);
+
+  // Right panel search
+  const [searchStockPanel, setSearchStockPanel] = useState('');
 
   // Load dari Server Settings
   useEffect(() => {
@@ -247,6 +252,13 @@ export default function CatatanBelanjaTab() {
     .filter(p => p.name.toLowerCase().includes(searchBundle.toLowerCase()))
     .sort((a, b) => a.name.localeCompare(b.name))
     .slice(0, 20);
+
+  // Products with stock > 0 for right panel
+  const inStockProducts = useMemo(() => {
+    return products
+      .filter(p => p.stok_saat_ini > 0 && p.name.toLowerCase().includes(searchStockPanel.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [products, searchStockPanel]);
 
   // Parse current note for the interactive list
   const parsedNoteLines = parseLines(note);
@@ -523,19 +535,75 @@ export default function CatatanBelanjaTab() {
 
 
 
-      {/* TEXT AREA */}
-      <div className="p-4 flex-1 flex flex-col bg-sidebar-primary/5 min-h-0">
-        {isLoading ? (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">Memuat catatan...</div>
-        ) : (
-          <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="Tuliskan daftar belajaan, permintaan khusus pelanggan, atau barang yang butuh digaransikan secepatnya ke distributor disini..."
-            className="w-full flex-1 p-4 bg-card border border-border rounded-lg outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-foreground text-sm font-medium leading-relaxed custom-scrollbar shadow-inner"
-            style={{ fontFamily: "'Roboto Mono', 'Courier New', monospace" }}
-          ></textarea>
-        )}
+      {/* MAIN CONTENT: Textarea + Stock Panel */}
+      <div className="p-4 flex-1 flex gap-4 bg-sidebar-primary/5 min-h-0">
+        {/* LEFT: Textarea */}
+        <div className="flex-1 flex flex-col min-h-0">
+          {isLoading ? (
+            <div className="flex-1 flex items-center justify-center text-muted-foreground">Memuat catatan...</div>
+          ) : (
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Tuliskan daftar belajaan, permintaan khusus pelanggan, atau barang yang butuh digaransikan secepatnya ke distributor disini..."
+              className="w-full flex-1 p-4 bg-card border border-border rounded-lg outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-foreground text-sm font-medium leading-relaxed custom-scrollbar shadow-inner"
+              style={{ fontFamily: "'Roboto Mono', 'Courier New', monospace" }}
+            ></textarea>
+          )}
+        </div>
+
+        {/* RIGHT: Products with Stock */}
+        <div className="w-[320px] shrink-0 flex flex-col bg-card border border-border rounded-xl overflow-hidden shadow-sm hidden lg:flex">
+          {/* Panel Header */}
+          <div className="bg-emerald-500/10 border-b border-border px-3 py-2.5 shrink-0">
+            <h3 className="text-[11px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Box size={13} /> Produk Tersedia ({inStockProducts.length})
+            </h3>
+          </div>
+          {/* Panel Search */}
+          <div className="px-2.5 py-2 border-b border-border shrink-0">
+            <div className="flex items-center bg-input/20 border border-border rounded-lg px-2.5 py-1.5 focus-within:ring-2 ring-emerald-300/50 transition-all">
+              <Search size={13} className="text-muted-foreground mr-1.5" />
+              <input
+                value={searchStockPanel}
+                onChange={e => setSearchStockPanel(e.target.value)}
+                placeholder="Cari produk..."
+                className="bg-transparent outline-none text-xs w-full font-medium text-foreground"
+              />
+              {searchStockPanel && (
+                <button onClick={() => setSearchStockPanel('')} className="text-muted-foreground hover:text-foreground ml-1">
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+          </div>
+          {/* Panel List */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {inStockProducts.length === 0 ? (
+              <div className="p-4 text-center text-xs text-muted-foreground">Tidak ada produk dengan stok.</div>
+            ) : (
+              inStockProducts.map(p => (
+                <button
+                  key={p.id}
+                  onClick={() => appendToNote(p.name, 1)}
+                  className="w-full text-left px-3 py-2 flex items-center justify-between gap-2 border-b border-border/50 last:border-0 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 transition-colors group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[11px] font-bold text-foreground group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors block truncate">{p.name}</span>
+                    {p.category && <span className="text-[9px] text-muted-foreground">{p.category.name}</span>}
+                  </div>
+                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 ${
+                    p.stok_saat_ini < 10 
+                      ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' 
+                      : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                  }`}>
+                    {p.stok_saat_ini}
+                  </span>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
