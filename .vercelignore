@@ -1,0 +1,14 @@
+api/
+vendor/
+storage/
+bootstrap/
+config/
+database/
+resources/
+routes/
+tests/
+.env
+phpunit.xml
+artisan
+composer.json
+composer.lock

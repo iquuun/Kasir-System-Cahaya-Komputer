@@ -1,0 +1,36 @@
+name: Auto Deploy Backend Hostinger
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/**'
+      - 'update-server.php'
+
+jobs:
+  trigger-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Hostinger to Pull Code
+        run: |
+          echo "Menunggu 15 detik agar Hostinger selesai menarik file dari GitHub..."
+          sleep 15
+          
+      - name: Trigger Update Server Script
+        run: |
+          echo "Memanggil script rahasia untuk memindahkan file ke /laravel..."
+          HTTP_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" "https://cahayapos.id/github-kurir/update-server.php?key=rahasia123")
+          
+          # Ekstrak status code dan body
+          HTTP_STATUS=$(echo "$HTTP_RESPONSE" | tr -d '\n' | sed -e 's/.*HTTP_STATUS://')
+          BODY=$(echo "$HTTP_RESPONSE" | sed -e 's/HTTP_STATUS:.*//g')
+          
+          echo "$BODY"
+          
+          if [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "❌ ERROR: Script gagal dijalankan. Status Code: $HTTP_STATUS"
+            exit 1
+          fi
+          
+          echo "✅ Deployment Backend Selesai!"

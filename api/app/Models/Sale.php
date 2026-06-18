@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Sale extends Model
+{
+    protected $fillable = [
+        'invoice',
+        'channel',
+        'tanggal',
+        'total_penjualan',
+        'total_hpp',
+        'laba_kotor',
+        'tax_percent',
+        'tax_amount',
+        'pembayaran',
+        'kembalian',
+        'status_bayar',
+        'sisa_bayar',
+        'user_id',
+        'nama_barang_manual',
+        'username_pembeli',
+        'alamat_pembeli',
+        'telepon_pembeli',
+        'harga_modal_manual',
+        'masuk_dp',
+        'keluar_tf',
+        'status_pencairan',
+        'no_pesanan',
+        'no_resi'
+    ];
+
+    public function items()
+    {
+        return $this->hasMany(SaleItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}
