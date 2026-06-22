@@ -121,9 +121,9 @@ function SidebarPopover({ children, item, show, isOwner }: { children: React.Rea
           onMouseEnter={() => { if (timeoutRef.current) clearTimeout(timeoutRef.current); }}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden min-w-[160px]">
+          <div className="bg-blue-900 text-white rounded-lg shadow-xl border border-white/10 overflow-hidden min-w-[160px]">
             {/* Header label */}
-            <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-700">
+            <div className="px-3 py-2 border-b border-white/10">
               <p className="text-xs font-bold">{item.label}</p>
             </div>
             {/* Sub items */}
@@ -138,8 +138,8 @@ function SidebarPopover({ children, item, show, isOwner }: { children: React.Rea
                       to={sub.path}
                       className={`flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium transition-colors ${
                         isSubActive
-                          ? 'bg-blue-50 text-blue-600 font-bold dark:bg-blue-900/30'
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600 dark:text-slate-300 dark:hover:bg-slate-700'
+                          ? 'bg-white/20 text-white font-bold'
+                          : 'text-white/70 hover:bg-white/10 hover:text-white'
                       }`}
                     >
                       <SubIcon size={13} className="shrink-0 opacity-80" />
@@ -150,7 +150,7 @@ function SidebarPopover({ children, item, show, isOwner }: { children: React.Rea
               </div>
             )}
             {/* Arrow pointing left */}
-            <div className="absolute left-0 top-3 -translate-x-full w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[6px] border-r-white dark:border-r-slate-800" />
+            <div className="absolute left-0 top-3 -translate-x-full w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[6px] border-r-blue-900" />
           </div>
         </div>
       )}
@@ -207,7 +207,7 @@ export default function Sidebar() {
 
   const sidebarContent = (isMobile: boolean) => (
     <>
-      <div className={`border-b border-slate-100 dark:border-slate-800 shrink-0 flex items-center ${(isCollapsed && !isMobile) ? 'p-2 justify-center' : 'p-4 justify-between'}`}>
+      <div className={`border-b border-white/10 shrink-0 flex items-center ${(isCollapsed && !isMobile) ? 'p-2 justify-center' : 'p-4 justify-between'}`}>
         {(!isCollapsed || isMobile) && (
           <div className="overflow-hidden bg-white rounded-lg p-1 mr-2 flex items-center justify-center shrink-0 w-12 h-12">
             <img src="/Cahaya Logo.png" alt="Store Logo" className="w-full h-full object-contain" />
@@ -223,7 +223,7 @@ export default function Sidebar() {
         ) : (
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors text-slate-400 dark:text-slate-500 shrink-0"
+            className="p-1 hover:bg-white/20 rounded transition-colors text-white shrink-0"
             title={isCollapsed ? "Perbesar Menu" : "Perkecil Menu"}
           >
             {isCollapsed ? <Menu size={22} /> : <ChevronLeft size={22} />}
@@ -231,7 +231,7 @@ export default function Sidebar() {
         )}
       </div>
 
-      <nav className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent flex flex-col ${(isCollapsed && !isMobile) ? 'p-1.5' : 'p-3'}`}>
+      <nav className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent flex flex-col ${(isCollapsed && !isMobile) ? 'p-1.5' : 'p-3'}`}>
         {navItems.map((item) => {
           if (item.ownerOnly && !isOwner) return null;
 
@@ -247,8 +247,8 @@ export default function Sidebar() {
                   onClick={(e) => toggleMenu(item.path, e, isMobile)}
                   className={`flex items-center justify-between px-3 py-2 rounded-md w-full transition-all text-xs ${
                     location.pathname.startsWith(item.path)
-                      ? 'bg-blue-50 text-blue-600 font-bold dark:bg-blue-900/30 dark:text-blue-400'
-                      : `text-slate-600 dark:text-slate-400 hover:bg-slate-50 hover:text-blue-600 dark:hover:bg-slate-800/50 font-medium ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''}`
+                      ? 'bg-white/10 text-white font-bold'
+                      : `text-white/80 hover:bg-white/10 hover:text-white font-medium ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''}`
                   } ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -256,7 +256,7 @@ export default function Sidebar() {
                     {(!isCollapsed || isMobile) && <span className="truncate">{item.label}</span>}
                   </div>
                   {(!isCollapsed || isMobile) && (
-                    <div className="shrink-0 text-slate-400">
+                    <div className="shrink-0 text-white/50">
                       {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                     </div>
                   )}
@@ -272,8 +272,8 @@ export default function Sidebar() {
                   className={({ isActive }) =>
                     `flex items-center px-3 py-2 rounded-md transition-all text-xs w-full ${
                       isActive
-                        ? 'bg-blue-600 text-white font-extrabold shadow-md shadow-blue-600/20'
-                        : `text-slate-600 dark:text-slate-400 hover:bg-slate-50 hover:text-blue-600 dark:hover:bg-slate-800/50 font-medium ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''}`
+                        ? 'bg-white text-blue-600 font-extrabold shadow-md shadow-blue-900/15'
+                        : `text-white/80 hover:bg-white/10 hover:text-white font-medium ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''}`
                     } ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`
                   }
                 >
@@ -298,8 +298,8 @@ export default function Sidebar() {
                         }}
                         className={`flex items-center gap-2 py-1.5 px-3 rounded-md text-[11px] font-medium transition-all ${
                             isSubActive
-                              ? 'bg-blue-50 text-blue-700 font-bold shadow-sm dark:bg-blue-900/30 dark:text-blue-400' 
-                              : 'text-slate-500 hover:text-blue-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50 hover:translate-x-0.5'
+                              ? 'bg-white/20 text-white font-bold shadow-sm' 
+                              : 'text-white/70 hover:text-white hover:bg-white/10 hover:translate-x-0.5'
                           }`
                         }
                       >
@@ -325,10 +325,10 @@ export default function Sidebar() {
         })}
       </nav>
  
-      <div className={`border-t border-slate-100 dark:border-slate-800 shrink-0 ${(isCollapsed && !isMobile) ? 'p-1.5' : 'p-3'}`}>
+      <div className={`border-t border-white/10 shrink-0 ${(isCollapsed && !isMobile) ? 'p-1.5' : 'p-3'}`}>
           <button
             onClick={() => setIsLogoutModalOpen(true)}
-            className={`flex items-center px-3 py-2 rounded-md w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:text-red-400 transition-all text-xs font-semibold ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''} ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`}
+            className={`flex items-center px-3 py-2 rounded-md w-full text-white/90 hover:bg-red-500/80 hover:text-white transition-all text-xs font-semibold ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''} ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`}
             title={isCollapsed && !isMobile ? "Keluar" : undefined}
           >
             <LogOut size={18} className="shrink-0" />
@@ -341,9 +341,9 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className={`hidden md:flex h-screen bg-gradient-to-b from-blue-100/60 via-blue-50/30 to-white dark:bg-slate-900 dark:from-slate-900 dark:to-slate-900 text-slate-700 dark:text-slate-300 flex-col shrink-0 transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800 print:hidden relative ${isCollapsed ? 'w-14' : 'w-44'}`}>
+      <div className={`hidden md:flex h-screen bg-gradient-to-b from-blue-700 via-blue-500 to-blue-400 dark:from-slate-900 dark:to-slate-900 text-white flex-col shrink-0 transition-all duration-300 ease-in-out border-r border-blue-400/30 print:hidden relative ${isCollapsed ? 'w-14' : 'w-44'}`}>
         {/* Subtle decorative glow at the top */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-white/5 dark:to-transparent pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
         {sidebarContent(false)}
       </div>
       {/* Mobile Overlay */}
@@ -355,7 +355,7 @@ export default function Sidebar() {
       )}
 
       {/* Mobile Bottom Sheet Menu */}
-      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-blue-50/80 to-white dark:from-slate-900 dark:to-slate-900 rounded-t-[2.5rem] shadow-2xl border-t border-gray-100/70 flex flex-col transform transition-transform duration-300 ease-in-out print:hidden max-h-[85vh] overflow-hidden ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:from-slate-900 dark:to-slate-900 rounded-t-[2.5rem] shadow-2xl border-t border-gray-100/70 flex flex-col transform transition-transform duration-300 ease-in-out print:hidden max-h-[85vh] overflow-hidden ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
         {/* Drag Handle & Top Indicator */}
         <div className="flex justify-center py-3.5 shrink-0">
           <div className="w-16 h-1.5 bg-gray-300 dark:bg-gray-700 rounded-full cursor-pointer hover:bg-gray-400 transition-colors" />
