@@ -3102,7 +3102,7 @@ export default function PenjualanPage() {
             </div>
 
             {/* Slots List - Compact */}
-            <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+            <div className="flex-1 overflow-y-auto px-2 py-1.5 space-y-0.5">
               {rakitanSlots.map((slot, idx) => {
                 const filteredProds = products.filter(p => {
                   if (slot.kategori === 'ALL') return true;
@@ -3116,9 +3116,9 @@ export default function PenjualanPage() {
 
                 return (
                   <div key={slot.id} className="relative group" style={{ zIndex: rakitanSlots.length - idx }}>
-                    <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 hover:border-cyan-300 transition-colors">
+                    <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded px-1.5 py-1 hover:border-cyan-300 transition-colors">
                       {/* Label */}
-                      <span className="text-[9px] font-black text-cyan-700 bg-cyan-50 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0 w-[72px] text-center truncate">
+                      <span className="text-[8px] font-black text-cyan-700 bg-cyan-50 px-1 py-0.5 rounded uppercase tracking-wider shrink-0 w-[68px] text-center truncate">
                         {slot.label}
                       </span>
                       {/* Product Search */}
@@ -3129,14 +3129,14 @@ export default function PenjualanPage() {
                           value={slot.search}
                           onChange={(e) => updateRakitanSlot(slot.id, { search: e.target.value, showDropdown: true })}
                           onFocus={() => updateRakitanSlot(slot.id, { showDropdown: true })}
-                          className={`w-full text-[11px] border rounded-md px-2 py-1.5 outline-none focus:ring-1 focus:ring-cyan-300 transition-all ${
+                          className={`w-full text-[10px] border rounded px-1.5 py-1 outline-none focus:ring-1 focus:ring-cyan-300 transition-all ${
                             slot.product ? 'bg-cyan-50 border-cyan-300 font-semibold text-cyan-800' : 'bg-white border-gray-200'
                           }`}
                         />
                         {slot.product && (
                           <button
                             onClick={() => updateRakitanSlot(slot.id, { product: null, search: '' })}
-                            className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
                           >
                             <XIcon size={12} />
                           </button>
@@ -3145,9 +3145,9 @@ export default function PenjualanPage() {
                         {slot.showDropdown && !slot.product && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => updateRakitanSlot(slot.id, { showDropdown: false })} />
-                            <div className="absolute top-full left-0 right-0 mt-0.5 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-36 overflow-y-auto">
+                            <div className="absolute top-full left-0 right-0 mt-0.5 bg-white border border-gray-200 rounded shadow-xl z-50 max-h-36 overflow-y-auto">
                               {filteredProds.length === 0 ? (
-                                <div className="px-3 py-1.5 text-[11px] text-gray-400 text-center">Tidak ditemukan</div>
+                                <div className="px-2 py-1 text-[10px] text-gray-400 text-center">Tidak ditemukan</div>
                               ) : (
                                 filteredProds.slice(0, 20).map(p => (
                                   <div
@@ -3159,10 +3159,10 @@ export default function PenjualanPage() {
                                         showDropdown: false,
                                       });
                                     }}
-                                    className="px-2.5 py-1.5 text-[11px] cursor-pointer hover:bg-cyan-50 border-b border-gray-100 last:border-0 flex justify-between items-center"
+                                    className="px-2 py-1 text-[10px] cursor-pointer hover:bg-cyan-50 border-b border-gray-100 last:border-0 flex justify-between items-center"
                                   >
                                     <span className="font-semibold text-gray-800 truncate">{p.name}</span>
-                                    <span className="text-[9px] text-gray-400 ml-2 whitespace-nowrap">
+                                    <span className="text-[8px] text-gray-400 ml-2 whitespace-nowrap">
                                       Rp {p.harga_jual.toLocaleString('id-ID')}
                                     </span>
                                   </div>
@@ -3176,7 +3176,7 @@ export default function PenjualanPage() {
                       <div className="flex items-center gap-0.5 shrink-0">
                         <button
                           onClick={() => updateRakitanSlot(slot.id, { qty: Math.max(1, slot.qty - 1) })}
-                          className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-xs font-bold transition-colors"
+                          className="w-5 h-5 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-[10px] font-bold transition-colors"
                         >
                           -
                         </button>
@@ -3185,11 +3185,11 @@ export default function PenjualanPage() {
                           min={1}
                           value={slot.qty}
                           onChange={(e) => updateRakitanSlot(slot.id, { qty: Math.max(1, parseInt(e.target.value) || 1) })}
-                          className="w-8 text-center text-[11px] font-bold border border-gray-200 rounded py-1 outline-none focus:ring-1 focus:ring-cyan-300"
+                          className="w-7 text-center text-[10px] font-bold border border-gray-200 rounded py-0.5 outline-none focus:ring-1 focus:ring-cyan-300"
                         />
                         <button
                           onClick={() => updateRakitanSlot(slot.id, { qty: slot.qty + 1 })}
-                          className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-xs font-bold transition-colors"
+                          className="w-5 h-5 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-[10px] font-bold transition-colors"
                         >
                           +
                         </button>
@@ -3205,7 +3205,7 @@ export default function PenjualanPage() {
                     </div>
                     {/* Selected info inline */}
                     {slot.product && (
-                      <div className="ml-[78px] text-[9px] text-gray-400 mt-0.5 mb-0.5">
+                      <div className="ml-[74px] text-[8px] text-gray-400">
                         Rp {slot.product.harga_jual.toLocaleString('id-ID')} × {slot.qty} = <b className="text-cyan-700">Rp {(slot.product.harga_jual * slot.qty).toLocaleString('id-ID')}</b>
                       </div>
                     )}
