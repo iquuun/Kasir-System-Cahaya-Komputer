@@ -785,7 +785,7 @@ export default function PenjualanPage() {
     setNoResi(sale.no_resi || '');
     setTaxPercent(sale.tax_percent || 0);
     setPayment('0');
-    setActiveTab('pos');
+    handleTabChange('pos');
     toast.success(`Barang dari ${sale.invoice} berhasil dimuat ke kasir!`);
   };
 
