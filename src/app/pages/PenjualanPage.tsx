@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical, Edit2, Save, Settings, RotateCcw, Camera, X as XIcon, ArrowUpDown, ChevronUp, ChevronDown, Check } from 'lucide-react';
+import { Search, Plus, Trash2, Printer, History, ShoppingCart, Ban, ChevronLeft, ChevronRight, Calendar, Download, GripVertical, Edit2, Save, Settings, RotateCcw, Camera, X as XIcon, ArrowUpDown, ChevronUp, ChevronDown, Check, Monitor, Cpu } from 'lucide-react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { useLocation, useNavigate } from 'react-router';
 import StoreProfileModal from '../components/StoreProfileModal';
@@ -205,6 +205,133 @@ export default function PenjualanPage() {
   const [isSaveTemplateModalOpen, setIsSaveTemplateModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [templateName, setTemplateName] = useState('');
+
+  // Rakitan Builder Modal
+  interface RakitanSlot {
+    id: string;
+    label: string;
+    kategori: string; // category name to filter products (uppercase)
+    product: Product | null;
+    qty: number;
+    search: string;
+    showDropdown: boolean;
+  }
+  const FULLSET_SLOTS = [
+    { label: 'Prosesor', kategori: 'PROC' },
+    { label: 'Motherboard', kategori: 'MOBO' },
+    { label: 'Fan Prosesor', kategori: 'CPU COOLER' },
+    { label: 'RAM', kategori: 'RAM' },
+    { label: 'VGA', kategori: 'VGA' },
+    { label: 'SSD', kategori: 'SSD' },
+    { label: 'HDD', kategori: 'HDD' },
+    { label: 'PSU', kategori: 'PSU' },
+    { label: 'Casing', kategori: 'CASING' },
+    { label: 'Monitor', kategori: 'MONITOR' },
+    { label: 'Keyboard & Mouse', kategori: 'KEYBOARD' },
+    { label: 'USB WiFi', kategori: 'USB WIFI' },
+    { label: 'Mousepad (Bonus)', kategori: 'MOUSEPAD' },
+  ];
+  const CPU_ONLY_SLOTS = [
+    { label: 'Prosesor', kategori: 'PROC' },
+    { label: 'Motherboard', kategori: 'MOBO' },
+    { label: 'Fan Prosesor', kategori: 'CPU COOLER' },
+    { label: 'RAM', kategori: 'RAM' },
+    { label: 'VGA', kategori: 'VGA' },
+    { label: 'SSD', kategori: 'SSD' },
+    { label: 'HDD', kategori: 'HDD' },
+    { label: 'PSU', kategori: 'PSU' },
+    { label: 'Casing', kategori: 'CASING' },
+  ];
+
+  const createSlots = (template: { label: string; kategori: string }[]): RakitanSlot[] =>
+    template.map((s, i) => ({
+      id: `slot-${Date.now()}-${i}`,
+      label: s.label,
+      kategori: s.kategori,
+      product: null,
+      qty: 1,
+      search: '',
+      showDropdown: false,
+    }));
+
+  const [isRakitanModalOpen, setIsRakitanModalOpen] = useState(false);
+  const [rakitanType, setRakitanType] = useState<'fullset' | 'cpu_only'>('fullset');
+  const [rakitanSlots, setRakitanSlots] = useState<RakitanSlot[]>(createSlots(FULLSET_SLOTS));
+
+  const openRakitanModal = () => {
+    setRakitanType('fullset');
+    setRakitanSlots(createSlots(FULLSET_SLOTS));
+    setIsRakitanModalOpen(true);
+  };
+
+  const switchRakitanType = (type: 'fullset' | 'cpu_only') => {
+    setRakitanType(type);
+    setRakitanSlots(createSlots(type === 'fullset' ? FULLSET_SLOTS : CPU_ONLY_SLOTS));
+  };
+
+  const updateRakitanSlot = (id: string, updates: Partial<RakitanSlot>) => {
+    setRakitanSlots(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+  };
+
+  const removeRakitanSlot = (id: string) => {
+    setRakitanSlots(prev => prev.filter(s => s.id !== id));
+  };
+
+  const addRakitanSlot = () => {
+    setRakitanSlots(prev => [
+      ...prev,
+      {
+        id: `slot-${Date.now()}`,
+        label: 'Tambahan',
+        kategori: 'ALL',
+        product: null,
+        qty: 1,
+        search: '',
+        showDropdown: false,
+      },
+    ]);
+  };
+
+  const submitRakitan = () => {
+    const filledSlots = rakitanSlots.filter(s => s.product !== null);
+    if (filledSlots.length === 0) {
+      toast.error('Pilih minimal 1 komponen untuk membuat rakitan!');
+      return;
+    }
+
+    const totalHarga = filledSlots.reduce((sum, s) => sum + s.product!.harga_jual * s.qty, 0);
+    const headerName = rakitanType === 'fullset' ? 'Rakitan Fullset' : 'Rakitan CPU Only';
+
+    // Create the header item (manual product)
+    const headerProduct: Product = {
+      id: -Date.now(),
+      name: headerName,
+      harga_jual: totalHarga,
+      stok_saat_ini: 999,
+      category_id: 0,
+    };
+    const headerItem: SaleItem = {
+      product: headerProduct,
+      qty: 1,
+      harga_jual_saat_itu: totalHarga,
+      is_sub: false,
+      satuan: 'SET',
+      manual_name: headerName,
+    };
+
+    // Create sub items
+    const subItems: SaleItem[] = filledSlots.map(s => ({
+      product: s.product!,
+      qty: s.qty,
+      harga_jual_saat_itu: 0,
+      is_sub: true,
+      satuan: 'PCS',
+    }));
+
+    setSaleItems(prev => [...prev, headerItem, ...subItems]);
+    setIsRakitanModalOpen(false);
+    toast.success(`${headerName} berhasil ditambahkan ke keranjang! (${filledSlots.length} komponen)`);
+  };
 
   useEffect(() => {
     if (activeTab === 'pos') {
@@ -1401,6 +1528,14 @@ export default function PenjualanPage() {
                        >
                         <ShoppingCart size={12} />
                         PAKETKAN
+                       </button>
+                       <button 
+                        onClick={openRakitanModal} 
+                        title="Buat Faktur Rakitan PC"
+                        className="text-[10px] bg-cyan-600 hover:bg-cyan-700 text-white py-1.5 px-2.5 rounded-md font-bold shadow-sm transition-all flex items-center gap-1"
+                       >
+                        <Cpu size={12} />
+                        RAKITAN
                        </button>
                       <button onClick={addManualItem} className="text-[10px] bg-gray-100 border border-gray-200 hover:bg-gray-200 py-1.5 px-2.5 rounded-md font-bold text-gray-700">+ BARIS MANUAL</button>
                       <select value={channel} onChange={(e) => setChannel(e.target.value)} className="text-[10px] bg-gray-100 border-none rounded-md px-2 py-1.5 outline-none font-bold text-gray-700">
@@ -2918,6 +3053,200 @@ export default function PenjualanPage() {
                   className="w-full md:w-auto px-6 py-2.5 md:py-2 bg-gray-100 text-gray-700 rounded-xl md:rounded-lg text-xs font-bold hover:bg-gray-200 transition-colors"
                 >
                   Tutup Scanner
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ===== MODAL RAKITAN BUILDER ===== */}
+      {isRakitanModalOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-4 shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Cpu size={20} />
+                  <h2 className="text-base font-bold">Faktur Rakitan Builder</h2>
+                </div>
+                <button onClick={() => setIsRakitanModalOpen(false)} className="p-1.5 hover:bg-white/20 rounded-lg transition-colors">
+                  <XIcon size={18} />
+                </button>
+              </div>
+              {/* Type Toggle */}
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => switchRakitanType('fullset')}
+                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                    rakitanType === 'fullset'
+                      ? 'bg-white text-cyan-700 shadow-md'
+                      : 'bg-white/20 text-white/80 hover:bg-white/30'
+                  }`}
+                >
+                  <Monitor size={14} className="inline mr-1.5 -mt-0.5" />
+                  Rakitan Fullset
+                </button>
+                <button
+                  onClick={() => switchRakitanType('cpu_only')}
+                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                    rakitanType === 'cpu_only'
+                      ? 'bg-white text-cyan-700 shadow-md'
+                      : 'bg-white/20 text-white/80 hover:bg-white/30'
+                  }`}
+                >
+                  <Cpu size={14} className="inline mr-1.5 -mt-0.5" />
+                  Rakitan CPU Only
+                </button>
+              </div>
+            </div>
+
+            {/* Slots List */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+              {rakitanSlots.map((slot, idx) => {
+                const filteredProds = products.filter(p => {
+                  if (slot.kategori === 'ALL') return true;
+                  return p.category?.name?.toUpperCase() === slot.kategori;
+                }).filter(p => {
+                  if (!slot.search) return true;
+                  return p.name.toLowerCase().includes(slot.search.toLowerCase());
+                });
+
+                return (
+                  <div key={slot.id} className="relative bg-gray-50 border border-gray-200 rounded-xl p-3 group hover:border-cyan-300 transition-colors" style={{ zIndex: rakitanSlots.length - idx }}>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-[10px] font-black text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        {slot.label}
+                      </span>
+                      <button
+                        onClick={() => removeRakitanSlot(slot.id)}
+                        className="ml-auto opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        title="Hapus slot ini"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {/* Product Search Dropdown */}
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          placeholder={slot.product ? slot.product.name : `Cari ${slot.label}...`}
+                          value={slot.search}
+                          onChange={(e) => updateRakitanSlot(slot.id, { search: e.target.value, showDropdown: true })}
+                          onFocus={() => updateRakitanSlot(slot.id, { showDropdown: true })}
+                          className={`w-full text-xs border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-cyan-300 focus:border-cyan-400 transition-all ${
+                            slot.product ? 'bg-cyan-50 border-cyan-300 font-semibold text-cyan-800' : 'bg-white border-gray-200'
+                          }`}
+                        />
+                        {slot.product && (
+                          <button
+                            onClick={() => updateRakitanSlot(slot.id, { product: null, search: '' })}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                          >
+                            <XIcon size={14} />
+                          </button>
+                        )}
+                        {/* Dropdown */}
+                        {slot.showDropdown && !slot.product && (
+                          <>
+                            <div className="fixed inset-0 z-40" onClick={() => updateRakitanSlot(slot.id, { showDropdown: false })} />
+                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-40 overflow-y-auto">
+                              {filteredProds.length === 0 ? (
+                                <div className="px-3 py-2 text-xs text-gray-400 text-center">Tidak ditemukan</div>
+                              ) : (
+                                filteredProds.slice(0, 30).map(p => (
+                                  <div
+                                    key={p.id}
+                                    onClick={() => {
+                                      updateRakitanSlot(slot.id, {
+                                        product: p,
+                                        search: '',
+                                        showDropdown: false,
+                                      });
+                                    }}
+                                    className="px-3 py-2 text-xs cursor-pointer hover:bg-cyan-50 border-b border-gray-100 last:border-0 flex justify-between items-center"
+                                  >
+                                    <span className="font-semibold text-gray-800">{p.name}</span>
+                                    <span className="text-[10px] text-gray-400 ml-2 whitespace-nowrap">
+                                      Rp {p.harga_jual.toLocaleString('id-ID')} • Stok: {p.stok_saat_ini}
+                                    </span>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      {/* Qty */}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={() => updateRakitanSlot(slot.id, { qty: Math.max(1, slot.qty - 1) })}
+                          className="w-7 h-7 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-bold transition-colors"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          min={1}
+                          value={slot.qty}
+                          onChange={(e) => updateRakitanSlot(slot.id, { qty: Math.max(1, parseInt(e.target.value) || 1) })}
+                          className="w-10 text-center text-xs font-bold border border-gray-200 rounded-lg py-1.5 outline-none focus:ring-2 focus:ring-cyan-300"
+                        />
+                        <button
+                          onClick={() => updateRakitanSlot(slot.id, { qty: slot.qty + 1 })}
+                          className="w-7 h-7 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-bold transition-colors"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    {/* Show selected product info */}
+                    {slot.product && (
+                      <div className="mt-1.5 text-[10px] text-gray-500 flex justify-between">
+                        <span>Harga: <b className="text-gray-700">Rp {slot.product.harga_jual.toLocaleString('id-ID')}</b></span>
+                        <span>Subtotal: <b className="text-cyan-700">Rp {(slot.product.harga_jual * slot.qty).toLocaleString('id-ID')}</b></span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Add Component Button */}
+              <button
+                onClick={addRakitanSlot}
+                className="w-full py-2.5 border-2 border-dashed border-gray-300 hover:border-cyan-400 rounded-xl text-xs font-bold text-gray-400 hover:text-cyan-600 transition-all flex items-center justify-center gap-1.5"
+              >
+                <Plus size={14} /> Tambah Komponen Lain
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="border-t bg-gray-50 p-4 shrink-0">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <div className="text-[10px] text-gray-400 font-bold uppercase">Total Harga Rakitan</div>
+                  <div className="text-lg font-black text-cyan-700">
+                    Rp {rakitanSlots.filter(s => s.product).reduce((sum, s) => sum + s.product!.harga_jual * s.qty, 0).toLocaleString('id-ID')}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] text-gray-400 font-bold">{rakitanSlots.filter(s => s.product).length} komponen dipilih</div>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsRakitanModalOpen(false)}
+                  className="flex-1 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-xs font-bold transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={submitRakitan}
+                  disabled={rakitanSlots.filter(s => s.product).length === 0}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                >
+                  <Check size={14} /> Buat Faktur Rakitan
                 </button>
               </div>
             </div>
