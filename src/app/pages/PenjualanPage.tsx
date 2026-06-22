@@ -1410,7 +1410,23 @@ export default function PenjualanPage() {
                   </div>
 
                   {/* Cart Table */}
-                  <div className="flex-1 overflow-y-auto pr-1 mb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent min-h-[300px]">
+                  <div 
+                    className="flex-1 overflow-y-auto pr-1 mb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent min-h-[300px]"
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      const container = e.currentTarget;
+                      const rect = container.getBoundingClientRect();
+                      const y = e.clientY;
+                      const topThreshold = rect.top + 50;
+                      const bottomThreshold = rect.bottom - 50;
+
+                      if (y < topThreshold) {
+                        container.scrollTop -= 15;
+                      } else if (y > bottomThreshold) {
+                        container.scrollTop += 15;
+                      }
+                    }}
+                  >
                     {saleItems.length === 0 ? (
                       <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-3 opacity-50">
                         <ShoppingCart size={48} strokeWidth={1} />
