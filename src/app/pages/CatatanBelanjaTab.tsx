@@ -41,6 +41,15 @@ export default function CatatanBelanjaTab() {
   // Qty picker per product in dropdown
   const [dropdownQty, setDropdownQty] = useState<Record<number, number>>({});
 
+  // Saved Bundles
+  const [savedBundles, setSavedBundles] = useState<string[]>([]);
+  useEffect(() => {
+    const loaded = localStorage.getItem('saved_bundle_templates');
+    if (loaded) {
+      try { setSavedBundles(JSON.parse(loaded)); } catch(e){}
+    }
+  }, []);
+
   // Create product inline states
   const [showCreateProduct, setShowCreateProduct] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -522,14 +531,61 @@ export default function CatatanBelanjaTab() {
             </div>
 
             {/* Submit */}
-            <button
-              disabled={selectedBundledProducts.length === 0}
-              onClick={createBundle}
-              className="px-3 py-1.5 bg-blue-500 text-white rounded-lg text-[11px] font-bold hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-40 shrink-0"
-            >
-              + Tambah
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                disabled={selectedBundledProducts.length === 0}
+                onClick={createBundle}
+                className="px-3 py-1.5 bg-blue-500 text-white rounded-lg text-[11px] font-bold hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-40 shrink-0"
+              >
+                + Tambah
+              </button>
+              <button
+                disabled={selectedBundledProducts.length === 0}
+                onClick={() => {
+                   const bundleName = selectedBundledProducts.map(p => p.name).join(' + ');
+                   const bundleStr = `PAKET ${bundleName}`;
+                   if (!savedBundles.includes(bundleStr)) {
+                      const newBundles = [...savedBundles, bundleStr];
+                      setSavedBundles(newBundles);
+                      localStorage.setItem('saved_bundle_templates', JSON.stringify(newBundles));
+                      toast.success('Paket berhasil disimpan ke template!');
+                   }
+                   createBundle();
+                }}
+                className="px-3 py-1.5 bg-emerald-500 text-white rounded-lg text-[11px] font-bold hover:bg-emerald-600 active:scale-95 transition-all disabled:opacity-40 shrink-0"
+              >
+                Simpan & Tambah
+              </button>
+            </div>
           </div>
+
+          {/* Saved Bundles */}
+          {savedBundles.length > 0 && (
+            <div className="w-full mt-2 pt-2 border-t border-blue-200 dark:border-blue-800 flex flex-wrap gap-1.5 items-center">
+              <span className="text-[9px] font-black text-blue-600 uppercase tracking-wider mr-1">Tersimpan:</span>
+              {savedBundles.map(b => (
+                <div key={b} className="group relative inline-flex items-center">
+                  <button 
+                    onClick={() => appendToNote(b, 1)}
+                    className="px-2 py-1 bg-white dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 text-[10px] font-bold rounded-l hover:bg-blue-50 transition text-left"
+                  >
+                    {b}
+                  </button>
+                  <button 
+                    onClick={() => {
+                      const newB = savedBundles.filter(x => x !== b);
+                      setSavedBundles(newB);
+                      localStorage.setItem('saved_bundle_templates', JSON.stringify(newB));
+                    }}
+                    className="px-1.5 py-1 bg-red-50 text-red-500 border border-l-0 border-blue-200 dark:border-blue-800 text-[10px] rounded-r hover:bg-red-100 transition opacity-0 group-hover:opacity-100"
+                    title="Hapus dari tersimpan"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -609,7 +665,7 @@ export default function CatatanBelanjaTab() {
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Tuliskan daftar belajaan, permintaan khusus pelanggan, atau barang yang butuh digaransikan secepatnya ke distributor disini..."
+              placeholder="Tuliskan daftar belanjaan, permintaan khusus pelanggan, atau barang yang butuh digaransikan secepatnya ke distributor disini..."
               className="w-full flex-1 p-4 bg-card border border-border rounded-lg outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-foreground text-sm font-medium leading-relaxed custom-scrollbar shadow-inner"
               style={{ fontFamily: "'Roboto Mono', 'Courier New', monospace" }}
             ></textarea>

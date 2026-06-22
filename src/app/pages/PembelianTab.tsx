@@ -216,6 +216,50 @@ export default function PembelianTab() {
     }
   };
 
+  const handlePasteFromCatatan = () => {
+    const catatan = localStorage.getItem('catatan_belanja');
+    if (!catatan) {
+      toast.error('Catatan belanja masih kosong');
+      return;
+    }
+    
+    const lines = catatan.split('\n');
+    const newItems = [...formData.items];
+    let addedCount = 0;
+
+    lines.forEach(line => {
+      const match = line.match(/^\d+\.\s*(.+?)\s*-\s*(\d+)\s*pcs.*$/);
+      if (match) {
+        const name = match[1].trim();
+        const qty = parseInt(match[2], 10);
+        
+        // Find product by exact or case-insensitive name match
+        const product = products.find(p => p.name.toLowerCase() === name.toLowerCase());
+        
+        if (product) {
+          const existingIdx = newItems.findIndex(i => i.product_id === product.id.toString());
+          if (existingIdx >= 0) {
+            newItems[existingIdx].qty = (parseInt(newItems[existingIdx].qty) + qty).toString();
+          } else {
+            newItems.push({
+              product_id: product.id.toString(),
+              qty: qty.toString(),
+              harga_beli: product.harga_beli.toString()
+            });
+          }
+          addedCount++;
+        }
+      }
+    });
+
+    if (addedCount > 0) {
+      setFormData(prev => ({ ...prev, items: newItems }));
+      toast.success(`${addedCount} produk berhasil disalin dari Catatan!`);
+    } else {
+      toast.warning('Tidak ada produk di Catatan yang namanya persis dengan data barang.');
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -978,13 +1022,23 @@ export default function PembelianTab() {
                 <div className="border border-gray-200 rounded-lg p-2.5 md:p-3 bg-gray-50 overflow-hidden flex flex-col">
                   <div className="flex items-center justify-between mb-2 md:mb-3">
                     <label className="block text-xs font-medium text-gray-700">Barang yang dibeli</label>
-                    <button
-                      type="button"
-                      onClick={handleAddItem}
-                      className="text-[11px] flex items-center gap-1 bg-white border border-gray-300 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 active:scale-95 transition-all font-medium"
-                    >
-                      <Plus size={14} /> Tambah
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePasteFromCatatan}
+                        className="text-[11px] flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1.5 rounded-lg hover:bg-emerald-100 active:scale-95 transition-all font-bold"
+                        title="Salin list produk dari tab Catatan"
+                      >
+                        <Package size={14} /> Ambil dr Catatan
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleAddItem}
+                        className="text-[11px] flex items-center gap-1 bg-white border border-gray-300 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 active:scale-95 transition-all font-medium"
+                      >
+                        <Plus size={14} /> Tambah
+                      </button>
+                    </div>
                   </div>
 
                   {formData.items.length === 0 ? (
