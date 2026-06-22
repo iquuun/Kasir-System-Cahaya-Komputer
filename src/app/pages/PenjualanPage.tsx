@@ -3102,7 +3102,7 @@ export default function PenjualanPage() {
             </div>
 
             {/* Slots List - Compact */}
-            <div className="flex-1 overflow-y-auto px-2 py-1.5 space-y-0.5">
+            <div className={`flex-1 overflow-y-auto px-2 pt-1.5 space-y-0.5 ${rakitanSlots.some(s => s.showDropdown) ? 'pb-40' : 'pb-1.5'}`}>
               {rakitanSlots.map((slot, idx) => {
                 const filteredProds = products.filter(p => {
                   if (slot.kategori === 'ALL') return true;
