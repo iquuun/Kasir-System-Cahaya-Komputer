@@ -217,30 +217,30 @@ export default function PenjualanPage() {
     showDropdown: boolean;
   }
   const FULLSET_SLOTS = [
-    { label: 'Prosesor', kategori: 'PROC' },
-    { label: 'Motherboard', kategori: 'MOBO' },
-    { label: 'Fan Prosesor', kategori: 'CPU COOLER' },
-    { label: 'RAM', kategori: 'RAM' },
-    { label: 'VGA', kategori: 'VGA' },
-    { label: 'SSD', kategori: 'SSD' },
-    { label: 'HDD', kategori: 'HDD' },
-    { label: 'PSU', kategori: 'PSU' },
-    { label: 'Casing', kategori: 'CASING' },
-    { label: 'Monitor', kategori: 'MONITOR' },
-    { label: 'Keyboard & Mouse', kategori: 'KEYBOARD' },
-    { label: 'USB WiFi', kategori: 'USB WIFI' },
-    { label: 'Mousepad (Bonus)', kategori: 'MOUSEPAD' },
+    { label: 'Prosesor', kategori: 'PROC,PROSESOR,INTEL,AMD' },
+    { label: 'Motherboard', kategori: 'MOBO,MOTHERBOARD,MAINBOARD' },
+    { label: 'Fan Prosesor', kategori: 'CPU COOLER,FAN,COOLER,HEATSINK' },
+    { label: 'RAM', kategori: 'RAM,MEMORY,DDR' },
+    { label: 'VGA', kategori: 'VGA,GRAPHIC,GTX,RTX,RX' },
+    { label: 'SSD', kategori: 'SSD,NVME,SATA' },
+    { label: 'HDD', kategori: 'HDD,HARDDISK,SEAGATE,WDC' },
+    { label: 'PSU', kategori: 'PSU,POWER SUPPLY' },
+    { label: 'Casing', kategori: 'CASING,CASE' },
+    { label: 'Monitor', kategori: 'MONITOR,LED,LCD' },
+    { label: 'Keyboard & Mouse', kategori: 'KEYBOARD,MOUSE,ACC,AKSESORIS' },
+    { label: 'USB WiFi', kategori: 'WIFI,WIRELESS,ADAPTER,ACC,AKSESORIS' },
+    { label: 'Mousepad (Bonus)', kategori: 'MOUSEPAD,PAD,ACC,AKSESORIS' },
   ];
   const CPU_ONLY_SLOTS = [
-    { label: 'Prosesor', kategori: 'PROC' },
-    { label: 'Motherboard', kategori: 'MOBO' },
-    { label: 'Fan Prosesor', kategori: 'CPU COOLER' },
-    { label: 'RAM', kategori: 'RAM' },
-    { label: 'VGA', kategori: 'VGA' },
-    { label: 'SSD', kategori: 'SSD' },
-    { label: 'HDD', kategori: 'HDD' },
-    { label: 'PSU', kategori: 'PSU' },
-    { label: 'Casing', kategori: 'CASING' },
+    { label: 'Prosesor', kategori: 'PROC,PROSESOR,INTEL,AMD' },
+    { label: 'Motherboard', kategori: 'MOBO,MOTHERBOARD,MAINBOARD' },
+    { label: 'Fan Prosesor', kategori: 'CPU COOLER,FAN,COOLER,HEATSINK' },
+    { label: 'RAM', kategori: 'RAM,MEMORY,DDR' },
+    { label: 'VGA', kategori: 'VGA,GRAPHIC,GTX,RTX,RX' },
+    { label: 'SSD', kategori: 'SSD,NVME,SATA' },
+    { label: 'HDD', kategori: 'HDD,HARDDISK,SEAGATE,WDC' },
+    { label: 'PSU', kategori: 'PSU,POWER SUPPLY' },
+    { label: 'Casing', kategori: 'CASING,CASE' },
   ];
 
   const createSlots = (template: { label: string; kategori: string }[]): RakitanSlot[] =>
@@ -3106,7 +3106,10 @@ export default function PenjualanPage() {
               {rakitanSlots.map((slot, idx) => {
                 const filteredProds = products.filter(p => {
                   if (slot.kategori === 'ALL') return true;
-                  return p.category?.name?.toUpperCase() === slot.kategori;
+                  const pCat = p.category?.name?.toUpperCase() || '';
+                  const pName = p.name.toUpperCase();
+                  const allowedCats = slot.kategori.split(',');
+                  return allowedCats.some(k => pCat.includes(k) || pName.includes(k));
                 }).filter(p => p.stok_saat_ini > 0).filter(p => {
                   if (!slot.search) return true;
                   return p.name.toLowerCase().includes(slot.search.toLowerCase());
