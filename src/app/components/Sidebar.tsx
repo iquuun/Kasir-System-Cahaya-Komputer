@@ -341,7 +341,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className={`hidden md:flex h-screen bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 flex-col shrink-0 transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800 print:hidden relative ${isCollapsed ? 'w-14' : 'w-44'}`}>
+      <div className={`hidden md:flex h-screen bg-gradient-to-b from-blue-100/60 via-blue-50/30 to-white dark:bg-slate-900 dark:from-slate-900 dark:to-slate-900 text-slate-700 dark:text-slate-300 flex-col shrink-0 transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800 print:hidden relative ${isCollapsed ? 'w-14' : 'w-44'}`}>
         {/* Subtle decorative glow at the top */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-white/5 dark:to-transparent pointer-events-none" />
         {sidebarContent(false)}
@@ -355,7 +355,7 @@ export default function Sidebar() {
       )}
 
       {/* Mobile Bottom Sheet Menu */}
-      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-[2.5rem] shadow-2xl border-t border-gray-100/70 flex flex-col transform transition-transform duration-300 ease-in-out print:hidden max-h-[85vh] overflow-hidden ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-blue-50/80 to-white dark:from-slate-900 dark:to-slate-900 rounded-t-[2.5rem] shadow-2xl border-t border-gray-100/70 flex flex-col transform transition-transform duration-300 ease-in-out print:hidden max-h-[85vh] overflow-hidden ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
         {/* Drag Handle & Top Indicator */}
         <div className="flex justify-center py-3.5 shrink-0">
           <div className="w-16 h-1.5 bg-gray-300 dark:bg-gray-700 rounded-full cursor-pointer hover:bg-gray-400 transition-colors" />
