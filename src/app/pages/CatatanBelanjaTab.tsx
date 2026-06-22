@@ -362,12 +362,6 @@ export default function CatatanBelanjaTab() {
               Sortir Kategori
             </button>
             <button 
-              onClick={handleSortAZ}
-              className="bg-accent text-foreground hover:bg-muted px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 border border-border transition active:scale-95"
-            >
-              Sortir A-Z
-            </button>
-            <button 
               onClick={handleCopy}
               className="bg-accent text-foreground hover:bg-muted px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 border border-border transition active:scale-95"
             >
