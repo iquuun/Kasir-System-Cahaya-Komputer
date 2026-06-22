@@ -231,24 +231,38 @@ export default function PembelianTab() {
       const match = line.match(/^\d+\.\s*(.+?)\s*-\s*(\d+)\s*pcs.*$/);
       if (match) {
         const name = match[1].trim();
-        const qty = parseInt(match[2], 10);
+        const baseQty = parseInt(match[2], 10);
         
-        // Find product by exact or case-insensitive name match
-        const product = products.find(p => p.name.toLowerCase() === name.toLowerCase());
+        let parsedItems: { name: string, qty: number }[] = [];
         
-        if (product) {
-          const existingIdx = newItems.findIndex(i => i.product_id === product.id.toString());
-          if (existingIdx >= 0) {
-            newItems[existingIdx].qty = (parseInt(newItems[existingIdx].qty) + qty).toString();
-          } else {
-            newItems.push({
-              product_id: product.id.toString(),
-              qty: qty.toString(),
-              harga_beli: product.harga_beli.toString()
-            });
-          }
-          addedCount++;
+        if (name.toUpperCase().startsWith('PAKET ')) {
+          const itemsStr = name.substring(6); // remove "PAKET "
+          const parts = itemsStr.split('+').map(s => s.trim());
+          parts.forEach(part => {
+             parsedItems.push({ name: part, qty: baseQty }); // each part gets the package qty
+          });
+        } else {
+          parsedItems.push({ name: name, qty: baseQty });
         }
+
+        parsedItems.forEach(item => {
+          // Find product by exact or case-insensitive name match
+          const product = products.find(p => p.name.toLowerCase() === item.name.toLowerCase());
+          
+          if (product) {
+            const existingIdx = newItems.findIndex(i => i.product_id === product.id.toString());
+            if (existingIdx >= 0) {
+              newItems[existingIdx].qty = (parseInt(newItems[existingIdx].qty) + item.qty).toString();
+            } else {
+              newItems.push({
+                product_id: product.id.toString(),
+                qty: item.qty.toString(),
+                harga_beli: product.harga_beli.toString()
+              });
+            }
+            addedCount++;
+          }
+        });
       }
     });
 

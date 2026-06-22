@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { FileText, Copy, Search, PlusCircle, Plus, Minus, Package, X, Loader2, Box, CheckCircle2 } from 'lucide-react';
+import { FileText, Copy, Search, PlusCircle, Plus, Minus, Package, X, Loader2, Box, CheckCircle2, Trash2 } from 'lucide-react';
 import api from '../api';
 import { toast } from 'sonner';
 
@@ -559,31 +559,35 @@ export default function CatatanBelanjaTab() {
             </div>
           </div>
 
-          {/* Saved Bundles */}
+          {/* Saved Bundles List */}
           {savedBundles.length > 0 && (
-            <div className="w-full mt-2 pt-2 border-t border-blue-200 dark:border-blue-800 flex flex-wrap gap-1.5 items-center">
-              <span className="text-[9px] font-black text-blue-600 uppercase tracking-wider mr-1">Tersimpan:</span>
-              {savedBundles.map(b => (
-                <div key={b} className="group relative inline-flex items-center">
-                  <button 
-                    onClick={() => appendToNote(b, 1)}
-                    className="px-2 py-1 bg-white dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 text-[10px] font-bold rounded-l hover:bg-blue-50 transition text-left"
-                  >
-                    {b}
-                  </button>
-                  <button 
-                    onClick={() => {
-                      const newB = savedBundles.filter(x => x !== b);
-                      setSavedBundles(newB);
-                      localStorage.setItem('saved_bundle_templates', JSON.stringify(newB));
-                    }}
-                    className="px-1.5 py-1 bg-red-50 text-red-500 border border-l-0 border-blue-200 dark:border-blue-800 text-[10px] rounded-r hover:bg-red-100 transition opacity-0 group-hover:opacity-100"
-                    title="Hapus dari tersimpan"
-                  >
-                    &times;
-                  </button>
-                </div>
-              ))}
+            <div className="w-full mt-3">
+              <div className="text-[10px] font-black text-blue-600 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                <Package size={12} /> Template Paket Tersimpan ({savedBundles.length})
+              </div>
+              <div className="flex flex-col gap-1 max-h-32 overflow-y-auto custom-scrollbar border border-blue-100 dark:border-blue-900 rounded-lg bg-white/50 p-1">
+                {savedBundles.map((b, idx) => (
+                  <div key={idx} className="flex items-center justify-between group px-2 py-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors border-b border-blue-50 last:border-0">
+                    <button 
+                      onClick={() => appendToNote(b, 1)}
+                      className="text-left flex-1 text-[11px] font-bold text-blue-700 dark:text-blue-300 mr-2"
+                    >
+                      {b}
+                    </button>
+                    <button 
+                      onClick={() => {
+                        const newB = savedBundles.filter(x => x !== b);
+                        setSavedBundles(newB);
+                        localStorage.setItem('saved_bundle_templates', JSON.stringify(newB));
+                      }}
+                      className="opacity-0 group-hover:opacity-100 p-1.5 text-red-500 hover:bg-red-100 rounded transition-all shrink-0"
+                      title="Hapus template paket ini"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

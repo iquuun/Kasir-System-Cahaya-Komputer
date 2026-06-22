@@ -31,3 +31,6 @@ api/database/backups/
 .vercel
 *.zip
 deploy_hostinger/
+
+.vercel
+.env*
