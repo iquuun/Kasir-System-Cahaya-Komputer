@@ -3062,100 +3062,92 @@ export default function PenjualanPage() {
       {/* ===== MODAL RAKITAN BUILDER ===== */}
       {isRakitanModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Header */}
-            <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-4 shrink-0">
+            <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-3 shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Cpu size={20} />
-                  <h2 className="text-base font-bold">Faktur Rakitan Builder</h2>
+                  <Cpu size={18} />
+                  <h2 className="text-sm font-bold">Faktur Rakitan</h2>
                 </div>
-                <button onClick={() => setIsRakitanModalOpen(false)} className="p-1.5 hover:bg-white/20 rounded-lg transition-colors">
-                  <XIcon size={18} />
+                <button onClick={() => setIsRakitanModalOpen(false)} className="p-1 hover:bg-white/20 rounded-lg transition-colors">
+                  <XIcon size={16} />
                 </button>
               </div>
               {/* Type Toggle */}
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-1.5 mt-2">
                 <button
                   onClick={() => switchRakitanType('fullset')}
-                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
                     rakitanType === 'fullset'
                       ? 'bg-white text-cyan-700 shadow-md'
                       : 'bg-white/20 text-white/80 hover:bg-white/30'
                   }`}
                 >
-                  <Monitor size={14} className="inline mr-1.5 -mt-0.5" />
-                  Rakitan Fullset
+                  <Monitor size={12} className="inline mr-1 -mt-0.5" />
+                  Fullset
                 </button>
                 <button
                   onClick={() => switchRakitanType('cpu_only')}
-                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
                     rakitanType === 'cpu_only'
                       ? 'bg-white text-cyan-700 shadow-md'
                       : 'bg-white/20 text-white/80 hover:bg-white/30'
                   }`}
                 >
-                  <Cpu size={14} className="inline mr-1.5 -mt-0.5" />
-                  Rakitan CPU Only
+                  <Cpu size={12} className="inline mr-1 -mt-0.5" />
+                  CPU Only
                 </button>
               </div>
             </div>
 
-            {/* Slots List */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            {/* Slots List - Compact */}
+            <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
               {rakitanSlots.map((slot, idx) => {
                 const filteredProds = products.filter(p => {
                   if (slot.kategori === 'ALL') return true;
                   return p.category?.name?.toUpperCase() === slot.kategori;
-                }).filter(p => {
+                }).filter(p => p.stok_saat_ini > 0).filter(p => {
                   if (!slot.search) return true;
                   return p.name.toLowerCase().includes(slot.search.toLowerCase());
                 });
 
                 return (
-                  <div key={slot.id} className="relative bg-gray-50 border border-gray-200 rounded-xl p-3 group hover:border-cyan-300 transition-colors" style={{ zIndex: rakitanSlots.length - idx }}>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-[10px] font-black text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  <div key={slot.id} className="relative group" style={{ zIndex: rakitanSlots.length - idx }}>
+                    <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 hover:border-cyan-300 transition-colors">
+                      {/* Label */}
+                      <span className="text-[9px] font-black text-cyan-700 bg-cyan-50 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0 w-[72px] text-center truncate">
                         {slot.label}
                       </span>
-                      <button
-                        onClick={() => removeRakitanSlot(slot.id)}
-                        className="ml-auto opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                        title="Hapus slot ini"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {/* Product Search Dropdown */}
-                      <div className="relative flex-1">
+                      {/* Product Search */}
+                      <div className="relative flex-1 min-w-0">
                         <input
                           type="text"
-                          placeholder={slot.product ? slot.product.name : `Cari ${slot.label}...`}
+                          placeholder={slot.product ? slot.product.name : `Cari...`}
                           value={slot.search}
                           onChange={(e) => updateRakitanSlot(slot.id, { search: e.target.value, showDropdown: true })}
                           onFocus={() => updateRakitanSlot(slot.id, { showDropdown: true })}
-                          className={`w-full text-xs border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-cyan-300 focus:border-cyan-400 transition-all ${
+                          className={`w-full text-[11px] border rounded-md px-2 py-1.5 outline-none focus:ring-1 focus:ring-cyan-300 transition-all ${
                             slot.product ? 'bg-cyan-50 border-cyan-300 font-semibold text-cyan-800' : 'bg-white border-gray-200'
                           }`}
                         />
                         {slot.product && (
                           <button
                             onClick={() => updateRakitanSlot(slot.id, { product: null, search: '' })}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                            className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
                           >
-                            <XIcon size={14} />
+                            <XIcon size={12} />
                           </button>
                         )}
                         {/* Dropdown */}
                         {slot.showDropdown && !slot.product && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => updateRakitanSlot(slot.id, { showDropdown: false })} />
-                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-40 overflow-y-auto">
+                            <div className="absolute top-full left-0 right-0 mt-0.5 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-36 overflow-y-auto">
                               {filteredProds.length === 0 ? (
-                                <div className="px-3 py-2 text-xs text-gray-400 text-center">Tidak ditemukan</div>
+                                <div className="px-3 py-1.5 text-[11px] text-gray-400 text-center">Tidak ditemukan</div>
                               ) : (
-                                filteredProds.slice(0, 30).map(p => (
+                                filteredProds.slice(0, 20).map(p => (
                                   <div
                                     key={p.id}
                                     onClick={() => {
@@ -3165,11 +3157,11 @@ export default function PenjualanPage() {
                                         showDropdown: false,
                                       });
                                     }}
-                                    className="px-3 py-2 text-xs cursor-pointer hover:bg-cyan-50 border-b border-gray-100 last:border-0 flex justify-between items-center"
+                                    className="px-2.5 py-1.5 text-[11px] cursor-pointer hover:bg-cyan-50 border-b border-gray-100 last:border-0 flex justify-between items-center"
                                   >
-                                    <span className="font-semibold text-gray-800">{p.name}</span>
-                                    <span className="text-[10px] text-gray-400 ml-2 whitespace-nowrap">
-                                      Rp {p.harga_jual.toLocaleString('id-ID')} • Stok: {p.stok_saat_ini}
+                                    <span className="font-semibold text-gray-800 truncate">{p.name}</span>
+                                    <span className="text-[9px] text-gray-400 ml-2 whitespace-nowrap">
+                                      Rp {p.harga_jual.toLocaleString('id-ID')}
                                     </span>
                                   </div>
                                 ))
@@ -3178,11 +3170,11 @@ export default function PenjualanPage() {
                           </>
                         )}
                       </div>
-                      {/* Qty */}
-                      <div className="flex items-center gap-1 shrink-0">
+                      {/* Qty - compact */}
+                      <div className="flex items-center gap-0.5 shrink-0">
                         <button
                           onClick={() => updateRakitanSlot(slot.id, { qty: Math.max(1, slot.qty - 1) })}
-                          className="w-7 h-7 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-bold transition-colors"
+                          className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-xs font-bold transition-colors"
                         >
                           -
                         </button>
@@ -3191,21 +3183,28 @@ export default function PenjualanPage() {
                           min={1}
                           value={slot.qty}
                           onChange={(e) => updateRakitanSlot(slot.id, { qty: Math.max(1, parseInt(e.target.value) || 1) })}
-                          className="w-10 text-center text-xs font-bold border border-gray-200 rounded-lg py-1.5 outline-none focus:ring-2 focus:ring-cyan-300"
+                          className="w-8 text-center text-[11px] font-bold border border-gray-200 rounded py-1 outline-none focus:ring-1 focus:ring-cyan-300"
                         />
                         <button
                           onClick={() => updateRakitanSlot(slot.id, { qty: slot.qty + 1 })}
-                          className="w-7 h-7 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-bold transition-colors"
+                          className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-xs font-bold transition-colors"
                         >
                           +
                         </button>
                       </div>
+                      {/* Delete */}
+                      <button
+                        onClick={() => removeRakitanSlot(slot.id)}
+                        className="opacity-0 group-hover:opacity-100 p-0.5 text-red-400 hover:text-red-600 rounded transition-all shrink-0"
+                        title="Hapus"
+                      >
+                        <Trash2 size={12} />
+                      </button>
                     </div>
-                    {/* Show selected product info */}
+                    {/* Selected info inline */}
                     {slot.product && (
-                      <div className="mt-1.5 text-[10px] text-gray-500 flex justify-between">
-                        <span>Harga: <b className="text-gray-700">Rp {slot.product.harga_jual.toLocaleString('id-ID')}</b></span>
-                        <span>Subtotal: <b className="text-cyan-700">Rp {(slot.product.harga_jual * slot.qty).toLocaleString('id-ID')}</b></span>
+                      <div className="ml-[78px] text-[9px] text-gray-400 mt-0.5 mb-0.5">
+                        Rp {slot.product.harga_jual.toLocaleString('id-ID')} × {slot.qty} = <b className="text-cyan-700">Rp {(slot.product.harga_jual * slot.qty).toLocaleString('id-ID')}</b>
                       </div>
                     )}
                   </div>
@@ -3215,38 +3214,36 @@ export default function PenjualanPage() {
               {/* Add Component Button */}
               <button
                 onClick={addRakitanSlot}
-                className="w-full py-2.5 border-2 border-dashed border-gray-300 hover:border-cyan-400 rounded-xl text-xs font-bold text-gray-400 hover:text-cyan-600 transition-all flex items-center justify-center gap-1.5"
+                className="w-full py-1.5 border-2 border-dashed border-gray-300 hover:border-cyan-400 rounded-lg text-[11px] font-bold text-gray-400 hover:text-cyan-600 transition-all flex items-center justify-center gap-1"
               >
-                <Plus size={14} /> Tambah Komponen Lain
+                <Plus size={12} /> Tambah Komponen
               </button>
             </div>
 
-            {/* Footer */}
-            <div className="border-t bg-gray-50 p-4 shrink-0">
-              <div className="flex items-center justify-between mb-3">
+            {/* Footer - compact */}
+            <div className="border-t bg-gray-50 px-4 py-3 shrink-0">
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <div className="text-[10px] text-gray-400 font-bold uppercase">Total Harga Rakitan</div>
-                  <div className="text-lg font-black text-cyan-700">
+                  <div className="text-[9px] text-gray-400 font-bold uppercase">Total Rakitan</div>
+                  <div className="text-base font-black text-cyan-700">
                     Rp {rakitanSlots.filter(s => s.product).reduce((sum, s) => sum + s.product!.harga_jual * s.qty, 0).toLocaleString('id-ID')}
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-[10px] text-gray-400 font-bold">{rakitanSlots.filter(s => s.product).length} komponen dipilih</div>
-                </div>
+                <div className="text-[10px] text-gray-400 font-bold">{rakitanSlots.filter(s => s.product).length} komponen</div>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsRakitanModalOpen(false)}
-                  className="flex-1 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-xs font-bold transition-colors"
+                  className="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-xs font-bold transition-colors"
                 >
                   Batal
                 </button>
                 <button
                   onClick={submitRakitan}
                   disabled={rakitanSlots.filter(s => s.product).length === 0}
-                  className="flex-1 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                 >
-                  <Check size={14} /> Buat Faktur Rakitan
+                  <Check size={14} /> Buat Faktur
                 </button>
               </div>
             </div>
