@@ -476,6 +476,27 @@ export default function CatatanBelanjaTab() {
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setSearchBundle('')}></div>
                   <div className="absolute top-full mt-1 w-full max-w-md bg-card border border-border rounded-lg shadow-xl z-50 max-h-40 overflow-y-auto custom-scrollbar">
+                    {/* Saved templates matching search */}
+                    {savedBundles
+                      .filter(b => b.toLowerCase().includes(searchBundle.toLowerCase()))
+                      .map((b, idx) => (
+                        <div
+                          key={`tpl-${idx}`}
+                          onClick={() => {
+                            appendToNote(b, 1);
+                            setSearchBundle('');
+                          }}
+                          className="px-3 py-2 text-xs font-bold cursor-pointer border-b border-blue-100 flex items-center justify-between bg-blue-50/50 hover:bg-blue-100 text-blue-700"
+                        >
+                          <span className="flex items-center gap-1.5 truncate">
+                            <Package size={12} className="shrink-0 text-blue-500" />
+                            {b}
+                          </span>
+                          <span className="text-[9px] bg-blue-200 text-blue-700 px-1.5 py-0.5 rounded font-black shrink-0">TEMPLATE</span>
+                        </div>
+                      ))
+                    }
+                    {/* Products */}
                     {filteredBundleProducts.map(p => {
                       const isSelected = selectedBundledProducts.some(x => x.id === p.id);
                       return (
