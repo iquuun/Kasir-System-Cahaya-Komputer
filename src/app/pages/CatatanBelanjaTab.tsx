@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { FileText, Copy, Search, PlusCircle, Plus, Minus, Package, X, Loader2, Box, CheckCircle2, Trash2 } from 'lucide-react';
+import { FileText, Copy, Search, PlusCircle, Plus, Minus, Package, X, Loader2, Box, CheckCircle2, Trash2, ArrowUpDown, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../api';
 import { toast } from 'sonner';
 
@@ -58,6 +58,10 @@ export default function CatatanBelanjaTab() {
 
   // Right panel search
   const [searchStockPanel, setSearchStockPanel] = useState('');
+
+  // Template collapsible & search
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [searchTemplate, setSearchTemplate] = useState('');
 
   // Load dari Server Settings
   useEffect(() => {
@@ -126,6 +130,23 @@ export default function CatatanBelanjaTab() {
     toast.success('Daftar berhasil diurutkan A-Z!');
   };
 
+  const CATEGORY_RANK: Record<string, number> = {
+    'PROC': 2,
+    'MOBO': 3,
+    'CPU COOLER': 4,
+    'RAM': 5,
+    'VGA': 6,
+    'SSD': 7,
+    'HDD': 8,
+    'PSU': 9,
+    'CASING': 10,
+    'FAN CASING': 10,
+    'MONITOR': 11,
+    'KEY&MOUSE': 12,
+    'ACCESORIES': 13,
+    'HEADSET': 14,
+  };
+
   const getCategoryRank = (itemName: string) => {
     const upperName = itemName.toUpperCase();
     
@@ -138,58 +159,13 @@ export default function CatatanBelanjaTab() {
     const product = products.find(p => p.name.toUpperCase() === upperName);
     const categoryName = product?.category?.name?.toUpperCase() || '';
     
-    // 2. prosesor
-    if (categoryName.includes('PROSESOR') || categoryName.includes('PROCESSOR') || categoryName.includes('PROC') || upperName.includes('PROSESOR') || upperName.includes('PROCESSOR') || upperName.includes('INTEL') || upperName.includes('AMD')) {
-      return 2;
+    // Gunakan exact match dari nama kategori di database
+    if (categoryName && CATEGORY_RANK[categoryName] !== undefined) {
+      return CATEGORY_RANK[categoryName];
     }
     
-    // 3. Mobo
-    if (categoryName.includes('MOBO') || categoryName.includes('MOTHERBOARD') || upperName.includes('MOBO') || upperName.includes('MOTHERBOARD') || upperName.includes('H610') || upperName.includes('B760') || upperName.includes('H510') || upperName.includes('A520') || upperName.includes('B550')) {
-      return 3;
-    }
-    
-    // 4. CPU cooler
-    if (categoryName.includes('CPU COOLER') || categoryName.includes('COOLER') || categoryName.includes('FAN PROC') || categoryName.includes('HEATSINK') || upperName.includes('COOLER') || upperName.includes('FAN PROC') || upperName.includes('CPU COOLER') || upperName.includes('LIQUID COOLING')) {
-      return 4;
-    }
-    
-    // 5. RAM
-    if (categoryName.includes('RAM') || categoryName.includes('MEMORY') || upperName.includes('RAM ') || upperName.includes('DDR4') || upperName.includes('DDR5')) {
-      return 5;
-    }
-    
-    // 6. VGA
-    if (categoryName.includes('VGA') || categoryName.includes('GRAPHIC CARD') || categoryName.includes('KARTU GRAFIS') || upperName.includes('VGA') || upperName.includes('GTX') || upperName.includes('RTX') || upperName.includes('RX ')) {
-      return 6;
-    }
-    
-    // 7. SSD
-    if (categoryName.includes('SSD') || categoryName.includes('SOLID STATE') || upperName.includes('SSD') || upperName.includes('NVME') || upperName.includes('SATA SSD')) {
-      return 7;
-    }
-    
-    // 8. HDD
-    if (categoryName.includes('HDD') || categoryName.includes('HARDDISK') || categoryName.includes('HARD DISK') || upperName.includes('HDD') || upperName.includes('HARDDISK') || upperName.includes('SEAGATE') || upperName.includes('WDC')) {
-      return 8;
-    }
-    
-    // 9. PSU
-    if (categoryName.includes('PSU') || categoryName.includes('POWER SUPPLY') || upperName.includes('PSU') || upperName.includes('POWER SUPPLY') || upperName.includes('AEROCOOL') || upperName.includes('DEEPCOOL') || upperName.includes('CORSAIR')) {
-      return 9;
-    }
-    
-    // 10. Casing
-    if (categoryName.includes('CASING') || categoryName.includes('CASE') || upperName.includes('CASING') || upperName.includes('CASE') || upperName.includes('VURRION') || upperName.includes('SADAP') || upperName.includes('SEGOTEP')) {
-      return 10;
-    }
-    
-    // 11. Monitor
-    if (categoryName.includes('MONITOR') || categoryName.includes('LAYAR') || upperName.includes('MONITOR') || upperName.includes('LAYAR') || upperName.includes('LED ')) {
-      return 11;
-    }
-    
-    // 12. Sisanya (di luar kategori di atas)
-    return 12;
+    // 99. Sisanya (di luar kategori di atas)
+    return 99;
   };
 
   const handleSortCategory = () => {
@@ -357,9 +333,9 @@ export default function CatatanBelanjaTab() {
         <div className="flex gap-2">
             <button 
               onClick={handleSortCategory}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-sm"
+              className="bg-accent text-foreground hover:bg-muted px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 border border-border transition active:scale-95"
             >
-              Sortir Kategori
+              <ArrowUpDown size={14} /> Sortir
             </button>
             <button 
               onClick={handleCopy}
@@ -553,35 +529,54 @@ export default function CatatanBelanjaTab() {
             </div>
           </div>
 
-          {/* Saved Bundles List */}
+          {/* Saved Bundles List - Collapsible */}
           {savedBundles.length > 0 && (
-            <div className="w-full mt-3">
-              <div className="text-[10px] font-black text-blue-600 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                <Package size={12} /> Template Paket Tersimpan ({savedBundles.length})
-              </div>
-              <div className="flex flex-col gap-1 max-h-32 overflow-y-auto custom-scrollbar border border-blue-100 dark:border-blue-900 rounded-lg bg-white/50 p-1">
-                {savedBundles.map((b, idx) => (
-                  <div key={idx} className="flex items-center justify-between group px-2 py-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors border-b border-blue-50 last:border-0">
-                    <button 
-                      onClick={() => appendToNote(b, 1)}
-                      className="text-left flex-1 text-[11px] font-bold text-blue-700 dark:text-blue-300 mr-2"
-                    >
-                      {b}
-                    </button>
-                    <button 
-                      onClick={() => {
-                        const newB = savedBundles.filter(x => x !== b);
-                        setSavedBundles(newB);
-                        localStorage.setItem('saved_bundle_templates', JSON.stringify(newB));
-                      }}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 text-red-500 hover:bg-red-100 rounded transition-all shrink-0"
-                      title="Hapus template paket ini"
-                    >
-                      <Trash2 size={12} />
-                    </button>
+            <div className="w-full mt-2">
+              <button 
+                onClick={() => setShowTemplates(!showTemplates)} 
+                className="text-[10px] font-black text-blue-600 uppercase tracking-wider flex items-center gap-1 hover:text-blue-800 transition-colors w-full"
+              >
+                <Package size={10} /> Template ({savedBundles.length})
+                {showTemplates ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+              </button>
+              {showTemplates && (
+                <div className="mt-1">
+                  {savedBundles.length > 3 && (
+                    <input
+                      type="text"
+                      placeholder="Cari template..."
+                      value={searchTemplate}
+                      onChange={(e) => setSearchTemplate(e.target.value)}
+                      className="w-full text-[10px] border border-blue-200 rounded px-2 py-1 mb-1 outline-none focus:ring-1 focus:ring-blue-300"
+                    />
+                  )}
+                  <div className="flex flex-col gap-0.5 max-h-24 overflow-y-auto custom-scrollbar border border-blue-100 dark:border-blue-900 rounded bg-white/50 p-0.5">
+                    {savedBundles
+                      .filter(b => !searchTemplate || b.toLowerCase().includes(searchTemplate.toLowerCase()))
+                      .map((b, idx) => (
+                      <div key={idx} className="flex items-center justify-between group px-1.5 py-1 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors">
+                        <button 
+                          onClick={() => appendToNote(b, 1)}
+                          className="text-left flex-1 text-[10px] font-bold text-blue-700 dark:text-blue-300 mr-1 truncate"
+                        >
+                          {b}
+                        </button>
+                        <button 
+                          onClick={() => {
+                            const newB = savedBundles.filter(x => x !== b);
+                            setSavedBundles(newB);
+                            localStorage.setItem('saved_bundle_templates', JSON.stringify(newB));
+                          }}
+                          className="opacity-0 group-hover:opacity-100 p-0.5 text-red-500 hover:bg-red-100 rounded transition-all shrink-0"
+                          title="Hapus"
+                        >
+                          <Trash2 size={10} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
           )}
         </div>
