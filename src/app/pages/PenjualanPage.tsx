@@ -3102,7 +3102,7 @@ export default function PenjualanPage() {
             </div>
 
             {/* Slots List - Compact */}
-            <div className={`flex-1 overflow-y-auto px-2 pt-1.5 space-y-0.5 ${rakitanSlots.some(s => s.showDropdown) ? 'pb-40' : 'pb-1.5'}`}>
+            <div className="flex-1 overflow-y-auto px-2 pt-1.5 pb-1.5 space-y-0.5">
               {rakitanSlots.map((slot, idx) => {
                 const filteredProds = products.filter(p => {
                   if (slot.kategori === 'ALL') return true;
@@ -3114,8 +3114,10 @@ export default function PenjualanPage() {
                   return p.name.toLowerCase().includes(slot.search.toLowerCase());
                 });
 
+                const isBottomHalf = idx >= Math.ceil(rakitanSlots.length / 2);
+
                 return (
-                  <div key={slot.id} className="relative group" style={{ zIndex: rakitanSlots.length - idx }}>
+                  <div key={slot.id} className="relative group" style={{ zIndex: slot.showDropdown ? 50 : 1 }}>
                     <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded px-1.5 py-1 hover:border-cyan-300 transition-colors">
                       {/* Label */}
                       <span className="text-[8px] font-black text-cyan-700 bg-cyan-50 px-1 py-0.5 rounded uppercase tracking-wider shrink-0 w-[68px] text-center truncate">
@@ -3145,7 +3147,7 @@ export default function PenjualanPage() {
                         {slot.showDropdown && !slot.product && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => updateRakitanSlot(slot.id, { showDropdown: false })} />
-                            <div className="absolute top-full left-0 right-0 mt-0.5 bg-white border border-gray-200 rounded shadow-xl z-50 max-h-36 overflow-y-auto">
+                            <div className={`absolute left-0 right-0 ${isBottomHalf ? 'bottom-full mb-0.5' : 'top-full mt-0.5'} bg-white border border-gray-200 rounded shadow-xl z-50 max-h-36 overflow-y-auto`}>
                               {filteredProds.length === 0 ? (
                                 <div className="px-2 py-1 text-[10px] text-gray-400 text-center">Tidak ditemukan</div>
                               ) : (
