@@ -209,7 +209,7 @@ export default function Sidebar() {
     <>
       <div className={`border-b border-white/10 shrink-0 flex items-center ${(isCollapsed && !isMobile) ? 'p-2 justify-center' : 'p-4 justify-between'}`}>
         {(!isCollapsed || isMobile) && (
-          <div className="overflow-hidden bg-white rounded-lg p-1 mr-2 flex items-center justify-center shrink-0 w-12 h-12">
+          <div className="overflow-hidden bg-card rounded-lg p-1 mr-2 flex items-center justify-center shrink-0 w-12 h-12">
             <img src="/Cahaya Logo.png" alt="Store Logo" className="w-full h-full object-contain" />
           </div>
         )}
@@ -272,7 +272,7 @@ export default function Sidebar() {
                   className={({ isActive }) =>
                     `flex items-center px-3 py-2 rounded-md transition-all text-xs w-full ${
                       isActive
-                        ? 'bg-white text-blue-600 font-extrabold shadow-md shadow-blue-900/15'
+                        ? 'bg-card text-blue-600 font-extrabold shadow-md shadow-blue-900/15'
                         : `text-white/80 hover:bg-white/10 hover:text-white font-medium ${(!isCollapsed || isMobile) ? 'hover:translate-x-1' : ''}`
                     } ${(isCollapsed && !isMobile) ? 'justify-center gap-0' : 'gap-2.5'}`
                   }
@@ -355,7 +355,7 @@ export default function Sidebar() {
       )}
 
       {/* Mobile Bottom Sheet Menu */}
-      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:from-slate-900 dark:to-slate-900 rounded-t-[2.5rem] shadow-2xl border-t border-gray-100/70 flex flex-col transform transition-transform duration-300 ease-in-out print:hidden max-h-[85vh] overflow-hidden ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card dark:from-slate-900 dark:to-slate-900 rounded-t-[2.5rem] shadow-2xl border-t border-gray-100/70 flex flex-col transform transition-transform duration-300 ease-in-out print:hidden max-h-[85vh] overflow-hidden ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
         {/* Drag Handle & Top Indicator */}
         <div className="flex justify-center py-3.5 shrink-0">
           <div className="w-16 h-1.5 bg-gray-300 dark:bg-gray-700 rounded-full cursor-pointer hover:bg-gray-400 transition-colors" />
@@ -364,12 +364,12 @@ export default function Sidebar() {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-2 border-b border-gray-150/40 sticky top-0 bg-white/85 backdrop-blur-md z-10 shrink-0">
           <div>
-            <h3 className="text-sm font-black text-gray-900 tracking-wider uppercase">Menu Utama</h3>
-            <p className="text-[9px] text-gray-400 font-bold mt-0.5 uppercase tracking-wide">Kasir System Cahaya Komputer</p>
+            <h3 className="text-sm font-black text-foreground tracking-wider uppercase">Menu Utama</h3>
+            <p className="text-[9px] text-muted-foreground font-bold mt-0.5 uppercase tracking-wide">Kasir System Cahaya Komputer</p>
           </div>
           <button 
             onClick={() => setIsMobileOpen(false)} 
-            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-full transition-colors"
+            className="p-2 bg-accent hover:bg-accent text-muted-foreground rounded-full transition-colors"
             title="Tutup Menu"
           >
             <X size={15} />
@@ -383,8 +383,8 @@ export default function Sidebar() {
               {user?.name?.charAt(0).toUpperCase() || 'U'}
             </div>
             <div>
-              <h4 className="font-extrabold text-xs text-gray-900 leading-tight">{user?.name || 'User'}</h4>
-              <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-1">{isOwner ? 'Owner / Admin' : 'Staf Kasir'}</p>
+              <h4 className="font-extrabold text-xs text-foreground leading-tight">{user?.name || 'User'}</h4>
+              <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-1">{isOwner ? 'Owner / Admin' : 'Staf Kasir'}</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
@@ -395,7 +395,7 @@ export default function Sidebar() {
 
         {/* Menu Items List */}
         <div className="px-6 pb-6 overflow-y-auto max-h-[55vh] space-y-4">
-          <div className="rounded-2xl border border-gray-150/50 bg-white shadow-sm overflow-hidden divide-y divide-gray-150/40">
+          <div className="rounded-2xl border border-gray-150/50 bg-card shadow-sm overflow-hidden divide-y divide-gray-150/40">
             {navItems.map((item) => {
               if (item.ownerOnly && !isOwner) return null;
               // Skip items already in bottom nav
@@ -413,20 +413,20 @@ export default function Sidebar() {
                       <button
                         onClick={(e) => toggleMenu(item.path, e, true)}
                         className={`w-full flex items-center justify-between p-4 text-left text-xs font-bold transition-colors ${
-                          isExpanded ? 'bg-slate-50/50' : 'hover:bg-gray-50/50'
+                          isExpanded ? 'bg-slate-50/50' : 'hover:bg-muted/50'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-xl ${colorClasses.bg} ${colorClasses.text} ${colorClasses.darkBg} ${colorClasses.darkText} shadow-sm shadow-blue-500/5`}>
                             <Icon size={16} />
                           </div>
-                          <span className="text-gray-800">{item.label}</span>
+                          <span className="text-foreground">{item.label}</span>
                         </div>
-                        <ChevronRight size={16} className={`text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
+                        <ChevronRight size={16} className={`text-muted-foreground transition-transform duration-200 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
                       </button>
                       {isExpanded && (
                         <div className="bg-slate-50/20 pb-3 pt-1 px-4 space-y-1 border-t border-gray-100/50 animate-in slide-in-from-top-2 duration-200">
-                          <div className="pl-6 border-l-2 border-gray-200 space-y-1 mt-1">
+                          <div className="pl-6 border-l-2 border-border space-y-1 mt-1">
                             {item.subItems!.map(sub => {
                               if (sub.ownerOnly && !isOwner) return null;
                               const SubIcon = sub.icon;
@@ -439,7 +439,7 @@ export default function Sidebar() {
                                   className={`flex items-center gap-2.5 py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all ${
                                     isSubActive 
                                       ? 'bg-blue-500 text-white shadow-sm shadow-blue-500/20' 
-                                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                      : 'text-muted-foreground hover:text-gray-900 hover:bg-muted'
                                   }`}
                                 >
                                   <SubIcon size={14} className="shrink-0" />
@@ -459,7 +459,7 @@ export default function Sidebar() {
                         `flex items-center justify-between p-4 text-xs font-bold transition-all w-full ${
                           isActive
                             ? 'bg-blue-500 text-white shadow-sm'
-                            : 'hover:bg-gray-50/50 text-gray-800'
+                            : 'hover:bg-muted/50 text-foreground'
                         }`
                       }
                     >
@@ -469,7 +469,7 @@ export default function Sidebar() {
                         </div>
                         <span>{item.label}</span>
                       </div>
-                      <ChevronRight size={16} className={`${location.pathname === item.path ? 'text-white' : 'text-gray-400'}`} />
+                      <ChevronRight size={16} className={`${location.pathname === item.path ? 'text-white' : 'text-muted-foreground'}`} />
                     </NavLink>
                   )}
                 </div>
@@ -494,9 +494,9 @@ export default function Sidebar() {
       </div>
 
       {/* Mobile Bottom Bar (Hamburger Trigger) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-lg border-t border-slate-100 shadow-[0_-8px_30px_rgb(0,0,0,0.06)] pb-4 pt-2.5 px-3 print:hidden">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-card/90 backdrop-blur-lg border-t border-slate-100 shadow-[0_-8px_30px_rgb(0,0,0,0.06)] pb-4 pt-2.5 px-3 print:hidden">
         <div className="flex items-center justify-around">
-          <NavLink to="/" end className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-gray-400 hover:text-gray-600'}`}>
+          <NavLink to="/" end className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-muted-foreground hover:text-gray-600'}`}>
             {({ isActive }) => (
               <>
                 <LayoutDashboard size={20} className={`transition-transform duration-300 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
@@ -505,7 +505,7 @@ export default function Sidebar() {
               </>
             )}
           </NavLink>
-          <NavLink to="/penjualan" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-gray-400 hover:text-gray-600'}`}>
+          <NavLink to="/penjualan" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-muted-foreground hover:text-gray-600'}`}>
             {({ isActive }) => (
               <>
                 <ShoppingCart size={20} className={`transition-transform duration-300 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
@@ -514,7 +514,7 @@ export default function Sidebar() {
               </>
             )}
           </NavLink>
-          <NavLink to="/pembelian" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-gray-400 hover:text-gray-600'}`}>
+          <NavLink to="/pembelian" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-muted-foreground hover:text-gray-600'}`}>
             {({ isActive }) => (
               <>
                 <Package size={20} className={`transition-transform duration-300 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
@@ -524,7 +524,7 @@ export default function Sidebar() {
             )}
           </NavLink>
           {isOwner ? (
-            <NavLink to="/cash-flow" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-gray-400 hover:text-gray-600'}`}>
+            <NavLink to="/cash-flow" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-muted-foreground hover:text-gray-600'}`}>
               {({ isActive }) => (
                 <>
                   <DollarSign size={20} className={`transition-transform duration-300 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
@@ -534,7 +534,7 @@ export default function Sidebar() {
               )}
             </NavLink>
           ) : (
-            <NavLink to="/garansi" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-gray-400 hover:text-gray-600'}`}>
+            <NavLink to="/garansi" className={({ isActive }) => `relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${isActive ? 'text-blue-500 scale-105 font-black' : 'text-muted-foreground hover:text-gray-600'}`}>
               {({ isActive }) => (
                 <>
                   <Wrench size={20} className={`transition-transform duration-300 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
@@ -549,7 +549,7 @@ export default function Sidebar() {
             className={`relative flex flex-col items-center gap-1 px-3 py-1 transition-all duration-300 ${
               isMobileOpen 
                 ? 'text-blue-500 scale-105 font-black' 
-                : 'text-gray-400 hover:text-gray-600'
+                : 'text-muted-foreground hover:text-gray-600'
             }`}
           >
             <Menu size={20} className={`transition-transform duration-300 ${isMobileOpen ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
@@ -562,20 +562,20 @@ export default function Sidebar() {
       {/* Logout Confirmation Modal */}
       {isLogoutModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="p-6 text-center text-black">
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 text-center text-foreground">
               <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-100">
                 <LogOut className="text-red-500 w-8 h-8 ml-1" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Konfirmasi Keluar</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="text-lg font-bold text-foreground mb-2">Konfirmasi Keluar</h3>
+              <p className="text-sm text-muted-foreground">
                 Apakah Anda yakin ingin keluar dari sistem? Anda harus login kembali untuk mengakses data toko.
               </p>
             </div>
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex gap-3 text-black">
+            <div className="p-4 bg-muted border-t border-border flex gap-3 text-foreground">
               <button
                 onClick={() => setIsLogoutModalOpen(false)}
-                className="flex-1 px-4 py-2 text-sm bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-100 font-medium transition-colors shadow-sm"
+                className="flex-1 px-4 py-2 text-sm bg-card border border-border text-foreground rounded-xl hover:bg-accent font-medium transition-colors shadow-sm"
               >
                 Batal
               </button>

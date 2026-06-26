@@ -90,13 +90,13 @@ export default function DistributorPage() {
   if (loading) return (
     <div className="space-y-6 animate-pulse">
       <div className="flex items-center justify-between">
-        <div><div className="h-5 bg-gray-200 rounded w-40 mb-2" /><div className="h-3 bg-gray-200 rounded w-56" /></div>
-        <div className="h-9 bg-gray-200 rounded-lg w-36" />
+        <div><div className="h-5 bg-accent rounded w-40 mb-2" /><div className="h-3 bg-accent rounded w-56" /></div>
+        <div className="h-9 bg-accent rounded-lg w-36" />
       </div>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-9 bg-gray-200 rounded-lg w-full" /></div>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="h-10 bg-gray-100 border-b border-gray-200" />
-        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-gray-200 rounded w-1/4" /><div className="h-4 bg-gray-200 rounded w-1/6" /><div className="h-4 bg-gray-200 rounded w-1/6 ml-auto" /></div>))}</div>
+      <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-9 bg-accent rounded-lg w-full" /></div>
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+        <div className="h-10 bg-accent border-b border-border" />
+        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
       </div>
     </div>
   );
@@ -117,18 +117,18 @@ export default function DistributorPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 md:p-3">
-          <p className="text-[8px] md:text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5 line-clamp-1">Total Distributor</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2 md:p-3">
+          <p className="text-[8px] md:text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-0.5 line-clamp-1">Total Distributor</p>
           <p className="text-base md:text-xl font-bold text-[#3B82F6]">{distributors.length}</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 md:p-3">
-          <p className="text-[8px] md:text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5 line-clamp-1">Total Transaksi</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2 md:p-3">
+          <p className="text-[8px] md:text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-0.5 line-clamp-1">Total Transaksi</p>
           <p className="text-base md:text-xl font-bold text-[#3B82F6]">
             {distributors.reduce((sum, d) => sum + (d.purchases_count || 0), 0)}
           </p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 md:p-3">
-          <p className="text-[8px] md:text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5 line-clamp-1">Total Pembelian</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2 md:p-3">
+          <p className="text-[8px] md:text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-0.5 line-clamp-1">Total Pembelian</p>
           <p className="text-base md:text-xl font-bold text-[#3B82F6]">
             Rp{' '}
             {distributors
@@ -143,12 +143,12 @@ export default function DistributorPage() {
         {distributors.map((distributor) => (
           <div
             key={distributor.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-100 p-2 hover:shadow-md transition-shadow flex flex-col justify-between"
+            className="bg-card rounded-lg shadow-sm border border-border p-2 hover:shadow-md transition-shadow flex flex-col justify-between"
           >
             <div>
               <div className="flex items-start justify-between mb-1.5">
                 <div className="flex-1">
-                  <h3 className="text-xs font-bold text-gray-800">{distributor.name}</h3>
+                  <h3 className="text-xs font-bold text-foreground">{distributor.name}</h3>
                 </div>
                 <div className="flex gap-1">
                   <button
@@ -167,27 +167,27 @@ export default function DistributorPage() {
               </div>
 
               <div className="space-y-1 mb-2">
-                <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
+                <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <Phone size={12} className="shrink-0" />
                   <span className="truncate">{distributor.phone || '-'}</span>
                 </div>
-                <div className="flex items-start gap-1.5 text-[11px] text-gray-600">
+                <div className="flex items-start gap-1.5 text-[11px] text-muted-foreground">
                   <MapPin size={12} className="mt-0.5 shrink-0" />
                   <span className="line-clamp-2 leading-tight">{distributor.address || '-'}</span>
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-gray-100 pt-2 mt-auto">
+            <div className="border-t border-border pt-2 mt-auto">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[8px] uppercase font-bold text-gray-400 tracking-wider">Transaksi</p>
+                  <p className="text-[8px] uppercase font-bold text-muted-foreground tracking-wider">Transaksi</p>
                   <p className="text-[11px] font-bold text-[#3B82F6]">
                     {distributor.purchases_count || 0}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[8px] uppercase font-bold text-gray-400 tracking-wider">Pembelian</p>
+                  <p className="text-[8px] uppercase font-bold text-muted-foreground tracking-wider">Pembelian</p>
                   <p className="text-[11px] font-bold text-[#3B82F6]">
                     Rp {(Number(distributor.purchases_sum_total_pembelian || 0) / 1000000).toFixed(1)} Jt
                   </p>
@@ -197,7 +197,7 @@ export default function DistributorPage() {
           </div>
         ))}
         {distributors.length === 0 && (
-          <div className="col-span-full p-5 text-center text-gray-500 bg-white rounded-lg border border-gray-100">
+          <div className="col-span-full p-5 text-center text-muted-foreground bg-card rounded-lg border border-border">
             Belum ada distributor. Silakan tambah baru.
           </div>
         )}
@@ -206,21 +206,21 @@ export default function DistributorPage() {
       {/* Modal Form */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center md:p-3 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-md overflow-hidden h-full md:h-auto flex flex-col">
-            <div className="p-4 border-b border-gray-100 flex items-center justify-between shrink-0 sticky top-0 bg-white z-20">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-md overflow-hidden h-full md:h-auto flex flex-col">
+            <div className="p-4 border-b border-border flex items-center justify-between shrink-0 sticky top-0 bg-card z-20">
               <div className="flex items-center gap-2">
-                <button onClick={handleCloseModal} className="md:hidden p-1.5 -ml-1 text-gray-500 hover:bg-gray-100 rounded-lg">
+                <button onClick={handleCloseModal} className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:bg-accent rounded-lg">
                   <ChevronLeft size={20} />
                 </button>
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-lg font-semibold text-foreground">
                   {modalMode === 'add' ? 'Tambah Distributor' : 'Edit Distributor'}
                 </h3>
               </div>
-              <button onClick={handleCloseModal} className="hidden md:block text-gray-400 hover:text-gray-600">&times;</button>
+              <button onClick={handleCloseModal} className="hidden md:block text-muted-foreground hover:text-gray-600">&times;</button>
             </div>
             <form onSubmit={handleSubmit} className="p-4 space-y-4 flex-1 overflow-y-auto">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-foreground mb-1">
                   Nama Distributor
                 </label>
                 <input
@@ -228,39 +228,39 @@ export default function DistributorPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] focus:border-transparent outline-none"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 text-xs font-medium bg-muted focus:ring-[#3B82F6] focus:border-transparent outline-none"
                   placeholder="Contoh: PT. Tech Indonesia"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-foreground mb-1">
                   Kontak (No. HP / Telepon)
                 </label>
                 <input
                   type="text"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] focus:border-transparent outline-none"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 text-xs font-medium bg-muted focus:ring-[#3B82F6] focus:border-transparent outline-none"
                   placeholder="Contoh: 08123456789"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-foreground mb-1">
                   Alamat
                 </label>
                 <textarea
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] focus:border-transparent outline-none"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 text-xs font-medium bg-muted focus:ring-[#3B82F6] focus:border-transparent outline-none"
                   placeholder="Detail alamat..."
                   rows={3}
                 ></textarea>
               </div>
-              <div className="flex justify-end gap-3 pt-4 sticky bottom-0 bg-white mt-auto md:mt-0 border-t border-gray-100 md:border-none md:pt-4">
+              <div className="flex justify-end gap-3 pt-4 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-none md:pt-4">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="hidden md:block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="hidden md:block px-3 py-2 text-muted-foreground hover:bg-accent rounded-lg transition-colors"
                 >
                   Batal
                 </button>

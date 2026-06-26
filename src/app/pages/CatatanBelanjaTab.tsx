@@ -571,7 +571,7 @@ export default function CatatanBelanjaTab() {
                       className="w-full text-[10px] border border-blue-200 rounded px-2 py-1 mb-1 outline-none focus:ring-1 focus:ring-blue-300"
                     />
                   )}
-                  <div className="flex flex-col gap-0.5 max-h-24 overflow-y-auto custom-scrollbar border border-blue-100 dark:border-blue-900 rounded bg-white/50 p-0.5">
+                  <div className="flex flex-col gap-0.5 max-h-24 overflow-y-auto custom-scrollbar border border-blue-100 dark:border-blue-900 rounded bg-card/50 p-0.5">
                     {savedBundles
                       .filter(b => !searchTemplate || b.toLowerCase().includes(searchTemplate.toLowerCase()))
                       .map((b, idx) => (

@@ -55,13 +55,13 @@ const formatRp = (val: number) => `Rp ${val.toLocaleString('id-ID')}`;
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-gray-100 text-xs">
-        <p className="font-black text-gray-800 mb-1.5">{label}</p>
+      <div className="bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-border text-xs">
+        <p className="font-black text-foreground mb-1.5">{label}</p>
         {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2 mb-0.5">
             <div className={`w-2 h-2 rounded-full`} style={{ backgroundColor: entry.color }}></div>
-            <span className="text-gray-600">{entry.name}:</span>
-            <span className="font-bold text-gray-800">{formatRp(entry.value)}</span>
+            <span className="text-muted-foreground">{entry.name}:</span>
+            <span className="font-bold text-foreground">{formatRp(entry.value)}</span>
           </div>
         ))}
       </div>
@@ -122,15 +122,15 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
       <div className="space-y-6 animate-pulse">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="bg-gray-200 rounded-xl h-24" />
+            <div key={i} className="bg-accent rounded-xl h-24" />
           ))}
         </div>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="bg-gray-200 rounded-2xl h-36" />
+            <div key={i} className="bg-accent rounded-2xl h-36" />
           ))}
         </div>
-        <div className="bg-gray-200 rounded-2xl h-64" />
+        <div className="bg-accent rounded-2xl h-64" />
       </div>
     );
   }
@@ -147,7 +147,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
       <div>
         <div className="flex items-center gap-2 mb-3">
           <div className="w-1 h-5 bg-blue-500 rounded-full"></div>
-          <h3 className="text-sm font-black text-gray-800 dark:text-gray-100 uppercase tracking-wider">Posisi Neraca Keuangan</h3>
+          <h3 className="text-sm font-black text-foreground dark:text-gray-100 uppercase tracking-wider">Posisi Neraca Keuangan</h3>
           <Wallet size={16} className="text-blue-500" />
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
@@ -283,21 +283,21 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ═══ SECTION 2: TABEL HUTANG PER DISTRIBUTOR ═══ */}
-        <div className="bg-white dark:bg-slate-800/60 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700/50 overflow-hidden flex flex-col backdrop-blur-sm">
-          <div className="p-5 border-b border-gray-50 dark:border-slate-700/50 flex items-center justify-between bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-500/5">
+        <div className="bg-card dark:bg-slate-800/60 rounded-2xl shadow-sm border border-border dark:border-slate-700/50 overflow-hidden flex flex-col backdrop-blur-sm">
+          <div className="p-5 border-b border-border dark:border-slate-700/50 flex items-center justify-between bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-500/5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center shadow-inner">
                  <CreditCard size={20} className="text-orange-600 dark:text-orange-400" />
               </div>
               <div>
-                <h3 className="text-[13px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-tight">Detail Pembelian & Hutang</h3>
-                <p className="text-[10px] text-gray-400 dark:text-slate-500 font-bold uppercase tracking-wider">Per Distributor Aktif</p>
+                <h3 className="text-[13px] font-black text-foreground dark:text-gray-100 uppercase tracking-tight">Detail Pembelian & Hutang</h3>
+                <p className="text-[10px] text-muted-foreground dark:text-slate-500 font-bold uppercase tracking-wider">Per Distributor Aktif</p>
               </div>
             </div>
           </div>
           
           {data.hutang_per_distributor.length === 0 ? (
-            <div className="p-12 text-center text-gray-500 dark:text-slate-400 text-sm flex-1 flex flex-col justify-center italic">
+            <div className="p-12 text-center text-muted-foreground dark:text-slate-400 text-sm flex-1 flex flex-col justify-center italic">
               Tidak ada hutang aktif pada distributor saat ini.
             </div>
           ) : (
@@ -305,17 +305,17 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
               <div className="hidden md:block overflow-x-auto flex-1 custom-scrollbar">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="bg-gray-50/50 dark:bg-slate-900/30">
-                      <th className="px-5 py-3 text-[10px] uppercase font-black text-gray-400 dark:text-slate-500 tracking-[0.1em]">Distributor</th>
-                      <th className="px-5 py-3 text-right text-[10px] uppercase font-black text-gray-400 dark:text-slate-500 tracking-[0.1em]">Pembelian</th>
-                      <th className="px-5 py-3 text-right text-[10px] uppercase font-black text-gray-400 dark:text-slate-500 tracking-[0.1em]">Sisa Hutang</th>
+                    <tr className="bg-muted/50 dark:bg-slate-900/30">
+                      <th className="px-5 py-3 text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Distributor</th>
+                      <th className="px-5 py-3 text-right text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Pembelian</th>
+                      <th className="px-5 py-3 text-right text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Sisa Hutang</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100/50 dark:divide-slate-700/30">
                     {data.hutang_per_distributor.map((dist) => (
                       <tr key={dist.name} className="hover:bg-orange-50/20 dark:hover:bg-orange-500/5 transition-colors group">
-                        <td className="px-5 py-4 text-xs font-black text-gray-700 dark:text-gray-200 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">{dist.name}</td>
-                        <td className="px-5 py-4 text-xs text-right font-bold text-gray-500 dark:text-slate-400">
+                        <td className="px-5 py-4 text-xs font-black text-foreground dark:text-gray-200 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">{dist.name}</td>
+                        <td className="px-5 py-4 text-xs text-right font-bold text-muted-foreground dark:text-slate-400">
                           {formatRp(Number(dist.total_pembelian))}
                         </td>
                         <td className="px-5 py-4 text-xs text-right">
@@ -332,20 +332,20 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
               </div>
 
               {/* Mobile Card List for Distributor Debt */}
-              <div className="md:hidden divide-y divide-gray-100 dark:divide-slate-700/30 flex-1 px-4 bg-white dark:bg-slate-800/60">
+              <div className="md:hidden divide-y divide-gray-100 dark:divide-slate-700/30 flex-1 px-4 bg-card dark:bg-slate-800/60">
                 {data.hutang_per_distributor.map((dist) => (
                   <div key={dist.name} className="py-3.5 space-y-2">
                     <div className="flex justify-between items-start">
-                      <h4 className="font-bold text-xs text-gray-800 dark:text-gray-200">{dist.name}</h4>
+                      <h4 className="font-bold text-xs text-foreground dark:text-gray-200">{dist.name}</h4>
                       <div className="bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded border border-rose-100 dark:border-rose-500/20 shrink-0">
                         <span className="font-black text-[11px] text-rose-600 dark:text-rose-400">
                           {formatRp(Number(dist.sisa_hutang))}
                         </span>
                       </div>
                     </div>
-                    <div className="flex justify-between text-[11px] text-gray-500 dark:text-slate-400">
+                    <div className="flex justify-between text-[11px] text-muted-foreground dark:text-slate-400">
                       <span>Total Pembelian:</span>
-                      <span className="font-medium text-gray-700 dark:text-slate-350">{formatRp(Number(dist.total_pembelian))}</span>
+                      <span className="font-medium text-foreground dark:text-slate-350">{formatRp(Number(dist.total_pembelian))}</span>
                     </div>
                   </div>
                 ))}
@@ -355,15 +355,15 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
         </div>
 
         {/* ═══ SECTION 3: GRAFIK POSISI KEUANGAN ═══ */}
-        <div className="bg-white dark:bg-slate-800/60 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700/50 p-6 flex flex-col backdrop-blur-sm">
+        <div className="bg-card dark:bg-slate-800/60 rounded-2xl shadow-sm border border-border dark:border-slate-700/50 p-6 flex flex-col backdrop-blur-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shadow-inner">
                 <BarChart3 size={20} className="text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h3 className="text-[13px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-tight">Grafik Posisi Keuangan</h3>
-                <p className="text-[10px] text-gray-400 dark:text-slate-500 font-bold uppercase tracking-wider">Rekap Aset & Kewajiban</p>
+                <h3 className="text-[13px] font-black text-foreground dark:text-gray-100 uppercase tracking-tight">Grafik Posisi Keuangan</h3>
+                <p className="text-[10px] text-muted-foreground dark:text-slate-500 font-bold uppercase tracking-wider">Rekap Aset & Kewajiban</p>
               </div>
             </div>
           </div>
@@ -387,7 +387,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" horizontal={false} />
                   <XAxis type="number" fontSize={10} tickFormatter={(v) => `${(v / 1000000).toFixed(0)}jt`} tick={{ fill: '#9ca3af', fontWeight: 700 }} />
-                  <YAxis type="category" dataKey="name" fontSize={9} fontWeight={900} width={90} tick={{ fill: 'currentColor', className: 'text-gray-400 dark:text-slate-500 uppercase' }} />
+                  <YAxis type="category" dataKey="name" fontSize={9} fontWeight={900} width={90} tick={{ fill: 'currentColor', className: 'text-muted-foreground dark:text-slate-500 uppercase' }} />
                   <Tooltip 
                     content={<CustomTooltip />}
                     cursor={{ fill: 'rgba(0,0,0,0.03)' }} 
@@ -409,7 +409,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-400 dark:text-slate-500 text-xs italic">
+              <div className="h-full flex items-center justify-center text-muted-foreground dark:text-slate-500 text-xs italic">
                 <Calendar size={16} className="mr-2" /> Belum ada data grafik tahun ini
               </div>
             )}

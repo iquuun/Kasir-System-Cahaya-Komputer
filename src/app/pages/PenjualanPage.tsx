@@ -472,7 +472,7 @@ export default function PenjualanPage() {
   };
 
   const renderSortIndicator = (field: 'invoice' | 'tanggal') => {
-    if (sortField !== field) return <ArrowUpDown size={10} className="text-gray-400 ml-1 inline-block" />;
+    if (sortField !== field) return <ArrowUpDown size={10} className="text-muted-foreground ml-1 inline-block" />;
     return sortDirection === 'asc' 
       ? <ChevronUp size={10} className="text-blue-500 ml-1 inline-block" /> 
       : <ChevronDown size={10} className="text-blue-500 ml-1 inline-block" />;
@@ -1308,7 +1308,7 @@ export default function PenjualanPage() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white rounded-xl shadow-2xl max-w-xs w-full overflow-hidden border border-gray-100"
+              className="bg-card rounded-xl shadow-2xl max-w-xs w-full overflow-hidden border border-border"
             >
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-white">
                 <h3 className="font-bold text-sm flex items-center gap-2">
@@ -1317,7 +1317,7 @@ export default function PenjualanPage() {
                 </h3>
               </div>
               <div className="p-4">
-                <p className="text-gray-600 text-xs mb-3">Sertakan Cap Digital?</p>
+                <p className="text-muted-foreground text-xs mb-3">Sertakan Cap Digital?</p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleConfirmPrint(true)}
@@ -1327,14 +1327,14 @@ export default function PenjualanPage() {
                   </button>
                   <button
                     onClick={() => handleConfirmPrint(false)}
-                    className="flex-1 py-2 bg-gray-50 text-gray-700 hover:bg-gray-100 rounded-lg font-semibold text-xs flex items-center justify-center gap-1 transition-colors border border-gray-200"
+                    className="flex-1 py-2 bg-muted text-foreground hover:bg-accent rounded-lg font-semibold text-xs flex items-center justify-center gap-1 transition-colors border border-border"
                   >
                     <XIcon size={14} /> Polos
                   </button>
                 </div>
                 <button
                   onClick={() => setShowPrintConfirmModal(false)}
-                  className="mt-2 w-full py-1.5 text-gray-400 hover:text-gray-600 text-xs font-medium transition-colors"
+                  className="mt-2 w-full py-1.5 text-muted-foreground hover:text-gray-600 text-xs font-medium transition-colors"
                 >
                   Batal
                 </button>
@@ -1345,17 +1345,17 @@ export default function PenjualanPage() {
       </AnimatePresence>
       {loading ? (
         <div className="space-y-6 animate-pulse no-print">
-          <div className="flex gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-100 max-w-fit">
-            <div className="h-8 bg-gray-200 rounded-md w-20" /><div className="h-8 bg-gray-200 rounded-md w-32" />
+          <div className="flex gap-2 bg-card p-1 rounded-xl shadow-sm border border-border max-w-fit">
+            <div className="h-8 bg-accent rounded-md w-20" /><div className="h-8 bg-accent rounded-md w-32" />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2 space-y-3">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-4 bg-gray-200 rounded w-36 mb-3" /><div className="grid grid-cols-3 gap-2">{[...Array(3)].map((_, i) => (<div key={i}><div className="h-3 bg-gray-200 rounded w-20 mb-1" /><div className="h-8 bg-gray-100 rounded-md" /></div>))}</div></div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-4 bg-gray-200 rounded w-28 mb-3" /><div className="h-[200px] bg-gray-50 rounded-lg flex items-center justify-center"><div className="h-12 w-12 bg-gray-200 rounded-lg" /></div></div>
+              <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-4 bg-accent rounded w-36 mb-3" /><div className="grid grid-cols-3 gap-2">{[...Array(3)].map((_, i) => (<div key={i}><div className="h-3 bg-accent rounded w-20 mb-1" /><div className="h-8 bg-accent rounded-md" /></div>))}</div></div>
+              <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-4 bg-accent rounded w-28 mb-3" /><div className="h-[200px] bg-muted rounded-lg flex items-center justify-center"><div className="h-12 w-12 bg-accent rounded-lg" /></div></div>
             </div>
             <div className="space-y-3">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-4 bg-gray-200 rounded w-24 mb-2" /><div className="h-8 bg-gray-200 rounded-lg mb-2" /><div className="space-y-2">{[...Array(4)].map((_, i) => (<div key={i} className="h-16 bg-gray-50 rounded-lg border border-gray-100" />))}</div></div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="grid grid-cols-3 gap-1.5">{[...Array(12)].map((_, i) => (<div key={i} className="h-9 bg-gray-100 rounded-md" />))}</div></div>
+              <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-4 bg-accent rounded w-24 mb-2" /><div className="h-8 bg-accent rounded-lg mb-2" /><div className="space-y-2">{[...Array(4)].map((_, i) => (<div key={i} className="h-16 bg-muted rounded-lg border border-border" />))}</div></div>
+              <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="grid grid-cols-3 gap-1.5">{[...Array(12)].map((_, i) => (<div key={i} className="h-9 bg-accent rounded-md" />))}</div></div>
             </div>
           </div>
         </div>
@@ -1369,7 +1369,7 @@ export default function PenjualanPage() {
               {/* Left: Customer Info & Review E-Faktur */}
               <div className="lg:col-span-2 flex flex-col gap-2.5 h-auto lg:h-[calc(100vh-110px)]">
                 {/* Customer Info Form */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 shrink-0">
+                <div className="bg-card rounded-xl shadow-sm border border-border p-3 shrink-0">
                   <div 
                     className="flex justify-between items-center cursor-pointer md:cursor-default" 
                     onClick={() => {
@@ -1379,7 +1379,7 @@ export default function PenjualanPage() {
                     }}
                   >
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold text-gray-800">Informasi Pelanggan</h3>
+                      <h3 className="text-sm font-semibold text-foreground">Informasi Pelanggan</h3>
                       {!isCustomerInfoExpanded && (
                         <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">
                           {customerName || 'UMUM'} {noResi ? `| Resi: ${noResi}` : ''}
@@ -1388,7 +1388,7 @@ export default function PenjualanPage() {
                     </div>
                     <button 
                       type="button" 
-                      className="text-gray-400 hover:text-gray-600 md:hidden"
+                      className="text-muted-foreground hover:text-gray-600 md:hidden"
                     >
                       {isCustomerInfoExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                     </button>
@@ -1397,56 +1397,56 @@ export default function PenjualanPage() {
                   <div className={`${isCustomerInfoExpanded ? 'block' : 'hidden md:block'} mt-2.5`}>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-semibold text-gray-500 uppercase">Nama Pelanggan</label>
+                        <label className="text-[10px] font-semibold text-muted-foreground uppercase">Nama Pelanggan</label>
                         <input
                           type="text"
                           placeholder="Nama Pelanggan / UMUM..."
                           value={customerName}
                           onChange={(e) => setCustomerName(e.target.value)}
-                          className="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
+                          className="text-xs bg-muted border border-border rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-semibold text-gray-500 uppercase">Input Alamat</label>
+                        <label className="text-[10px] font-semibold text-muted-foreground uppercase">Input Alamat</label>
                         <input
                           type="text"
                           placeholder="Alamat..."
                           value={customerAddress}
                           onChange={(e) => setCustomerAddress(e.target.value)}
-                          className="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
+                          className="text-xs bg-muted border border-border rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-semibold text-gray-500 uppercase">Input No. HP/WA</label>
+                        <label className="text-[10px] font-semibold text-muted-foreground uppercase">Input No. HP/WA</label>
                         <input
                           type="text"
                           placeholder="No. HP/WA..."
                           value={customerPhone}
                           onChange={(e) => setCustomerPhone(e.target.value)}
-                          className="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
+                          className="text-xs bg-muted border border-border rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
                         />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                       <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-semibold text-gray-500 uppercase">No. Pesanan</label>
+                        <label className="text-[10px] font-semibold text-muted-foreground uppercase">No. Pesanan</label>
                         <input
                           type="text"
                           placeholder="No pesanan marketplace..."
                           value={noPesanan}
                           onChange={(e) => setNoPesanan(e.target.value)}
-                          className="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
+                          className="text-xs bg-muted border border-border rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors"
                         />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-semibold text-gray-500 uppercase">No. Resi</label>
+                        <label className="text-[10px] font-semibold text-muted-foreground uppercase">No. Resi</label>
                         <div className="flex gap-1">
                           <input
                             type="text"
                             placeholder="Scan atau ketik no resi..."
                             value={noResi}
                             onChange={(e) => setNoResi(e.target.value)}
-                            className="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors flex-1"
+                            className="text-xs bg-muted border border-border rounded-md px-2.5 py-1.5 outline-none focus:border-[#3B82F6] transition-colors flex-1"
                           />
                           <button
                             type="button"
@@ -1462,12 +1462,12 @@ export default function PenjualanPage() {
                     </div>
 
                     {/* Manual Input Toggle & Fields */}
-                    <div className="mt-3 pt-3 border-t border-gray-100">
+                    <div className="mt-3 pt-3 border-t border-border">
                       <div className="flex items-center justify-between mb-2">
                          <button 
                           type="button"
                           onClick={() => setIsManual(!isManual)}
-                          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold transition-all ${isManual ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+                          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold transition-all ${isManual ? 'bg-orange-500 text-white shadow-md' : 'bg-accent text-muted-foreground hover:bg-accent'}`}
                          >
                           <Edit2 size={12} />
                           {isManual ? 'MODE MANUAL AKTIF' : 'AKTIFKAN INPUT MANUAL (Data Lama)'}
@@ -1503,9 +1503,9 @@ export default function PenjualanPage() {
                 </div>
 
                 {/* E-FAKTUR REVIEW (Keranjang) */}
-                <div className="bg-white rounded-xl shadow-lg border-t-[3px] border-[#3B82F6] p-3 flex flex-col flex-1 min-h-0">
-                  <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-100 shrink-0">
-                    <h3 className="text-sm font-bold text-gray-800 uppercase tracking-tight">REVIEW E-FAKTUR</h3>
+                <div className="bg-card rounded-xl shadow-lg border-t-[3px] border-[#3B82F6] p-3 flex flex-col flex-1 min-h-0">
+                  <div className="flex justify-between items-center mb-2 pb-2 border-b border-border shrink-0">
+                    <h3 className="text-sm font-bold text-foreground uppercase tracking-tight">REVIEW E-FAKTUR</h3>
                     <div className="flex items-center gap-2 flex-wrap">
                        <button 
                         onClick={() => setIsTemplateModalOpen(true)}
@@ -1537,8 +1537,8 @@ export default function PenjualanPage() {
                         <Cpu size={12} />
                         RAKITAN
                        </button>
-                      <button onClick={addManualItem} className="text-[10px] bg-gray-100 border border-gray-200 hover:bg-gray-200 py-1.5 px-2.5 rounded-md font-bold text-gray-700">+ BARIS MANUAL</button>
-                      <select value={channel} onChange={(e) => setChannel(e.target.value)} className="text-[10px] bg-gray-100 border-none rounded-md px-2 py-1.5 outline-none font-bold text-gray-700">
+                      <button onClick={addManualItem} className="text-[10px] bg-accent border border-border hover:bg-accent py-1.5 px-2.5 rounded-md font-bold text-foreground">+ BARIS MANUAL</button>
+                      <select value={channel} onChange={(e) => setChannel(e.target.value)} className="text-[10px] bg-accent border-none rounded-md px-2 py-1.5 outline-none font-bold text-foreground">
                         {channels.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
@@ -1563,20 +1563,20 @@ export default function PenjualanPage() {
                     }}
                   >
                     {saleItems.length === 0 ? (
-                      <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-3 opacity-50">
+                      <div className="h-full flex flex-col items-center justify-center text-muted-foreground space-y-3 opacity-50">
                         <ShoppingCart size={48} strokeWidth={1} />
                         <p className="text-sm font-medium italic">Keranjang Masih Kosong</p>
                       </div>
                     ) : (
                       <table className="w-full text-left border-collapse">
-                        <thead className="sticky top-0 bg-white z-10 border-b border-gray-100">
+                        <thead className="sticky top-0 bg-card z-10 border-b border-border">
                           <tr>
-                            <th className="py-2 px-0 text-[11px] font-bold text-gray-500 uppercase text-center w-5">No.</th>
-                            <th className="py-2 px-1.5 text-[11px] font-bold text-gray-500 uppercase w-full">Produk</th>
-                            <th className="py-2 px-1.5 text-[11px] font-bold text-gray-500 uppercase text-center whitespace-nowrap">Qty</th>
-                            <th className="py-2 px-1.5 text-[11px] font-bold text-gray-500 uppercase text-right">Harga</th>
-                            <th className="py-2 px-1.5 text-[11px] font-bold text-gray-500 uppercase text-right">Subtotal</th>
-                            <th className="py-2 px-1 text-[11px] font-bold text-gray-500 uppercase text-center">Aksi</th>
+                            <th className="py-2 px-0 text-[11px] font-bold text-muted-foreground uppercase text-center w-5">No.</th>
+                            <th className="py-2 px-1.5 text-[11px] font-bold text-muted-foreground uppercase w-full">Produk</th>
+                            <th className="py-2 px-1.5 text-[11px] font-bold text-muted-foreground uppercase text-center whitespace-nowrap">Qty</th>
+                            <th className="py-2 px-1.5 text-[11px] font-bold text-muted-foreground uppercase text-right">Harga</th>
+                            <th className="py-2 px-1.5 text-[11px] font-bold text-muted-foreground uppercase text-right">Subtotal</th>
+                            <th className="py-2 px-1 text-[11px] font-bold text-muted-foreground uppercase text-center">Aksi</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -1591,30 +1591,30 @@ export default function PenjualanPage() {
                                 onDragOver={(e) => handleDragOver(e, idx)}
                                 onDrop={(e) => handleDrop(e, idx)}
                                 onDragEnd={handleDragEnd}
-                                className={`group hover:bg-gray-50/80 transition-all 
+                                className={`group hover:bg-muted/80 transition-all 
                                   ${item.is_sub ? 'bg-gray-50/30' : ''} 
-                                  ${draggedIdx === idx ? 'opacity-40 bg-gray-100' : ''} 
+                                  ${draggedIdx === idx ? 'opacity-40 bg-accent' : ''} 
                                   ${isTargetBlock(idx) ? 'bg-blue-100/70 border-y-2 border-blue-400' : ''}
                                 `}
                               >
-                                <td className="py-2 px-0 text-center text-xs font-bold text-gray-400 w-5">
+                                <td className="py-2 px-0 text-center text-xs font-bold text-muted-foreground w-5">
                                   {displayNum}
                                 </td>
                                 <td className="py-2 px-1.5 w-full">
                                   <div className="flex items-center gap-0.5">
                                     {!item.is_sub ? (
-                                      <div className="cursor-grab active:cursor-grabbing p-0.5 hover:bg-gray-200 rounded text-gray-400 shrink-0" title="Tarik untuk memindahkan">
+                                      <div className="cursor-grab active:cursor-grabbing p-0.5 hover:bg-accent rounded text-muted-foreground shrink-0" title="Tarik untuk memindahkan">
                                         <GripVertical size={13} strokeWidth={2.5} />
                                       </div>
                                     ) : (
                                       <div className="w-[17px] shrink-0" />
                                     )}
-                                    {item.is_sub && <div className="w-2 h-3.5 border-l-2 border-b-2 border-gray-300 rounded-bl ml-0.5" />}
+                                    {item.is_sub && <div className="w-2 h-3.5 border-l-2 border-b-2 border-border rounded-bl ml-0.5" />}
                                     <input
                                       type="text"
                                       value={item.product.name}
                                       onChange={(e) => updateItemName(idx, e.target.value)}
-                                      className={`font-semibold text-xs bg-transparent hover:bg-blue-50 focus:bg-blue-50 border-b border-transparent focus:border-blue-200 outline-none w-full py-0.5 rounded transition-colors ${item.is_sub ? 'ml-0.5' : ''} ${item.product.id < 0 ? 'bg-blue-50 border-blue-200 px-1.5' : 'text-gray-800'}`}
+                                      className={`font-semibold text-xs bg-transparent hover:bg-blue-50 focus:bg-blue-50 border-b border-transparent focus:border-blue-200 outline-none w-full py-0.5 rounded transition-colors ${item.is_sub ? 'ml-0.5' : ''} ${item.product.id < 0 ? 'bg-blue-50 border-blue-200 px-1.5' : 'text-foreground'}`}
                                       placeholder="Nama Produk / Catatan (SN)..."
                                       title="Klik untuk mengedit nama barang atau menambah catatan SN"
                                     />
@@ -1622,10 +1622,10 @@ export default function PenjualanPage() {
                                 </td>
                                 <td className="py-2 px-1.5">
                                   <div className="flex items-center justify-center gap-0.5">
-                                    <button onClick={() => updateQty(idx, item.qty - 1)} className="w-5 h-5 flex justify-center items-center bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-bold transition-colors">-</button>
-                                    <span className="w-6 text-center text-xs font-bold text-gray-800">{item.qty}</span>
-                                    <button onClick={() => updateQty(idx, item.qty + 1)} className="w-5 h-5 flex justify-center items-center bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-bold transition-colors">+</button>
-                                    <select value={item.satuan} onChange={(e) => updateItemSatuan(idx, e.target.value)} className="bg-gray-100 border-none rounded text-[10px] px-0.5 py-0.5 outline-none ml-1">
+                                    <button onClick={() => updateQty(idx, item.qty - 1)} className="w-5 h-5 flex justify-center items-center bg-accent hover:bg-accent text-muted-foreground rounded text-xs font-bold transition-colors">-</button>
+                                    <span className="w-6 text-center text-xs font-bold text-foreground">{item.qty}</span>
+                                    <button onClick={() => updateQty(idx, item.qty + 1)} className="w-5 h-5 flex justify-center items-center bg-accent hover:bg-accent text-muted-foreground rounded text-xs font-bold transition-colors">+</button>
+                                    <select value={item.satuan} onChange={(e) => updateItemSatuan(idx, e.target.value)} className="bg-accent border-none rounded text-[10px] px-0.5 py-0.5 outline-none ml-1">
                                       <option value="PCS">PCS</option>
                                       <option value="SET">SET</option>
                                       <option value="Unit">Unit</option>
@@ -1634,12 +1634,12 @@ export default function PenjualanPage() {
                                 </td>
                                 <td className="py-2 px-1.5 text-right">
                                   <div className="flex items-center justify-end gap-1">
-                                    <span className="text-[10px] text-gray-400">Rp</span>
+                                    <span className="text-[10px] text-muted-foreground">Rp</span>
                                     <input
                                         type="text"
                                         value={formatNumber(item.harga_jual_saat_itu)}
                                         onChange={(e) => updateItemPrice(idx, parseNumber(e.target.value))}
-                                        className="w-28 bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5 text-xs font-bold text-gray-800 text-right outline-none focus:ring-1 focus:ring-[#3B82F6]"
+                                        className="w-28 bg-muted border border-border rounded px-1.5 py-0.5 text-xs font-bold text-foreground text-right outline-none focus:ring-1 focus:ring-[#3B82F6]"
                                     />
                                   </div>
                                 </td>
@@ -1648,7 +1648,7 @@ export default function PenjualanPage() {
                                 </td>
                                 <td className="py-2 px-1.5 text-center">
                                   <div className="flex items-center justify-center gap-1.5">
-                                    <button onClick={() => toggleSubItem(idx)} className={`p-1 rounded transition-colors shadow-sm ${item.is_sub ? 'bg-[#3B82F6] text-white' : 'bg-gray-100 text-gray-400 hover:text-[#3B82F6]'}`} title="Jadikan Komponen Rakitan">
+                                    <button onClick={() => toggleSubItem(idx)} className={`p-1 rounded transition-colors shadow-sm ${item.is_sub ? 'bg-[#3B82F6] text-white' : 'bg-accent text-muted-foreground hover:text-[#3B82F6]'}`} title="Jadikan Komponen Rakitan">
                                       <Plus size={12} />
                                     </button>
                                     <button onClick={() => removeItem(idx)} className="p-1 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded transition-colors shadow-sm">
@@ -1665,24 +1665,24 @@ export default function PenjualanPage() {
                   </div>
 
                   {/* Cart Totals Summary */}
-                  <div className="border-t border-gray-100 pt-4 mt-auto shrink-0">
+                  <div className="border-t border-border pt-4 mt-auto shrink-0">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                       {/* Left side: Tax / Additional fee */}
                       <div className="w-full md:w-1/3">
-                        <div className="flex items-center justify-between text-xs bg-gray-50 border border-gray-100 text-gray-600 px-3 py-2 rounded-lg">
+                        <div className="flex items-center justify-between text-xs bg-muted border border-border text-muted-foreground px-3 py-2 rounded-lg">
                           <span className="font-semibold">Pajak / Fee (%) :</span>
                           <input
                             type="text"
                             value={formatNumber(taxPercent)}
                             onChange={(e) => setTaxPercent(parseNumber(e.target.value))}
-                            className="w-12 bg-white border border-gray-200 rounded px-1.5 py-0.5 text-right outline-none focus:border-[#3B82F6] font-bold"
+                            className="w-12 bg-card border border-border rounded px-1.5 py-0.5 text-right outline-none focus:border-[#3B82F6] font-bold"
                           />
                         </div>
                       </div>
 
                       {/* Right side: Grand Total */}
                       <div className="w-full md:w-1/2 flex flex-col items-end">
-                        <p className="text-gray-400 font-bold uppercase tracking-wider text-[10px] mb-0.5">TOTAL KESELURUHAN</p>
+                        <p className="text-muted-foreground font-bold uppercase tracking-wider text-[10px] mb-0.5">TOTAL KESELURUHAN</p>
                         <div className="flex items-center gap-2 bg-[#3B82F6]/5 rounded-lg px-4 py-2 border border-[#3B82F6]/20">
                           <span className="text-base font-bold text-[#3B82F6]">Rp</span>
                           <input
@@ -1702,12 +1702,12 @@ export default function PenjualanPage() {
               <div className="lg:col-span-1 flex flex-col gap-2.5 h-[calc(100vh-110px)]">
 
                 {/* Product Search & List */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col flex-1 min-h-0">
+                <div className="bg-card rounded-xl shadow-sm border border-border p-3 flex flex-col flex-1 min-h-0">
                   <div className="shrink-0 mb-2">
-                    <h3 className="text-sm font-bold text-gray-800 mb-2">Pilih Produk</h3>
+                    <h3 className="text-sm font-bold text-foreground mb-2">Pilih Produk</h3>
                     <div className="flex flex-col gap-2">
                       <div className="relative">
-                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
                         <input
                           type="text"
                           placeholder="Cari Produk..."
@@ -1716,7 +1716,7 @@ export default function PenjualanPage() {
                             setSearchTerm(e.target.value);
                             setVisibleProducts(30);
                           }}
-                          className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs"
+                          className="w-full pl-8 pr-3 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs"
                         />
                       </div>
                       <select
@@ -1725,7 +1725,7 @@ export default function PenjualanPage() {
                           setSelectedCategory(e.target.value);
                           setVisibleProducts(30);
                         }}
-                        className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium"
+                        className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted font-medium"
                       >
                         <option value="all">Semua Kategori</option>
                         {categories.map(cat => (
@@ -1737,17 +1737,17 @@ export default function PenjualanPage() {
 
                   <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
                     {filteredProducts.length === 0 ? (
-                      <p className="text-center text-xs text-gray-400 mt-6">Produk tidak ditemukan</p>
+                      <p className="text-center text-xs text-muted-foreground mt-6">Produk tidak ditemukan</p>
                     ) : (
                       <>
                         {filteredProducts.slice(0, visibleProducts).map(product => (
-                          <div key={product.id} className="p-2.5 bg-white border border-gray-100 rounded-lg flex justify-between items-center hover:shadow-sm hover:border-[#3B82F6] transition-all group">
+                          <div key={product.id} className="p-2.5 bg-card border border-border rounded-lg flex justify-between items-center hover:shadow-sm hover:border-[#3B82F6] transition-all group">
                             <div className="flex-1 pr-2">
-                              <p className="font-bold text-xs text-gray-800 leading-tight line-clamp-2">{product.name}</p>
+                              <p className="font-bold text-xs text-foreground leading-tight line-clamp-2">{product.name}</p>
                               <p className="text-[11px] font-black text-[#3B82F6] mt-0.5">Rp {product.harga_jual.toLocaleString('id-ID')}</p>
                               <div className="flex items-center gap-1.5 mt-1">
-                                <span className="text-[9px] bg-gray-100 text-gray-600 px-1 py-0.5 rounded font-bold">Stok: {product.stok_saat_ini}</span>
-                                <span className="text-[9px] text-gray-400 uppercase">{product.category?.name || 'UMUM'}</span>
+                                <span className="text-[9px] bg-accent text-muted-foreground px-1 py-0.5 rounded font-bold">Stok: {product.stok_saat_ini}</span>
+                                <span className="text-[9px] text-muted-foreground uppercase">{product.category?.name || 'UMUM'}</span>
                               </div>
                             </div>
                             <button
@@ -1772,10 +1772,10 @@ export default function PenjualanPage() {
                 </div>
 
                 {/* Numpad & Payment */}
-                <div className="bg-white rounded-xl shadow-lg border-t-[3px] border-green-500 p-3 mt-auto shrink-0">
+                <div className="bg-card rounded-xl shadow-lg border-t-[3px] border-green-500 p-3 mt-auto shrink-0">
                   <div className="mb-2 space-y-1.5">
                     <div className="flex items-center justify-between gap-3 mb-2">
-                      <span className="text-gray-500 font-bold uppercase text-[10px] tracking-wider whitespace-nowrap">Tunai Dibayar</span>
+                      <span className="text-muted-foreground font-bold uppercase text-[10px] tracking-wider whitespace-nowrap">Tunai Dibayar</span>
                       <div className="flex items-center gap-2 flex-1 justify-end">
                         <span className="text-sm font-black text-green-600">Rp</span>
                         <input
@@ -1807,11 +1807,11 @@ export default function PenjualanPage() {
 
                   <div className="grid grid-cols-3 gap-1.5">
                     {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(key => (
-                      <button key={key} onClick={() => handleNumpadInput(key)} className="h-9 rounded-md text-sm font-bold bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-colors">{key}</button>
+                      <button key={key} onClick={() => handleNumpadInput(key)} className="h-9 rounded-md text-sm font-bold bg-muted text-foreground border border-border hover:bg-accent active:bg-gray-200 transition-colors">{key}</button>
                     ))}
                     <button onClick={() => handleNumpadInput('C')} className="h-9 rounded-md text-sm font-black bg-red-50 text-red-500 border border-red-200 hover:bg-red-100 active:bg-red-200 transition-colors">C</button>
-                    <button onClick={() => handleNumpadInput('0')} className="h-9 rounded-md text-sm font-bold bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-colors">0</button>
-                    <button onClick={() => handleNumpadInput('00')} className="h-9 rounded-md text-sm font-bold bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-colors">00</button>
+                    <button onClick={() => handleNumpadInput('0')} className="h-9 rounded-md text-sm font-bold bg-muted text-foreground border border-border hover:bg-accent active:bg-gray-200 transition-colors">0</button>
+                    <button onClick={() => handleNumpadInput('00')} className="h-9 rounded-md text-sm font-bold bg-muted text-foreground border border-border hover:bg-accent active:bg-gray-200 transition-colors">00</button>
 
                     <button onClick={() => handleNumpadInput('PAS')} className="col-span-3 h-10 mt-1 rounded-md text-[11px] bg-green-100 text-green-700 border border-green-200 hover:bg-green-200 active:bg-green-300 transition-colors font-black tracking-widest uppercase">Uang Pas / Transfer</button>
 
@@ -1833,41 +1833,41 @@ export default function PenjualanPage() {
             /* Sales History Tab */
             <div className="space-y-3 no-print">
               {/* Filter Bar */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
+              <div className="bg-card rounded-xl shadow-sm border border-border p-3">
                 <div className="flex flex-wrap items-end gap-3">
                   {/* Search */}
                   <div className="flex-1 min-w-[180px]">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Cari Transaksi</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Cari Transaksi</label>
                     <div className="relative">
-                      <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" size={13} />
+                      <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={13} />
                       <input
                         type="text"
                         placeholder="Invoice, nama, no pesanan, no resi..."
                         value={historySearch}
                         onChange={(e) => { setHistorySearch(e.target.value); setHistoryPage(1); }}
-                        className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
+                        className="w-full pl-8 pr-3 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted"
                       />
                     </div>
                   </div>
                   {/* Date Range Filter */}
                   <div className="relative min-w-[170px] z-30">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Filter Rentang Waktu</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Filter Rentang Waktu</label>
                     <button 
                       onClick={() => setShowDatePicker(!showDatePicker)}
-                      className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-100 outline-none focus:ring-1 focus:ring-[#3B82F6] w-full justify-between whitespace-nowrap"
+                      className="flex items-center gap-2 px-3 py-1.5 bg-muted border border-border rounded-lg text-xs font-semibold text-foreground hover:bg-accent outline-none focus:ring-1 focus:ring-[#3B82F6] w-full justify-between whitespace-nowrap"
                     >
                       <div className="flex items-center gap-2">
-                        <Calendar size={13} className="text-gray-400" />
+                        <Calendar size={13} className="text-muted-foreground" />
                         {dateRange.preset === 'all' ? 'Semua Waktu' : 
                          `${dateRange.start} s/d ${dateRange.end}`}
                       </div>
-                      <ChevronRight size={13} className={`text-gray-400 transition-transform ${showDatePicker ? 'rotate-90' : ''}`} />
+                      <ChevronRight size={13} className={`text-muted-foreground transition-transform ${showDatePicker ? 'rotate-90' : ''}`} />
                     </button>
 
                     {showDatePicker && (
-                      <div className="absolute top-11 left-0 md:left-auto md:right-0 w-[280px] md:w-[380px] bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in duration-200 z-50">
+                      <div className="absolute top-11 left-0 md:left-auto md:right-0 w-[280px] md:w-[380px] bg-card rounded-xl shadow-2xl border border-border overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in duration-200 z-50">
                         {/* Presets Sidebar */}
-                        <div className="w-full md:w-36 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col p-1.5 gap-0.5 relative z-10">
+                        <div className="w-full md:w-36 bg-muted border-b md:border-b-0 md:border-r border-border flex flex-col p-1.5 gap-0.5 relative z-10">
                           {[
                             { id: 'today', label: 'Hari Ini' },
                             { id: 'yesterday', label: 'Kemarin' },
@@ -1880,7 +1880,7 @@ export default function PenjualanPage() {
                             <button
                               key={p.id}
                               onClick={() => applyPreset(p.id)}
-                              className={`text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all ${dateRange.preset === p.id ? 'bg-[#1D4ED8] text-white shadow-md' : 'text-gray-600 hover:bg-white'}`}
+                              className={`text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all ${dateRange.preset === p.id ? 'bg-[#1D4ED8] text-white shadow-md' : 'text-muted-foreground hover:bg-white'}`}
                             >
                               {p.label}
                             </button>
@@ -1888,25 +1888,25 @@ export default function PenjualanPage() {
                         </div>
                         
                         {/* Custom Date Picker Inputs */}
-                        <div className="p-3 flex-1 bg-white relative z-10">
-                          <h4 className="text-[9px] font-black uppercase text-gray-400 mb-2 tracking-wider">Rentang Waktu</h4>
+                        <div className="p-3 flex-1 bg-card relative z-10">
+                          <h4 className="text-[9px] font-black uppercase text-muted-foreground mb-2 tracking-wider">Rentang Waktu</h4>
                           <div className="space-y-2.5">
                             <div>
-                              <label className="block text-[10px] font-bold text-gray-700 mb-0.5">Mulai Tanggal</label>
+                              <label className="block text-[10px] font-bold text-foreground mb-0.5">Mulai Tanggal</label>
                               <input 
                                 type="date"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange({ ...dateRange, start: e.target.value, preset: 'custom' })}
-                                className="w-full px-2 py-1 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium outline-none focus:ring-1 focus:ring-blue-500"
+                                className="w-full px-2 py-1 bg-muted border border-border rounded-lg text-xs font-medium outline-none focus:ring-1 focus:ring-blue-500"
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold text-gray-700 mb-0.5">Sampai Tanggal</label>
+                              <label className="block text-[10px] font-bold text-foreground mb-0.5">Sampai Tanggal</label>
                               <input 
                                 type="date"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange({ ...dateRange, end: e.target.value, preset: 'custom' })}
-                                className="w-full px-2 py-1 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium outline-none focus:ring-1 focus:ring-blue-500"
+                                className="w-full px-2 py-1 bg-muted border border-border rounded-lg text-xs font-medium outline-none focus:ring-1 focus:ring-blue-500"
                               />
                             </div>
                             <button 
@@ -1929,11 +1929,11 @@ export default function PenjualanPage() {
                   </div>
                   {/* Filter Channel */}
                   <div className="min-w-[140px] md:hidden">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Filter Channel</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Filter Channel</label>
                     <select
                       value={historyChannel}
                       onChange={(e) => { setHistoryChannel(e.target.value); setHistoryPage(1); }}
-                      className="w-full px-2 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium"
+                      className="w-full px-2 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted font-medium"
                     >
                       {uniqueChannels.map(ch => (
                         <option key={ch} value={ch}>{ch}</option>
@@ -1943,7 +1943,7 @@ export default function PenjualanPage() {
 
                   {/* Urutkan (Sorting) Filter */}
                   <div className="min-w-[140px] md:hidden">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Urutkan</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Urutkan</label>
                     <select
                       value={`${sortField}-${sortDirection}`}
                       onChange={(e) => {
@@ -1952,7 +1952,7 @@ export default function PenjualanPage() {
                         setSortDirection(dir);
                         setHistoryPage(1);
                       }}
-                      className="w-full px-2 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium"
+                      className="w-full px-2 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted font-medium"
                     >
                       <option value="tanggal-desc">Tanggal Terbaru</option>
                       <option value="tanggal-asc">Tanggal Terlama</option>
@@ -1965,7 +1965,7 @@ export default function PenjualanPage() {
                     {(historySearch || dateRange.preset !== 'all' || historyChannel !== 'Semua Channel') && (
                       <button
                         onClick={() => { setHistorySearch(''); applyPreset('all'); setHistoryChannel('Semua Channel'); setHistoryPage(1); }}
-                        className="px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       >
                         Reset Filter
                       </button>
@@ -2028,15 +2028,15 @@ export default function PenjualanPage() {
                 const paginated = sorted.slice((historyPage - 1) * historyPerPage, historyPage * historyPerPage);
 
                 return (
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
                     {/* Desktop Table View */}
                     <div className="hidden md:block overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-200">
+                        <thead className="bg-muted border-b border-border">
                           <tr>
                             <th 
                               onClick={() => handleSort('invoice')}
-                              className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                              className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground cursor-pointer hover:bg-accent transition-colors select-none"
                             >
                               <div className="flex items-center gap-1">
                                 Invoice
@@ -2045,55 +2045,55 @@ export default function PenjualanPage() {
                             </th>
                             <th 
                               onClick={() => handleSort('tanggal')}
-                              className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                              className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground cursor-pointer hover:bg-accent transition-colors select-none"
                             >
                               <div className="flex items-center gap-1">
                                 Tanggal
                                 {renderSortIndicator('tanggal')}
                               </div>
                             </th>
-                            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500 select-none">
+                            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground select-none">
                               <div className="flex items-center gap-1">
-                                <span className="shrink-0 text-gray-500">Channel</span>
+                                <span className="shrink-0 text-muted-foreground">Channel</span>
                                 <select
                                   value={historyChannel}
                                   onChange={(e) => { setHistoryChannel(e.target.value); setHistoryPage(1); }}
                                   className="bg-transparent text-[#3B82F6] border-none outline-none font-bold text-[10px] cursor-pointer max-w-[120px] py-0 px-1"
                                 >
                                   {uniqueChannels.map(ch => (
-                                    <option key={ch} value={ch} className="text-gray-700 bg-white font-normal text-xs">{ch}</option>
+                                    <option key={ch} value={ch} className="text-foreground bg-card font-normal text-xs">{ch}</option>
                                   ))}
                                 </select>
                               </div>
                             </th>
-                            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">No. Pesanan</th>
-                            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">No. Resi</th>
-                            <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Total</th>
-                            <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Aksi</th>
+                            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">No. Pesanan</th>
+                            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">No. Resi</th>
+                            <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Total</th>
+                            <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Aksi</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                           {paginated.length === 0 ? (
                             <tr>
-                              <td colSpan={7} className="px-4 py-8 text-center text-gray-400 text-xs">Tidak ada transaksi ditemukan.</td>
+                              <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground text-xs">Tidak ada transaksi ditemukan.</td>
                             </tr>
                           ) : paginated.map((sale) => (
-                            <tr key={sale.id} className="hover:bg-gray-50 transition-colors">
+                            <tr key={sale.id} className="hover:bg-muted transition-colors">
                               <td className="px-3 py-2">
-                                <div className="font-bold text-gray-800 text-xs">{sale.invoice}</div>
+                                <div className="font-bold text-foreground text-xs">{sale.invoice}</div>
                                 <div className="text-[10px] text-[#3B82F6] font-semibold mt-0.5">
                                   {sale.username_pembeli || 'UMUM'}
                                 </div>
-                                <div className="text-[10px] text-gray-500 mt-0.5 line-clamp-1 max-w-[200px]" title={sale.items?.[0]?.manual_name || sale.items?.[0]?.product?.name || ''}>
+                                <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1 max-w-[200px]" title={sale.items?.[0]?.manual_name || sale.items?.[0]?.product?.name || ''}>
                                   {sale.items?.[0]?.manual_name || sale.items?.[0]?.product?.name || '-'} {sale.items?.length > 1 ? `(+${sale.items.length - 1})` : ''}
                                 </div>
                               </td>
-                              <td className="px-3 py-2 text-gray-600 text-xs align-top pt-2.5">{new Date(sale.tanggal).toLocaleString('id-ID')}</td>
+                              <td className="px-3 py-2 text-muted-foreground text-xs align-top pt-2.5">{new Date(sale.tanggal).toLocaleString('id-ID')}</td>
                               <td className="px-3 py-2 align-top pt-2.5"><span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase">{sale.channel}</span></td>
-                              <td className="px-3 py-2 text-xs text-gray-700 align-top pt-2.5 max-w-[150px] break-all font-mono font-medium">
+                              <td className="px-3 py-2 text-xs text-foreground align-top pt-2.5 max-w-[150px] break-all font-mono font-medium">
                                 {sale.no_pesanan || '-'}
                               </td>
-                              <td className="px-3 py-2 text-[10px] text-gray-600 align-top pt-1.5 max-w-[180px]">
+                              <td className="px-3 py-2 text-[10px] text-muted-foreground align-top pt-1.5 max-w-[180px]">
                                 <div className="flex flex-col gap-1">
                                   <div className="flex justify-start">
                                     {sale.no_resi ? (
@@ -2129,7 +2129,7 @@ export default function PenjualanPage() {
                                           toast.success('No. Resi disimpan');
                                         }
                                       }}
-                                      className="w-full text-[11px] border border-gray-200 rounded px-1.5 py-0.5 bg-gray-50 focus:bg-white outline-none focus:border-blue-400 flex-1"
+                                      className="w-full text-[11px] border border-border rounded px-1.5 py-0.5 bg-muted focus:bg-white outline-none focus:border-blue-400 flex-1"
                                     />
                                     <button
                                       onClick={() => {
@@ -2144,7 +2144,7 @@ export default function PenjualanPage() {
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-3 py-2 text-right font-bold text-gray-800 text-xs align-top pt-2.5">
+                              <td className="px-3 py-2 text-right font-bold text-foreground text-xs align-top pt-2.5">
                                 Rp {Number(sale.total_penjualan).toLocaleString('id-ID')}
                                 {sale.status_bayar === 'dp' && (
                                   <div className="text-[10px] text-amber-600 mt-0.5 whitespace-nowrap">Sisa: Rp {Number(sale.sisa_bayar).toLocaleString('id-ID')}</div>
@@ -2152,16 +2152,16 @@ export default function PenjualanPage() {
                               </td>
                               <td className="px-3 py-2 text-center align-top pt-2.5">
                                 <div className="flex items-center justify-center gap-1">
-                                  <button onClick={() => { setLastSale(sale); setShowPrintConfirmModal(true); }} className="p-1.5 text-gray-400 hover:text-[#3B82F6] hover:bg-blue-50 rounded-md transition-colors" title="Cetak Faktur">
+                                  <button onClick={() => { setLastSale(sale); setShowPrintConfirmModal(true); }} className="p-1.5 text-muted-foreground hover:text-[#3B82F6] hover:bg-blue-50 rounded-md transition-colors" title="Cetak Faktur">
                                     <Printer size={15} />
                                   </button>
-                                  <button onClick={() => openEditModal(sale)} className="p-1.5 text-gray-400 hover:text-amber-500 hover:bg-amber-50 rounded-md transition-colors" title="Edit Harga / Info Faktur">
+                                  <button onClick={() => openEditModal(sale)} className="p-1.5 text-muted-foreground hover:text-amber-500 hover:bg-amber-50 rounded-md transition-colors" title="Edit Harga / Info Faktur">
                                     <Edit2 size={15} />
                                   </button>
-                                  <button onClick={() => handleBeliLagi(sale)} className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors" title="Beli Lagi - Muat ke Kasir">
+                                  <button onClick={() => handleBeliLagi(sale)} className="p-1.5 text-muted-foreground hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors" title="Beli Lagi - Muat ke Kasir">
                                     <RotateCcw size={15} />
                                   </button>
-                                  <button onClick={() => setVoidTarget(sale)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Void / Batalkan Transaksi">
+                                  <button onClick={() => setVoidTarget(sale)} className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Void / Batalkan Transaksi">
                                     <Ban size={15} />
                                   </button>
                                 </div>
@@ -2175,26 +2175,26 @@ export default function PenjualanPage() {
                     {/* Mobile Card View */}
                     <div className="block md:hidden bg-gray-50/60 p-2 space-y-2.5">
                       {paginated.length === 0 ? (
-                        <div className="px-4 py-8 text-center text-gray-400 text-xs bg-white rounded-lg border border-gray-100">Tidak ada transaksi ditemukan.</div>
+                        <div className="px-4 py-8 text-center text-muted-foreground text-xs bg-card rounded-lg border border-border">Tidak ada transaksi ditemukan.</div>
                       ) : paginated.map((sale) => (
-                        <div key={sale.id} className="bg-white border border-gray-200/70 rounded-xl p-3 shadow-sm space-y-2 hover:shadow transition-shadow">
+                        <div key={sale.id} className="bg-card border border-gray-200/70 rounded-xl p-3 shadow-sm space-y-2 hover:shadow transition-shadow">
                           {/* Row 1: Invoice, Channel, and Date */}
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-1.5">
-                              <span className="font-bold text-gray-800 text-xs">{sale.invoice}</span>
+                              <span className="font-bold text-foreground text-xs">{sale.invoice}</span>
                               <span className="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-[9px] font-bold uppercase shrink-0">{sale.channel}</span>
                             </div>
-                            <span className="text-[10px] text-gray-500 font-medium">{new Date(sale.tanggal).toLocaleString('id-ID')}</span>
+                            <span className="text-[10px] text-muted-foreground font-medium">{new Date(sale.tanggal).toLocaleString('id-ID')}</span>
                           </div>
 
                           {/* Row 2: Buyer (Pelanggan) & Total Amount */}
                           <div className="text-[11px] flex justify-between items-start gap-1">
                             <div>
-                              <span className="text-gray-400">Pelanggan: </span>
+                              <span className="text-muted-foreground">Pelanggan: </span>
                               <span className="text-[#3B82F6] font-semibold">{sale.username_pembeli || 'UMUM'}</span>
                             </div>
                             <div className="text-right">
-                              <span className="text-gray-500 font-semibold">Rp {Number(sale.total_penjualan).toLocaleString('id-ID')}</span>
+                              <span className="text-muted-foreground font-semibold">Rp {Number(sale.total_penjualan).toLocaleString('id-ID')}</span>
                               {sale.status_bayar === 'dp' && (
                                 <span className="text-[9px] text-amber-600 block font-medium">Sisa: Rp {Number(sale.sisa_bayar).toLocaleString('id-ID')}</span>
                               )}
@@ -2202,22 +2202,22 @@ export default function PenjualanPage() {
                           </div>
 
                           {/* Row 3: Items (Barang) List */}
-                          <div className="text-[11px] text-gray-700 line-clamp-1">
-                            <span className="text-gray-400">Barang: </span>
+                          <div className="text-[11px] text-foreground line-clamp-1">
+                            <span className="text-muted-foreground">Barang: </span>
                             {sale.items?.[0]?.manual_name || sale.items?.[0]?.product?.name || '-'} {sale.items?.length > 1 ? `(+${sale.items.length - 1})` : ''}
                           </div>
 
                           {/* Row 4: Inputs container (Compact & Gray background if order info exists or resi needs input) */}
-                          <div className="flex flex-col gap-1 bg-gray-50 p-1.5 rounded-md">
+                          <div className="flex flex-col gap-1 bg-muted p-1.5 rounded-md">
                             {sale.no_pesanan && (
-                              <div className="flex items-center gap-1.5 text-[10px] text-gray-700">
-                                <span className="text-gray-400">No. Pesanan:</span>
+                              <div className="flex items-center gap-1.5 text-[10px] text-foreground">
+                                <span className="text-muted-foreground">No. Pesanan:</span>
                                 <span className="font-mono font-semibold break-all">{sale.no_pesanan}</span>
                               </div>
                             )}
                             <div className="flex flex-col gap-1.5 w-full">
                               <div className="flex items-center justify-between">
-                                <span className="text-[10px] text-gray-500 font-semibold">No. Resi:</span>
+                                <span className="text-[10px] text-muted-foreground font-semibold">No. Resi:</span>
                                 {sale.no_resi ? (
                                   <span className="text-[9px] bg-green-50 text-green-600 border border-green-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5">
                                     <Check size={10} /> Disimpan
@@ -2251,7 +2251,7 @@ export default function PenjualanPage() {
                                       toast.success('No. Resi disimpan');
                                     }
                                   }}
-                                  className="w-full text-[10px] border border-gray-200 rounded px-1.5 py-0.5 bg-white outline-none focus:border-blue-400 flex-1 font-mono"
+                                  className="w-full text-[10px] border border-border rounded px-1.5 py-0.5 bg-card outline-none focus:border-blue-400 flex-1 font-mono"
                                 />
                                 <button
                                   onClick={() => {
@@ -2268,21 +2268,21 @@ export default function PenjualanPage() {
                           </div>
 
                           {/* Row 5: Cashier & Action Buttons */}
-                          <div className="flex justify-between items-center border-t border-gray-100 pt-1.5 mt-0.5">
-                            <span className="text-[10px] text-gray-400 font-medium">
+                          <div className="flex justify-between items-center border-t border-border pt-1.5 mt-0.5">
+                            <span className="text-[10px] text-muted-foreground font-medium">
                               Kasir: {sale.user?.name || 'ADMIN'}
                             </span>
                             <div className="flex items-center gap-2">
-                              <button onClick={() => { setLastSale(sale); setShowPrintConfirmModal(true); }} className="p-2 text-gray-400 hover:text-[#3B82F6] hover:bg-blue-50 rounded-lg transition-colors" title="Cetak Faktur">
+                              <button onClick={() => { setLastSale(sale); setShowPrintConfirmModal(true); }} className="p-2 text-muted-foreground hover:text-[#3B82F6] hover:bg-blue-50 rounded-lg transition-colors" title="Cetak Faktur">
                                 <Printer size={18} />
                               </button>
-                              <button onClick={() => openEditModal(sale)} className="p-2 text-gray-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors" title="Edit Harga / Info Faktur">
+                              <button onClick={() => openEditModal(sale)} className="p-2 text-muted-foreground hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors" title="Edit Harga / Info Faktur">
                                 <Edit2 size={18} />
                               </button>
-                              <button onClick={() => handleBeliLagi(sale)} className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Beli Lagi - Muat ke Kasir">
+                              <button onClick={() => handleBeliLagi(sale)} className="p-2 text-muted-foreground hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Beli Lagi - Muat ke Kasir">
                                 <RotateCcw size={18} />
                               </button>
-                              <button onClick={() => setVoidTarget(sale)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Void / Batalkan Transaksi">
+                              <button onClick={() => setVoidTarget(sale)} className="p-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Void / Batalkan Transaksi">
                                 <Ban size={18} />
                               </button>
                             </div>
@@ -2292,30 +2292,30 @@ export default function PenjualanPage() {
                     </div>
 
                     {/* Pagination Footer */}
-                    <div className="border-t border-gray-100 px-3 py-2 flex items-center justify-between bg-gray-50/50">
-                      <p className="text-[10px] text-gray-500 font-medium">
+                    <div className="border-t border-border px-3 py-2 flex items-center justify-between bg-muted/50">
+                      <p className="text-[10px] text-muted-foreground font-medium">
                         Menampilkan {paginated.length} dari {filtered.length} transaksi
                       </p>
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
                           disabled={historyPage <= 1}
-                          className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                          className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                         >
-                          <ChevronLeft size={14} className="text-gray-600" />
+                          <ChevronLeft size={14} className="text-muted-foreground" />
                         </button>
                         {Array.from({ length: totalPages }, (_, i) => i + 1)
                           .filter(p => p === 1 || p === totalPages || Math.abs(p - historyPage) <= 1)
                           .map((p, idx, arr) => (
                             <span key={p}>
                               {idx > 0 && arr[idx - 1] !== p - 1 && (
-                                <span className="text-gray-400 text-[10px] px-0.5">...</span>
+                                <span className="text-muted-foreground text-[10px] px-0.5">...</span>
                               )}
                               <button
                                 onClick={() => setHistoryPage(p)}
                                 className={`min-w-[24px] h-6 text-[11px] font-bold rounded transition-colors ${historyPage === p
                                     ? 'bg-[#3B82F6] text-white shadow-sm'
-                                    : 'text-gray-600 hover:bg-gray-200'
+                                    : 'text-muted-foreground hover:bg-accent'
                                   }`}
                               >
                                 {p}
@@ -2326,9 +2326,9 @@ export default function PenjualanPage() {
                         <button
                           onClick={() => setHistoryPage((p) => Math.min(totalPages, p + 1))}
                           disabled={historyPage >= totalPages}
-                          className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                          className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                         >
-                          <ChevronRight size={14} className="text-gray-600" />
+                          <ChevronRight size={14} className="text-muted-foreground" />
                         </button>
                       </div>
                     </div>
@@ -2343,7 +2343,7 @@ export default function PenjualanPage() {
       {/* ====== VOID CONFIRMATION MODAL ====== */}
       {voidTarget && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm h-full md:h-auto overflow-hidden flex flex-col animate-in">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm h-full md:h-auto overflow-hidden flex flex-col animate-in">
             {/* Red header strip */}
             <div className="bg-gradient-to-r from-red-500 to-red-600 px-4 py-3 text-center shrink-0 sticky top-0 z-20 flex justify-between items-center md:block">
               <button
@@ -2365,31 +2365,31 @@ export default function PenjualanPage() {
 
             {/* Content */}
             <div className="p-4 md:p-5 flex-1 overflow-y-auto">
-              <div className="bg-gray-50 rounded-xl p-3 space-y-2 mb-4">
+              <div className="bg-muted rounded-xl p-3 space-y-2 mb-4">
                   <div className="flex flex-col">
                     <div className="flex gap-2">
-                       <span className="w-20 text-gray-500">Kepada Yth.</span>
+                       <span className="w-20 text-muted-foreground">Kepada Yth.</span>
                        <span className="font-bold">: {voidTarget.username_pembeli || 'UMUM'}</span>
                     </div>
                     <div className="flex gap-2">
-                       <span className="w-20 text-gray-500">Alamat</span>
+                       <span className="w-20 text-muted-foreground">Alamat</span>
                        <span>: {voidTarget.alamat_pembeli || '-'}</span>
                     </div>
                     <div className="flex gap-2">
-                       <span className="w-20 text-gray-500">No. HP</span>
+                       <span className="w-20 text-muted-foreground">No. HP</span>
                        <span>: {voidTarget.telepon_pembeli || '-'}</span>
                     </div>
                   </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500 font-medium">Tanggal</span>
-                  <span className="text-gray-700">{new Date(voidTarget.tanggal).toLocaleString('id-ID')}</span>
+                  <span className="text-muted-foreground font-medium">Tanggal</span>
+                  <span className="text-foreground">{new Date(voidTarget.tanggal).toLocaleString('id-ID')}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500 font-medium">Channel</span>
+                  <span className="text-muted-foreground font-medium">Channel</span>
                   <span className="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase">{voidTarget.channel}</span>
                 </div>
-                <div className="border-t border-gray-200 pt-2 flex justify-between text-xs">
-                  <span className="text-gray-500 font-bold">Total</span>
+                <div className="border-t border-border pt-2 flex justify-between text-xs">
+                  <span className="text-muted-foreground font-bold">Total</span>
                   <span className="font-black text-red-600 text-sm">Rp {Number(voidTarget.total_penjualan).toLocaleString('id-ID')}</span>
                 </div>
               </div>
@@ -2400,11 +2400,11 @@ export default function PenjualanPage() {
                 </p>
               </div>
 
-              <div className="flex gap-2 sticky bottom-0 bg-white pt-2 border-t border-gray-100 mt-auto md:mt-0 md:border-none md:pt-0">
+              <div className="flex gap-2 sticky bottom-0 bg-card pt-2 border-t border-border mt-auto md:mt-0 md:border-none md:pt-0">
                 <button
                   onClick={() => setVoidTarget(null)}
                   disabled={isVoiding}
-                  className="hidden md:block flex-1 px-3 py-2.5 md:py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-200 transition-colors disabled:opacity-50"
+                  className="hidden md:block flex-1 px-3 py-2.5 md:py-2 bg-accent text-foreground rounded-lg text-xs font-bold hover:bg-accent transition-colors disabled:opacity-50"
                 >
                   Batal
                 </button>
@@ -2425,7 +2425,7 @@ export default function PenjualanPage() {
       {/* ====== EDIT INVOICE MODAL ====== */}
       {editTarget && editForm && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-2xl h-full md:h-auto md:max-h-[90vh] overflow-hidden flex flex-col animate-in">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-2xl h-full md:h-auto md:max-h-[90vh] overflow-hidden flex flex-col animate-in">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 md:py-2 flex items-center justify-between text-center shrink-0 sticky top-0 z-20">
               <button
                 type="button"
@@ -2444,27 +2444,27 @@ export default function PenjualanPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
                 <div className="flex flex-col gap-1.5">
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Data Pelanggan</h4>
+                  <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Data Pelanggan</h4>
                   <div>
-                    <label className="block text-[10px] text-gray-500 mb-0.5">Nama Pembeli</label>
-                    <input type="text" value={editForm.username_pembeli} onChange={e => setEditForm({...editForm, username_pembeli: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
+                    <label className="block text-[10px] text-muted-foreground mb-0.5">Nama Pembeli</label>
+                    <input type="text" value={editForm.username_pembeli} onChange={e => setEditForm({...editForm, username_pembeli: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-gray-500 mb-0.5">Alamat</label>
-                    <input type="text" value={editForm.alamat_pembeli} onChange={e => setEditForm({...editForm, alamat_pembeli: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
+                    <label className="block text-[10px] text-muted-foreground mb-0.5">Alamat</label>
+                    <input type="text" value={editForm.alamat_pembeli} onChange={e => setEditForm({...editForm, alamat_pembeli: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-gray-500 mb-0.5">No HP</label>
-                    <input type="text" value={editForm.telepon_pembeli} onChange={e => setEditForm({...editForm, telepon_pembeli: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
+                    <label className="block text-[10px] text-muted-foreground mb-0.5">No HP</label>
+                    <input type="text" value={editForm.telepon_pembeli} onChange={e => setEditForm({...editForm, telepon_pembeli: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                     <div>
-                      <label className="block text-[10px] text-gray-500 mb-0.5">No. Pesanan</label>
-                      <input type="text" placeholder="No pesanan marketplace..." value={editForm.no_pesanan} onChange={e => setEditForm({...editForm, no_pesanan: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
+                      <label className="block text-[10px] text-muted-foreground mb-0.5">No. Pesanan</label>
+                      <input type="text" placeholder="No pesanan marketplace..." value={editForm.no_pesanan} onChange={e => setEditForm({...editForm, no_pesanan: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400" />
                     </div>
                     <div>
-                      <label className="block text-[10px] text-gray-500 mb-0.5">No. Resi</label>
+                      <label className="block text-[10px] text-muted-foreground mb-0.5">No. Resi</label>
                       <div className="flex gap-1">
-                        <input type="text" placeholder="Scan atau ketik no resi..." value={editForm.no_resi} onChange={e => setEditForm({...editForm, no_resi: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400 flex-1" />
+                        <input type="text" placeholder="Scan atau ketik no resi..." value={editForm.no_resi} onChange={e => setEditForm({...editForm, no_resi: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400 flex-1" />
                         <button type="button" onClick={() => openScanner('edit')} className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors flex items-center gap-1 text-[10px] font-bold shrink-0" title="Scan Barcode">
                           <Camera size={12} /> Scan
                         </button>
@@ -2473,36 +2473,36 @@ export default function PenjualanPage() {
                   </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Pembayaran & Waktu</h4>
+                  <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Pembayaran & Waktu</h4>
                   <div>
-                    <label className="block text-[10px] text-gray-500 mb-0.5">Tanggal & Jam Transaksi</label>
-                    <input type="datetime-local" value={editForm.tanggal} onChange={e => setEditForm({...editForm, tanggal: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400" />
+                    <label className="block text-[10px] text-muted-foreground mb-0.5">Tanggal & Jam Transaksi</label>
+                    <input type="datetime-local" value={editForm.tanggal} onChange={e => setEditForm({...editForm, tanggal: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400" />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-gray-500 mb-0.5">Channel Penjualan</label>
-                    <select value={editForm.channel} onChange={e => setEditForm({...editForm, channel: e.target.value})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400">
+                    <label className="block text-[10px] text-muted-foreground mb-0.5">Channel Penjualan</label>
+                    <select value={editForm.channel} onChange={e => setEditForm({...editForm, channel: e.target.value})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400">
                       {channels.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] text-gray-500 mb-0.5">Terima Pembayaran (Tunai/Transfer)</label>
-                    <input type="text" value={formatNumber(editForm.pembayaran)} onChange={e => setEditForm({...editForm, pembayaran: parseNumber(e.target.value)})} className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 outline-none focus:border-blue-400 font-bold text-green-600" />
-                    <p className="text-[9px] text-gray-400 mt-0.5 leading-tight">Ubah jika ada selisih total & uang pas disesuaikan.</p>
+                    <label className="block text-[10px] text-muted-foreground mb-0.5">Terima Pembayaran (Tunai/Transfer)</label>
+                    <input type="text" value={formatNumber(editForm.pembayaran)} onChange={e => setEditForm({...editForm, pembayaran: parseNumber(e.target.value)})} className="w-full text-[11px] border border-border rounded px-2 py-1 outline-none focus:border-blue-400 font-bold text-green-600" />
+                    <p className="text-[9px] text-muted-foreground mt-0.5 leading-tight">Ubah jika ada selisih total & uang pas disesuaikan.</p>
                   </div>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Daftar Barang (Hanya ubah harga)</h4>
-                <div className="border border-gray-100 rounded-lg overflow-x-auto">
+                <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Daftar Barang (Hanya ubah harga)</h4>
+                <div className="border border-border rounded-lg overflow-x-auto">
                   <div className="min-w-[500px]">
                     <table className="w-full text-left">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-muted">
                         <tr>
-                          <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase">Barang</th>
-                          <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase text-center w-16">Qty</th>
-                          <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase text-right w-28">Harga Baru</th>
-                          <th className="py-1.5 px-2 text-[10px] font-bold text-gray-500 uppercase text-right w-28">Subtotal</th>
+                          <th className="py-1.5 px-2 text-[10px] font-bold text-muted-foreground uppercase">Barang</th>
+                          <th className="py-1.5 px-2 text-[10px] font-bold text-muted-foreground uppercase text-center w-16">Qty</th>
+                          <th className="py-1.5 px-2 text-[10px] font-bold text-muted-foreground uppercase text-right w-28">Harga Baru</th>
+                          <th className="py-1.5 px-2 text-[10px] font-bold text-muted-foreground uppercase text-right w-28">Subtotal</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
@@ -2510,11 +2510,11 @@ export default function PenjualanPage() {
                           const formItem = editForm.items[idx];
                           const subtotal = origItem.qty * Number(formItem.harga_jual_saat_itu);
                           return (
-                            <tr key={origItem.id} className="hover:bg-gray-50 transition-colors">
+                            <tr key={origItem.id} className="hover:bg-muted transition-colors">
                               <td className="py-1 px-2 text-[11px]">
-                                <p className="font-bold text-gray-700 leading-tight">{formItem.manual_name}</p>
+                                <p className="font-bold text-foreground leading-tight">{formItem.manual_name}</p>
                               </td>
-                              <td className="py-1 px-2 text-[11px] text-center text-gray-500 whitespace-nowrap">{origItem.qty} {origItem.satuan}</td>
+                              <td className="py-1 px-2 text-[11px] text-center text-muted-foreground whitespace-nowrap">{origItem.qty} {origItem.satuan}</td>
                               <td className="py-1 px-2 text-right">
                                 <input 
                                   type="text" 
@@ -2525,7 +2525,7 @@ export default function PenjualanPage() {
                                     newItems[idx].harga_jual_saat_itu = val;
                                     setEditForm({...editForm, items: newItems});
                                   }}
-                                  className="w-[110px] text-right text-[11px] border border-gray-200 rounded px-1.5 py-0.5 outline-none focus:border-blue-400"
+                                  className="w-[110px] text-right text-[11px] border border-border rounded px-1.5 py-0.5 outline-none focus:border-blue-400"
                                 />
                               </td>
                               <td className="py-1 px-2 text-[11px] text-right font-bold text-blue-600 whitespace-nowrap">Rp {subtotal.toLocaleString('id-ID')}</td>
@@ -2555,8 +2555,8 @@ export default function PenjualanPage() {
 
             </div>
             
-            <div className="p-3 bg-gray-50 border-t border-gray-200 flex gap-2 shrink-0 sticky bottom-0 z-20">
-              <button onClick={() => setEditTarget(null)} disabled={isEditing} className="hidden md:block flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-[11px] font-bold hover:bg-gray-100 transition-colors">Batal</button>
+            <div className="p-3 bg-muted border-t border-border flex gap-2 shrink-0 sticky bottom-0 z-20">
+              <button onClick={() => setEditTarget(null)} disabled={isEditing} className="hidden md:block flex-1 px-4 py-2 bg-card border border-border text-foreground rounded-lg text-[11px] font-bold hover:bg-accent transition-colors">Batal</button>
               <button onClick={submitEditInvoice} disabled={isEditing} className="flex-1 px-4 py-3 md:py-2 bg-[#3B82F6] text-white rounded-xl md:rounded-lg text-xs md:text-[11px] font-bold hover:bg-blue-600 shadow-md transition-colors flex items-center justify-center gap-1.5 active:scale-[0.98]">
                 <Save size={14} className="md:w-[13px] md:h-[13px]" /> {isEditing ? 'Menyimpan...' : 'Simpan & Cetak Ulang'}
               </button>
@@ -2568,7 +2568,7 @@ export default function PenjualanPage() {
       {/* ====== PELUNASAN DP MODAL ====== */}
       {pelunasanTarget && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm h-full md:h-auto overflow-hidden flex flex-col animate-in">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm h-full md:h-auto overflow-hidden flex flex-col animate-in">
             <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3 md:py-4 text-center shrink-0 sticky top-0 z-20 flex justify-between items-center md:block">
               <button
                 type="button"
@@ -2581,21 +2581,21 @@ export default function PenjualanPage() {
               <div className="w-8 md:hidden"></div> {/* Balancer */}
             </div>
             <div className="p-4 md:p-5 flex-1 overflow-y-auto">
-              <div className="bg-gray-50 rounded-xl p-3 space-y-2 mb-4 text-xs">
-                <div className="flex justify-between"><span className="text-gray-500">Invoice</span><span className="font-bold text-gray-800">{pelunasanTarget.invoice}</span></div>
-                <div className="flex justify-between"><span className="text-gray-500">Total Tagihan</span><span className="font-bold text-gray-800">Rp {Number(pelunasanTarget.total_penjualan).toLocaleString('id-ID')}</span></div>
-                <div className="flex justify-between"><span className="text-gray-500">Sudah Dibayar</span><span className="font-bold text-gray-800">Rp {Number(pelunasanTarget.pembayaran).toLocaleString('id-ID')}</span></div>
-                <div className="border-t border-gray-200 pt-2 flex justify-between"><span className="text-gray-500 font-bold">Sisa Tagihan</span><span className="font-black text-amber-600 text-sm">Rp {Number(pelunasanTarget.sisa_bayar).toLocaleString('id-ID')}</span></div>
+              <div className="bg-muted rounded-xl p-3 space-y-2 mb-4 text-xs">
+                <div className="flex justify-between"><span className="text-muted-foreground">Invoice</span><span className="font-bold text-foreground">{pelunasanTarget.invoice}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Total Tagihan</span><span className="font-bold text-foreground">Rp {Number(pelunasanTarget.total_penjualan).toLocaleString('id-ID')}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Sudah Dibayar</span><span className="font-bold text-foreground">Rp {Number(pelunasanTarget.pembayaran).toLocaleString('id-ID')}</span></div>
+                <div className="border-t border-border pt-2 flex justify-between"><span className="text-muted-foreground font-bold">Sisa Tagihan</span><span className="font-black text-amber-600 text-sm">Rp {Number(pelunasanTarget.sisa_bayar).toLocaleString('id-ID')}</span></div>
               </div>
               <div className="mb-4">
-                <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Nominal Pembayaran</label>
+                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">Nominal Pembayaran</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-sm">Rp</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-sm">Rp</span>
                   <input
                     type="number"
                     value={pelunasanInput}
                     onChange={(e) => setPelunasanInput(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-500 font-bold"
+                    className="w-full pl-9 pr-3 py-2 border border-border rounded-lg outline-none focus:ring-2 focus:ring-amber-500 font-bold"
                     placeholder="0"
                   />
                 </div>
@@ -2603,8 +2603,8 @@ export default function PenjualanPage() {
                    <button onClick={() => setPelunasanInput(pelunasanTarget.sisa_bayar?.toString() || '0')} className="flex-1 py-1.5 bg-amber-50 text-amber-600 font-bold text-[10px] rounded uppercase hover:bg-amber-100 transition-colors">Lunasi Semua (Uang Pas)</button>
                 </div>
               </div>
-              <div className="flex gap-2 sticky bottom-0 bg-white pt-2 border-t border-gray-100 mt-auto md:mt-0 md:border-none md:pt-0">
-                <button onClick={() => { setPelunasanTarget(null); setPelunasanInput(''); }} disabled={isPelunasanSubmitting} className="hidden md:block flex-1 px-3 py-2.5 md:py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-200 transition-colors disabled:opacity-50">Batal</button>
+              <div className="flex gap-2 sticky bottom-0 bg-card pt-2 border-t border-border mt-auto md:mt-0 md:border-none md:pt-0">
+                <button onClick={() => { setPelunasanTarget(null); setPelunasanInput(''); }} disabled={isPelunasanSubmitting} className="hidden md:block flex-1 px-3 py-2.5 md:py-2 bg-accent text-foreground rounded-lg text-xs font-bold hover:bg-accent transition-colors disabled:opacity-50">Batal</button>
                 <button onClick={handlePelunasanSubmit} disabled={isPelunasanSubmitting} className="flex-1 px-3 py-3 md:py-2 bg-amber-500 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-amber-600 transition-colors disabled:opacity-50 active:scale-[0.98]">
                   {isPelunasanSubmitting ? 'Memproses...' : 'Proses Bayar'}
                 </button>
@@ -2615,9 +2615,9 @@ export default function PenjualanPage() {
       )}
 
       {/* FAKTUR TEMPLATE - Continuous Form 21cm x 14.5cm */}
-      <div id="print-area" className="faktur-print bg-white text-black font-sans" style={{ width: '100%', margin: '0' }}>
+      <div id="print-area" className="faktur-print bg-card text-foreground font-sans" style={{ width: '100%', margin: '0' }}>
         {lastSale && (
-          <div className="bg-white" style={{ fontSize: '14px', fontWeight: 'normal', lineHeight: '1.2' }}>
+          <div className="bg-card" style={{ fontSize: '14px', fontWeight: 'normal', lineHeight: '1.2' }}>
             {/* ===== HEADER ===== */}
             <table className="w-full border-collapse">
               <tbody>
@@ -2847,7 +2847,7 @@ export default function PenjualanPage() {
       {/* Template Modals */}
       {isTemplateModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center md:p-4 bg-black/50 backdrop-blur-sm no-print">
-          <div className="bg-white md:rounded-2xl shadow-xl w-full max-w-lg border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
+          <div className="bg-card md:rounded-2xl shadow-xl w-full max-w-lg border border-border overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
              <div className="p-3 md:p-4 bg-emerald-600 text-white flex justify-between items-center shrink-0 sticky top-0 z-20">
                 <div className="flex items-center gap-2">
                   <button onClick={() => setIsTemplateModalOpen(false)} className="md:hidden hover:bg-white/10 p-1 -ml-1 rounded transition-colors"><ChevronLeft size={20}/></button>
@@ -2855,15 +2855,15 @@ export default function PenjualanPage() {
                 </div>
                 <button onClick={() => setIsTemplateModalOpen(false)} className="hidden md:block hover:bg-white/10 p-1 rounded transition-colors">&times;</button>
              </div>
-             <div className="p-4 flex-1 md:max-h-[60vh] overflow-y-auto no-scrollbar space-y-2 bg-gray-50/50">
+             <div className="p-4 flex-1 md:max-h-[60vh] overflow-y-auto no-scrollbar space-y-2 bg-muted/50">
                 {posTemplates.length === 0 ? (
-                  <div className="text-center py-10 text-gray-400 italic text-sm">Belum ada template yang disimpan.</div>
+                  <div className="text-center py-10 text-muted-foreground italic text-sm">Belum ada template yang disimpan.</div>
                 ) : (
                   posTemplates.map((t: any) => (
-                    <div key={t.id} className="bg-white border border-gray-100 p-3 rounded-xl shadow-sm hover:border-emerald-300 transition-all flex justify-between items-center group">
+                    <div key={t.id} className="bg-card border border-border p-3 rounded-xl shadow-sm hover:border-emerald-300 transition-all flex justify-between items-center group">
                        <div className="flex-1 cursor-pointer" onClick={() => loadTemplate(t.items)}>
-                          <p className="font-bold text-gray-800 text-sm">{t.name}</p>
-                          <p className="text-[10px] text-gray-500 uppercase font-medium">{t.items.length} Barang • Dibuat {new Date(t.id).toLocaleDateString('id-ID')}</p>
+                          <p className="font-bold text-foreground text-sm">{t.name}</p>
+                          <p className="text-[10px] text-muted-foreground uppercase font-medium">{t.items.length} Barang • Dibuat {new Date(t.id).toLocaleDateString('id-ID')}</p>
                        </div>
                        <button onClick={() => deleteTemplate(t.id)} className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100">
                           <Trash2 size={16} className="md:w-3.5 md:h-3.5" />
@@ -2872,8 +2872,8 @@ export default function PenjualanPage() {
                   ))
                 )}
              </div>
-             <div className="p-3 bg-gray-100 border-t border-gray-200 flex justify-end shrink-0 sticky bottom-0 z-20">
-                <button onClick={() => setIsTemplateModalOpen(false)} className="w-full md:w-auto px-5 py-2.5 md:py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 transition-colors">TUTUP</button>
+             <div className="p-3 bg-accent border-t border-border flex justify-end shrink-0 sticky bottom-0 z-20">
+                <button onClick={() => setIsTemplateModalOpen(false)} className="w-full md:w-auto px-5 py-2.5 md:py-1.5 bg-card border border-border rounded-lg text-xs font-bold text-muted-foreground hover:bg-muted transition-colors">TUTUP</button>
              </div>
           </div>
         </div>
@@ -2881,7 +2881,7 @@ export default function PenjualanPage() {
 
       {isSaveTemplateModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center md:p-4 bg-black/50 backdrop-blur-sm no-print">
-          <div className="bg-white md:rounded-2xl shadow-xl w-full max-w-sm border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
+          <div className="bg-card md:rounded-2xl shadow-xl w-full max-w-sm border border-border overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
              <div className="p-3 md:p-4 bg-amber-500 text-white flex justify-between items-center shrink-0 sticky top-0 z-20">
                 <div className="flex items-center gap-2">
                   <button onClick={() => setIsSaveTemplateModalOpen(false)} className="md:hidden hover:bg-white/10 p-1 -ml-1 rounded transition-colors"><ChevronLeft size={20}/></button>
@@ -2891,22 +2891,22 @@ export default function PenjualanPage() {
              </div>
              <div className="p-5 space-y-4 flex-1 overflow-y-auto">
                 <div>
-                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Nama Template</label>
+                   <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-1">Nama Template</label>
                    <input 
                     type="text" 
                     value={templateName}
                     onChange={(e) => setTemplateName(e.target.value)}
                     placeholder="Contoh: Paket Service A atau Paket PC Gaming..."
-                    className="w-full text-sm font-bold bg-gray-50 border border-gray-200 px-3 py-2.5 rounded-xl outline-none focus:ring-2 ring-amber-400/50 transition-all"
+                    className="w-full text-sm font-bold bg-muted border border-border px-3 py-2.5 rounded-xl outline-none focus:ring-2 ring-amber-400/50 transition-all"
                     autoFocus
                    />
                 </div>
-                <p className="text-[10px] text-gray-500 italic bg-amber-50 p-2 rounded-lg border border-amber-100">
+                <p className="text-[10px] text-muted-foreground italic bg-amber-50 p-2 rounded-lg border border-amber-100">
                    Seluruh barang yang ada di keranjang ({saleItems.length} item) akan disimpan ke dalam template ini.
                 </p>
              </div>
-             <div className="p-3 bg-gray-100 border-t border-gray-200 flex justify-end gap-2 shrink-0 sticky bottom-0 z-20">
-                <button onClick={() => setIsSaveTemplateModalOpen(false)} className="hidden md:block px-4 py-2 text-xs font-bold text-gray-600 hover:text-gray-800 transition-colors">BATAL</button>
+             <div className="p-3 bg-accent border-t border-border flex justify-end gap-2 shrink-0 sticky bottom-0 z-20">
+                <button onClick={() => setIsSaveTemplateModalOpen(false)} className="hidden md:block px-4 py-2 text-xs font-bold text-muted-foreground hover:text-gray-800 transition-colors">BATAL</button>
                 <button 
                   onClick={saveTemplate} 
                   disabled={isSubmitting}
@@ -2929,7 +2929,7 @@ export default function PenjualanPage() {
       {/* ====== BARCODE SCANNER MODAL ====== */}
       {showScanner && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-[70] no-print">
-          <div className="bg-white md:rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
+          <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-3 md:px-4 py-3 flex justify-between items-center shrink-0 sticky top-0 z-20">
               <div className="flex items-center gap-2">
                 <button 
@@ -2950,7 +2950,7 @@ export default function PenjualanPage() {
               </button>
             </div>
             <div className="p-4 flex-1 overflow-y-auto">
-              <p className="text-[11px] text-gray-500 mb-3 text-center">Arahkan kamera ke barcode resi pengiriman</p>
+              <p className="text-[11px] text-muted-foreground mb-3 text-center">Arahkan kamera ke barcode resi pengiriman</p>
               <div 
                 id={scannerContainerId} 
                 className="w-full rounded-lg overflow-hidden border-2 border-blue-200"
@@ -2974,7 +2974,7 @@ export default function PenjualanPage() {
                         type="button"
                         disabled={!hasPrev}
                         onClick={() => navigateScanner('prev')}
-                        className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-gray-100 border border-gray-200 text-gray-750 disabled:opacity-40 rounded-xl text-xs font-bold transition-all hover:bg-gray-205 active:scale-95"
+                        className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-accent border border-border text-gray-750 disabled:opacity-40 rounded-xl text-xs font-bold transition-all hover:bg-gray-205 active:scale-95"
                       >
                         <ChevronLeft size={16} /> Sebelumnya
                       </button>
@@ -3003,22 +3003,22 @@ export default function PenjualanPage() {
                         )}
                       </div>
                       <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[11px]">
-                        <span className="text-gray-500">Pelanggan</span>
-                        <span className="font-semibold text-gray-800">{targetSale.username_pembeli || 'UMUM'}</span>
-                        <span className="text-gray-500">No. Faktur</span>
-                        <span className="font-semibold text-gray-800">{targetSale.invoice}</span>
+                        <span className="text-muted-foreground">Pelanggan</span>
+                        <span className="font-semibold text-foreground">{targetSale.username_pembeli || 'UMUM'}</span>
+                        <span className="text-muted-foreground">No. Faktur</span>
+                        <span className="font-semibold text-foreground">{targetSale.invoice}</span>
                         {targetSale.no_pesanan && (
                           <>
-                            <span className="text-gray-500">No. Pesanan</span>
-                            <span className="font-mono font-semibold text-gray-800 text-[10px] break-all">{targetSale.no_pesanan}</span>
+                            <span className="text-muted-foreground">No. Pesanan</span>
+                            <span className="font-mono font-semibold text-foreground text-[10px] break-all">{targetSale.no_pesanan}</span>
                           </>
                         )}
-                        <span className="text-gray-500">Channel</span>
+                        <span className="text-muted-foreground">Channel</span>
                         <span className="font-bold text-blue-600 uppercase">{targetSale.channel}</span>
                         
-                        <span className="text-gray-500">No. Resi</span>
+                        <span className="text-muted-foreground">No. Resi</span>
                         <div className="flex items-center gap-1.5">
-                          <span className={`font-mono font-bold text-[10px] break-all ${targetSale.no_resi ? 'text-green-600' : 'text-gray-400 italic'}`}>
+                          <span className={`font-mono font-bold text-[10px] break-all ${targetSale.no_resi ? 'text-green-600' : 'text-muted-foreground italic'}`}>
                             {targetSale.no_resi || 'Belum di-scan'}
                           </span>
                           {targetSale.no_resi && (
@@ -3047,10 +3047,10 @@ export default function PenjualanPage() {
                 );
               })()}
 
-              <div className="mt-4 flex justify-center sticky bottom-0 bg-white pt-2">
+              <div className="mt-4 flex justify-center sticky bottom-0 bg-card pt-2">
                 <button 
                   onClick={closeScanner} 
-                  className="w-full md:w-auto px-6 py-2.5 md:py-2 bg-gray-100 text-gray-700 rounded-xl md:rounded-lg text-xs font-bold hover:bg-gray-200 transition-colors"
+                  className="w-full md:w-auto px-6 py-2.5 md:py-2 bg-accent text-foreground rounded-xl md:rounded-lg text-xs font-bold hover:bg-accent transition-colors"
                 >
                   Tutup Scanner
                 </button>
@@ -3062,7 +3062,7 @@ export default function PenjualanPage() {
       {/* ===== MODAL RAKITAN BUILDER ===== */}
       {isRakitanModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Header */}
             <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-3 shrink-0">
               <div className="flex items-center justify-between">
@@ -3080,7 +3080,7 @@ export default function PenjualanPage() {
                   onClick={() => switchRakitanType('fullset')}
                   className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
                     rakitanType === 'fullset'
-                      ? 'bg-white text-cyan-700 shadow-md'
+                      ? 'bg-card text-cyan-700 shadow-md'
                       : 'bg-white/20 text-white/80 hover:bg-white/30'
                   }`}
                 >
@@ -3091,7 +3091,7 @@ export default function PenjualanPage() {
                   onClick={() => switchRakitanType('cpu_only')}
                   className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
                     rakitanType === 'cpu_only'
-                      ? 'bg-white text-cyan-700 shadow-md'
+                      ? 'bg-card text-cyan-700 shadow-md'
                       : 'bg-white/20 text-white/80 hover:bg-white/30'
                   }`}
                 >
@@ -3118,7 +3118,7 @@ export default function PenjualanPage() {
 
                 return (
                   <div key={slot.id} className="relative group" style={{ zIndex: slot.showDropdown ? 50 : 1 }}>
-                    <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded px-1.5 py-1 hover:border-cyan-300 transition-colors">
+                    <div className="flex items-center gap-1.5 bg-muted border border-border rounded px-1.5 py-1 hover:border-cyan-300 transition-colors">
                       {/* Label */}
                       <span className="text-[8px] font-black text-cyan-700 bg-cyan-50 px-1 py-0.5 rounded uppercase tracking-wider shrink-0 w-[68px] text-center truncate">
                         {slot.label}
@@ -3132,13 +3132,13 @@ export default function PenjualanPage() {
                           onChange={(e) => updateRakitanSlot(slot.id, { search: e.target.value, showDropdown: true })}
                           onFocus={() => updateRakitanSlot(slot.id, { showDropdown: true })}
                           className={`w-full text-[10px] border rounded px-1.5 py-1 outline-none focus:ring-1 focus:ring-cyan-300 transition-all ${
-                            slot.product ? 'bg-cyan-50 border-cyan-300 font-semibold text-cyan-800' : 'bg-white border-gray-200'
+                            slot.product ? 'bg-cyan-50 border-cyan-300 font-semibold text-cyan-800' : 'bg-card border-border'
                           }`}
                         />
                         {slot.product && (
                           <button
                             onClick={() => updateRakitanSlot(slot.id, { product: null, search: '' })}
-                            className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-red-500"
                           >
                             <XIcon size={12} />
                           </button>
@@ -3147,9 +3147,9 @@ export default function PenjualanPage() {
                         {slot.showDropdown && !slot.product && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => updateRakitanSlot(slot.id, { showDropdown: false })} />
-                            <div className={`absolute left-0 right-0 ${isBottomHalf ? 'bottom-full mb-0.5' : 'top-full mt-0.5'} bg-white border border-gray-200 rounded shadow-xl z-50 max-h-36 overflow-y-auto`}>
+                            <div className={`absolute left-0 right-0 ${isBottomHalf ? 'bottom-full mb-0.5' : 'top-full mt-0.5'} bg-card border border-border rounded shadow-xl z-50 max-h-36 overflow-y-auto`}>
                               {filteredProds.length === 0 ? (
-                                <div className="px-2 py-1 text-[10px] text-gray-400 text-center">Tidak ditemukan</div>
+                                <div className="px-2 py-1 text-[10px] text-muted-foreground text-center">Tidak ditemukan</div>
                               ) : (
                                 filteredProds.slice(0, 20).map(p => (
                                   <div
@@ -3161,10 +3161,10 @@ export default function PenjualanPage() {
                                         showDropdown: false,
                                       });
                                     }}
-                                    className="px-2 py-1 text-[10px] cursor-pointer hover:bg-cyan-50 border-b border-gray-100 last:border-0 flex justify-between items-center"
+                                    className="px-2 py-1 text-[10px] cursor-pointer hover:bg-cyan-50 border-b border-border last:border-0 flex justify-between items-center"
                                   >
-                                    <span className="font-semibold text-gray-800 truncate">{p.name}</span>
-                                    <span className="text-[8px] text-gray-400 ml-2 whitespace-nowrap">
+                                    <span className="font-semibold text-foreground truncate">{p.name}</span>
+                                    <span className="text-[8px] text-muted-foreground ml-2 whitespace-nowrap">
                                       Rp {p.harga_jual.toLocaleString('id-ID')}
                                     </span>
                                   </div>
@@ -3178,7 +3178,7 @@ export default function PenjualanPage() {
                       <div className="flex items-center gap-0.5 shrink-0">
                         <button
                           onClick={() => updateRakitanSlot(slot.id, { qty: Math.max(1, slot.qty - 1) })}
-                          className="w-5 h-5 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-[10px] font-bold transition-colors"
+                          className="w-5 h-5 flex items-center justify-center bg-accent hover:bg-gray-300 rounded text-[10px] font-bold transition-colors"
                         >
                           -
                         </button>
@@ -3187,11 +3187,11 @@ export default function PenjualanPage() {
                           min={1}
                           value={slot.qty}
                           onChange={(e) => updateRakitanSlot(slot.id, { qty: Math.max(1, parseInt(e.target.value) || 1) })}
-                          className="w-7 text-center text-[10px] font-bold border border-gray-200 rounded py-0.5 outline-none focus:ring-1 focus:ring-cyan-300"
+                          className="w-7 text-center text-[10px] font-bold border border-border rounded py-0.5 outline-none focus:ring-1 focus:ring-cyan-300"
                         />
                         <button
                           onClick={() => updateRakitanSlot(slot.id, { qty: slot.qty + 1 })}
-                          className="w-5 h-5 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded text-[10px] font-bold transition-colors"
+                          className="w-5 h-5 flex items-center justify-center bg-accent hover:bg-gray-300 rounded text-[10px] font-bold transition-colors"
                         >
                           +
                         </button>
@@ -3207,7 +3207,7 @@ export default function PenjualanPage() {
                     </div>
                     {/* Selected info inline */}
                     {slot.product && (
-                      <div className="ml-[74px] text-[8px] text-gray-400">
+                      <div className="ml-[74px] text-[8px] text-muted-foreground">
                         Rp {slot.product.harga_jual.toLocaleString('id-ID')} × {slot.qty} = <b className="text-cyan-700">Rp {(slot.product.harga_jual * slot.qty).toLocaleString('id-ID')}</b>
                       </div>
                     )}
@@ -3218,27 +3218,27 @@ export default function PenjualanPage() {
               {/* Add Component Button */}
               <button
                 onClick={addRakitanSlot}
-                className="w-full py-1.5 border-2 border-dashed border-gray-300 hover:border-cyan-400 rounded-lg text-[11px] font-bold text-gray-400 hover:text-cyan-600 transition-all flex items-center justify-center gap-1"
+                className="w-full py-1.5 border-2 border-dashed border-border hover:border-cyan-400 rounded-lg text-[11px] font-bold text-muted-foreground hover:text-cyan-600 transition-all flex items-center justify-center gap-1"
               >
                 <Plus size={12} /> Tambah Komponen
               </button>
             </div>
 
             {/* Footer - compact */}
-            <div className="border-t bg-gray-50 px-4 py-3 shrink-0">
+            <div className="border-t bg-muted px-4 py-3 shrink-0">
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <div className="text-[9px] text-gray-400 font-bold uppercase">Total Rakitan</div>
+                  <div className="text-[9px] text-muted-foreground font-bold uppercase">Total Rakitan</div>
                   <div className="text-base font-black text-cyan-700">
                     Rp {rakitanSlots.filter(s => s.product).reduce((sum, s) => sum + s.product!.harga_jual * s.qty, 0).toLocaleString('id-ID')}
                   </div>
                 </div>
-                <div className="text-[10px] text-gray-400 font-bold">{rakitanSlots.filter(s => s.product).length} komponen</div>
+                <div className="text-[10px] text-muted-foreground font-bold">{rakitanSlots.filter(s => s.product).length} komponen</div>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsRakitanModalOpen(false)}
-                  className="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-xs font-bold transition-colors"
+                  className="flex-1 py-2 bg-accent hover:bg-gray-300 text-foreground rounded-xl text-xs font-bold transition-colors"
                 >
                   Batal
                 </button>

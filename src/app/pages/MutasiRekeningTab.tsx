@@ -295,7 +295,7 @@ export default function MutasiRekeningTab() {
            <Banknote size={80} strokeWidth={1} className="text-white" />
         </div>
         <div className="flex items-center gap-3 relative z-10">
-          <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse ring-4 ring-white/20"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-card animate-pulse ring-4 ring-white/20"></div>
           <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">
              NERACA {timeFilter === 'today' ? 'HARIAN' : timeFilter === 'week' ? 'MINGGUAN' : timeFilter === 'month' ? 'BULANAN' : 'KESELURUHAN'}
           </span>
@@ -307,10 +307,10 @@ export default function MutasiRekeningTab() {
       </div>
 
       {/* Filters & Time Selection */}
-      <div className="flex flex-col xl:flex-row gap-4 items-center justify-between bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+      <div className="flex flex-col xl:flex-row gap-4 items-center justify-between bg-card p-3 rounded-xl border border-border shadow-sm">
         <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
           {/* Main Select Scale */}
-          <div className="flex items-center gap-1 p-1 bg-gray-50 rounded-xl border border-gray-200">
+          <div className="flex items-center gap-1 p-1 bg-muted rounded-xl border border-border">
              {(['all', 'masuk', 'keluar'] as const).map((f) => (
                 <button
                   key={f}
@@ -318,7 +318,7 @@ export default function MutasiRekeningTab() {
                   className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
                     filterType === f 
                       ? 'bg-blue-600 text-white shadow-md' 
-                      : 'text-gray-500 hover:bg-white hover:text-blue-600'
+                      : 'text-muted-foreground hover:bg-white hover:text-blue-600'
                   }`}
                 >
                   {f === 'all' ? 'Semua' : f === 'masuk' ? 'Masuk' : 'Keluar'}
@@ -326,7 +326,7 @@ export default function MutasiRekeningTab() {
               ))}
           </div>
 
-          <div className="flex items-center gap-1 p-1 bg-gray-50 rounded-xl border border-gray-200">
+          <div className="flex items-center gap-1 p-1 bg-muted rounded-xl border border-border">
             {[
               { id: 'today', label: 'Harian' },
               { id: 'week', label: 'Mingguan' },
@@ -339,7 +339,7 @@ export default function MutasiRekeningTab() {
                 className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
                   timeFilter === f.id 
                     ? 'bg-indigo-600 text-white shadow-md' 
-                    : 'text-gray-500 hover:bg-white hover:text-indigo-600'
+                    : 'text-muted-foreground hover:bg-white hover:text-indigo-600'
                 }`}
               >
                 {f.label}
@@ -349,7 +349,7 @@ export default function MutasiRekeningTab() {
 
           {/* Dynamic Navigation Picker */}
           {timeFilter !== 'all' && (
-            <div className="flex items-center gap-2 bg-gray-50 px-2 py-1 rounded-xl border border-gray-200">
+            <div className="flex items-center gap-2 bg-muted px-2 py-1 rounded-xl border border-border">
               <button 
                 onClick={() => {
                   const d = new Date(filterValue);
@@ -358,7 +358,7 @@ export default function MutasiRekeningTab() {
                   else if (timeFilter === 'month') d.setMonth(d.getMonth() - 1);
                   setFilterValue(getLocalYMD(d));
                 }}
-                className="p-1.5 hover:bg-white rounded-lg text-gray-400 hover:text-indigo-600 transition-all"
+                className="p-1.5 hover:bg-white rounded-lg text-muted-foreground hover:text-indigo-600 transition-all"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -382,7 +382,7 @@ export default function MutasiRekeningTab() {
                   else if (timeFilter === 'month') d.setMonth(d.getMonth() + 1);
                   setFilterValue(getLocalYMD(d));
                 }}
-                className="p-1.5 hover:bg-white rounded-lg text-gray-400 hover:text-indigo-600 transition-all"
+                className="p-1.5 hover:bg-white rounded-lg text-muted-foreground hover:text-indigo-600 transition-all"
               >
                 <ChevronRight size={16} />
               </button>
@@ -390,7 +390,7 @@ export default function MutasiRekeningTab() {
           )}
 
           {/* SUMBER / KATEGORI FILTER */}
-          <div className="flex items-center gap-1 p-1 bg-gray-50 rounded-xl border border-gray-200">
+          <div className="flex items-center gap-1 p-1 bg-muted rounded-xl border border-border">
              <select 
                value={filterSumber}
                onChange={(e) => setFilterSumber(e.target.value)}
@@ -406,11 +406,11 @@ export default function MutasiRekeningTab() {
 
         {/* Search Bar */}
         <div className="relative w-full md:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
           <input
             type="text"
             placeholder="Cari keterangan mutasi..."
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-[11px] outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            className="w-full pl-9 pr-4 py-2 bg-muted border border-border rounded-lg text-[11px] outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -418,11 +418,11 @@ export default function MutasiRekeningTab() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         {loading ? (
-          <div className="p-12 text-center text-gray-400">Memuat data...</div>
+          <div className="p-12 text-center text-muted-foreground">Memuat data...</div>
         ) : currentFlows.length === 0 ? (
-          <div className="p-12 text-center text-gray-400">
+          <div className="p-12 text-center text-muted-foreground">
             <TrendingUp className="mx-auto mb-3 text-gray-300" size={40} />
             <p className="text-sm">Belum ada data arus kas untuk filter ini.</p>
           </div>
@@ -430,22 +430,22 @@ export default function MutasiRekeningTab() {
           <>
             <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
+              <thead className="bg-muted border-b border-border">
                 <tr>
-                  <th className="text-left px-4 py-2 text-[10px] font-black text-gray-500 uppercase tracking-wider">Tanggal</th>
-                  <th className="text-left px-4 py-2 text-[10px] font-black text-gray-500 uppercase tracking-wider">Tipe</th>
-                  <th className="text-left px-4 py-2 text-[10px] font-black text-gray-500 uppercase tracking-wider">Sumber Kategori</th>
-                  <th className="text-right px-4 py-2 text-[10px] font-black text-gray-500 uppercase tracking-wider">Nominal</th>
-                  <th className="text-left px-4 py-2 text-[10px] font-black text-gray-500 uppercase tracking-wider">Keterangan</th>
-                  <th className="text-center px-4 py-2 text-[10px] font-black text-gray-500 uppercase tracking-wider">Aksi</th>
+                  <th className="text-left px-4 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-wider">Tanggal</th>
+                  <th className="text-left px-4 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-wider">Tipe</th>
+                  <th className="text-left px-4 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-wider">Sumber Kategori</th>
+                  <th className="text-right px-4 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-wider">Nominal</th>
+                  <th className="text-left px-4 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-wider">Keterangan</th>
+                  <th className="text-center px-4 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-wider">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {currentFlows.map((flow) => (
-                  <tr key={flow.id} className="hover:bg-blue-50/20 transition-colors border-b border-gray-50 last:border-0">
-                    <td className="px-4 py-3 text-xs text-gray-700">
+                  <tr key={flow.id} className="hover:bg-blue-50/20 transition-colors border-b border-border last:border-0">
+                    <td className="px-4 py-3 text-xs text-foreground">
                       <p className="font-bold">{new Date(flow.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
-                      <p className="text-[10px] text-gray-400 mt-0.5">{new Date(flow.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{new Date(flow.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
                     </td>
                     <td className="px-3 py-2 text-xs">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-wider ${flow.tipe === 'masuk' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
@@ -454,7 +454,7 @@ export default function MutasiRekeningTab() {
                         {flow.tipe === 'masuk' ? 'MASUK' : 'KELUAR'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs font-bold text-gray-800 capitalize">
+                    <td className="px-4 py-3 text-xs font-bold text-foreground capitalize">
                        {flow.sumber.replace(/_/g, ' ')}
                         {flow.sumber === 'biaya_operasional' && (
                           <>
@@ -474,10 +474,10 @@ export default function MutasiRekeningTab() {
                         {flow.tipe === 'masuk' ? '+' : '-'} Rp {Math.abs(Number(flow.nominal)).toLocaleString('id-ID')}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-500 font-medium">
+                    <td className="px-4 py-3 text-xs text-muted-foreground font-medium">
                       {flow.keterangan || '-'}
                       {flow.staff_name && (
-                        <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase italic">Staf: {flow.staff_name}</div>
+                        <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase italic">Staf: {flow.staff_name}</div>
                       )}
                     </td>
                     <td className="px-3 py-2 text-center text-xs">
@@ -496,16 +496,16 @@ export default function MutasiRekeningTab() {
           </div>
 
           {/* Mobile Card View */}
-          <div className="block md:hidden divide-y divide-gray-100 bg-white">
+          <div className="block md:hidden divide-y divide-gray-100 bg-card">
             {currentFlows.map((flow) => (
-              <div key={flow.id} className="p-2.5 space-y-1.5 hover:bg-gray-50 transition-colors">
+              <div key={flow.id} className="p-2.5 space-y-1.5 hover:bg-muted transition-colors">
                 {/* Row 1: Date & Type Badge */}
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="font-bold text-gray-800 text-xs">
+                    <span className="font-bold text-foreground text-xs">
                       {new Date(flow.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
-                    <span className="text-[10px] text-gray-400 font-medium ml-2">
+                    <span className="text-[10px] text-muted-foreground font-medium ml-2">
                       {new Date(flow.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
@@ -518,7 +518,7 @@ export default function MutasiRekeningTab() {
 
                 {/* Row 2: Category & Nominal */}
                 <div className="flex justify-between items-center text-[11px]">
-                  <div className="font-bold text-gray-800 capitalize">
+                  <div className="font-bold text-foreground capitalize">
                     {flow.sumber.replace(/_/g, ' ')}
                     {flow.sumber === 'biaya_operasional' && (
                       <>
@@ -540,11 +540,11 @@ export default function MutasiRekeningTab() {
                 </div>
 
                 {/* Row 3: Description & Actions */}
-                <div className="flex justify-between items-start gap-3 text-[11px] pt-1 border-t border-gray-50">
-                  <div className="text-gray-500 font-medium flex-1">
+                <div className="flex justify-between items-start gap-3 text-[11px] pt-1 border-t border-border">
+                  <div className="text-muted-foreground font-medium flex-1">
                     {flow.keterangan || '-'}
                     {flow.staff_name && (
-                      <span className="text-[9px] font-bold text-gray-400 uppercase italic block mt-0.5">Staf: {flow.staff_name}</span>
+                      <span className="text-[9px] font-bold text-muted-foreground uppercase italic block mt-0.5">Staf: {flow.staff_name}</span>
                     )}
                   </div>
                   
@@ -564,31 +564,31 @@ export default function MutasiRekeningTab() {
 
         {/* Pagination Footer */}
         {!loading && currentFlows.length > 0 && (
-          <div className="border-t border-gray-100 px-3 py-2 flex items-center justify-between bg-gray-50/50">
-            <p className="text-[10px] text-gray-500 font-medium">
+          <div className="border-t border-border px-3 py-2 flex items-center justify-between bg-muted/50">
+            <p className="text-[10px] text-muted-foreground font-medium">
               Menampilkan {currentFlows.length} dari {filteredFlows.length} mutasi
             </p>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage <= 1}
-                className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
-                <ChevronLeft size={14} className="text-gray-600" />
+                <ChevronLeft size={14} className="text-muted-foreground" />
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1)
                 .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
                 .map((p, idx, arr) => (
                   <span key={p} className="flex items-center">
                     {idx > 0 && arr[idx - 1] !== p - 1 && (
-                      <span className="text-gray-400 text-[10px] px-0.5">...</span>
+                      <span className="text-muted-foreground text-[10px] px-0.5">...</span>
                     )}
                     <button
                       onClick={() => setCurrentPage(p)}
                       className={`min-w-[24px] h-6 text-[11px] font-bold rounded transition-colors ${
                         currentPage === p
                           ? 'bg-[#3B82F6] text-white shadow-sm'
-                          : 'text-gray-600 hover:bg-gray-200'
+                          : 'text-muted-foreground hover:bg-accent'
                       }`}
                     >
                       {p}
@@ -599,9 +599,9 @@ export default function MutasiRekeningTab() {
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage >= totalPages}
-                className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
-                <ChevronRight size={14} className="text-gray-600" />
+                <ChevronRight size={14} className="text-muted-foreground" />
               </button>
             </div>
           </div>
@@ -611,21 +611,21 @@ export default function MutasiRekeningTab() {
       {/* Modal Tambah */}
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center z-50 md:p-3">
-        <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-md overflow-hidden h-full md:h-auto flex flex-col">
-            <div className="flex items-center justify-between p-3 border-b border-gray-100 shrink-0 sticky top-0 bg-white z-20">
+        <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-md overflow-hidden h-full md:h-auto flex flex-col">
+            <div className="flex items-center justify-between p-3 border-b border-border shrink-0 sticky top-0 bg-card z-20">
               <div className="flex items-center gap-2">
-                <button onClick={() => setShowModal(false)} className="md:hidden p-1.5 -ml-1 text-gray-500 hover:bg-gray-100 rounded-lg">
+                <button onClick={() => setShowModal(false)} className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:bg-accent rounded-lg">
                   <ChevronLeft size={20} />
                 </button>
-                <h3 className="text-sm font-bold text-gray-800">Tambah Transaksi Operasional / Kas</h3>
+                <h3 className="text-sm font-bold text-foreground">Tambah Transaksi Operasional / Kas</h3>
               </div>
-              <button onClick={() => setShowModal(false)} className="hidden md:block text-gray-400 hover:text-gray-600 transition-colors">
+              <button onClick={() => setShowModal(false)} className="hidden md:block text-muted-foreground hover:text-gray-600 transition-colors">
                 <X size={18} />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-3 space-y-3 flex-1 overflow-y-auto">
               <div>
-                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Tipe Transaksi</label>
+                <label className="block text-[10px] font-bold text-foreground mb-1 uppercase tracking-wider">Tipe Transaksi</label>
                 <div className="flex gap-2">
                   {(['masuk', 'keluar'] as const).map((t) => (
                     <button
@@ -634,7 +634,7 @@ export default function MutasiRekeningTab() {
                       onClick={() => setForm({ ...form, tipe: t, sumber: t === 'masuk' ? 'offline' : 'biaya_operasional' })}
                       className={`flex-1 py-1.5 rounded-lg font-black text-[11px] transition-colors tracking-wider ${form.tipe === t
                           ? t === 'masuk' ? 'bg-emerald-500 text-white shadow-md' : 'bg-rose-500 text-white shadow-md'
-                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                          : 'bg-accent text-muted-foreground hover:bg-accent'
                         }`}
                     >
                       {t === 'masuk' ? '+ KAS MASUK' : '- KAS KELUAR'}
@@ -644,22 +644,22 @@ export default function MutasiRekeningTab() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Tanggal & Waktu</label>
+                <label className="block text-[10px] font-bold text-foreground mb-1 uppercase tracking-wider">Tanggal & Waktu</label>
                 <input
                   type="datetime-local"
                   value={form.tanggal}
                   onChange={(e) => setForm({ ...form, tanggal: e.target.value })}
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Sumber / Kategori</label>
+                <label className="block text-[10px] font-bold text-foreground mb-1 uppercase tracking-wider">Sumber / Kategori</label>
                 <select
                   value={form.sumber}
                   onChange={(e) => setForm({ ...form, sumber: e.target.value })}
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium capitalize"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium capitalize"
                 >
                   {sumberOptions.map((s) => (
                     <option key={s.value} value={s.value}>{s.label}</option>
@@ -669,7 +669,7 @@ export default function MutasiRekeningTab() {
 
               {form.sumber === 'gaji_karyawan' && (
                 <div className="animate-in slide-in-from-top-2 duration-300">
-                  <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider text-purple-600">Pilih Staf / Karyawan</label>
+                  <label className="block text-[10px] font-bold text-foreground mb-1 uppercase tracking-wider text-purple-600">Pilih Staf / Karyawan</label>
                   <select
                     value={form.staff_user_id}
                     onChange={(e) => setForm({ ...form, staff_user_id: e.target.value })}
@@ -685,33 +685,33 @@ export default function MutasiRekeningTab() {
               )}
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Nominal (Rp)</label>
+                <label className="block text-[10px] font-bold text-foreground mb-1 uppercase tracking-wider">Nominal (Rp)</label>
                 <input
                   type="text"
                   value={formatNumber(form.nominal)}
                   onChange={(e) => setForm({ ...form, nominal: parseNumber(e.target.value).toString() })}
                   placeholder="Contoh: 500.000"
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm font-bold"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm font-bold"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Keterangan Tambahan</label>
+                <label className="block text-[10px] font-bold text-foreground mb-1 uppercase tracking-wider">Keterangan Tambahan</label>
                 <input
                   type="text"
                   value={form.keterangan}
                   onChange={(e) => setForm({ ...form, keterangan: e.target.value })}
                   placeholder="Misal: Pembayaran listrik bulan Maret"
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-xs font-medium"
                 />
               </div>
 
-              <div className="flex gap-2 pt-3 sticky bottom-0 bg-white mt-auto md:mt-0 border-t border-gray-100 md:pt-2">
+              <div className="flex gap-2 pt-3 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:pt-2">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="hidden md:block flex-1 py-2 rounded-xl md:rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 font-bold text-[11px] uppercase tracking-wider transition-colors"
+                  className="hidden md:block flex-1 py-2 rounded-xl md:rounded-lg border border-border text-foreground hover:bg-muted font-bold text-[11px] uppercase tracking-wider transition-colors"
                 >
                   Batal
                 </button>

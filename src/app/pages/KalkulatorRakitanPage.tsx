@@ -87,14 +87,14 @@ const SearchableSelect = ({ options, value, onChange, placeholder }: { options: 
         <div className="relative">
             <div 
                 onClick={() => setOpen(!open)}
-                className="w-full text-[11px] px-2 py-1 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400 cursor-pointer flex justify-between items-center h-[28px]"
+                className="w-full text-[11px] px-2 py-1 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400 cursor-pointer flex justify-between items-center h-[28px]"
             >
-                <span className="truncate text-gray-700 font-medium">{selected ? selected.label : placeholder}</span>
-                <span className="text-gray-400 text-[10px]">▼</span>
+                <span className="truncate text-foreground font-medium">{selected ? selected.label : placeholder}</span>
+                <span className="text-muted-foreground text-[10px]">▼</span>
             </div>
             {open && (
-                <div className="absolute z-50 w-full mt-1 bg-white border rounded shadow-xl max-h-60 flex flex-col" style={{ minWidth: "15rem" }}>
-                    <div className="p-1 border-b bg-gray-50 rounded-t">
+                <div className="absolute z-50 w-full mt-1 bg-card border rounded shadow-xl max-h-60 flex flex-col" style={{ minWidth: "15rem" }}>
+                    <div className="p-1 border-b bg-muted rounded-t">
                         <input 
                             autoFocus
                             type="text" 
@@ -105,12 +105,12 @@ const SearchableSelect = ({ options, value, onChange, placeholder }: { options: 
                         />
                     </div>
                     <div className="overflow-y-auto custom-scrollbar">
-                        <div onClick={() => { onChange(''); setOpen(false); }} className="px-2 py-2 text-[11px] hover:bg-gray-100 cursor-pointer text-gray-500 italic border-b">-- Batal --</div>
+                        <div onClick={() => { onChange(''); setOpen(false); }} className="px-2 py-2 text-[11px] hover:bg-accent cursor-pointer text-muted-foreground italic border-b">-- Batal --</div>
                         {options.filter(o => o.label.toLowerCase().includes(search.toLowerCase())).map(o => (
                             <div 
                                 key={o.value} 
                                 onClick={() => { onChange(o.value); setOpen(false); setSearch(''); }}
-                                className={`px-2 py-1.5 text-[11px] hover:bg-blue-50 cursor-pointer border-b last:border-b-0 ${value === o.value ? 'bg-blue-100 font-bold text-blue-700' : 'text-gray-700'}`}
+                                className={`px-2 py-1.5 text-[11px] hover:bg-blue-50 cursor-pointer border-b last:border-b-0 ${value === o.value ? 'bg-blue-100 font-bold text-blue-700' : 'text-foreground'}`}
                             >
                                 {o.label}
                             </div>
@@ -319,7 +319,7 @@ export default function KalkulatorPage() {
         const categoryName = selectedCategory || 'Belum Pilih Kategori';
 
         return (
-            <div className="bg-white border rounded-xl shadow-sm overflow-hidden mb-4">
+            <div className="bg-card border rounded-xl shadow-sm overflow-hidden mb-4">
                 {/* Header (always visible, clickable on mobile to toggle) */}
                 <div 
                     onClick={() => {
@@ -330,9 +330,9 @@ export default function KalkulatorPage() {
                     className="flex justify-between items-center p-3 cursor-pointer bg-gray-50/70 border-b select-none md:cursor-default"
                 >
                     <div className="flex flex-col">
-                        <span className="text-xs font-bold text-gray-700 uppercase tracking-wide">Pengaturan Biaya & Toko Marketplace</span>
+                        <span className="text-xs font-bold text-foreground uppercase tracking-wide">Pengaturan Biaya & Toko Marketplace</span>
                         {!isConfigExpanded && (
-                            <span className="text-[10px] text-gray-500 mt-0.5 block md:hidden truncate max-w-[280px]">
+                            <span className="text-[10px] text-muted-foreground mt-0.5 block md:hidden truncate max-w-[280px]">
                                 {storeName} ({categoryName} - {activeAdminPercent}%)
                             </span>
                         )}
@@ -347,25 +347,25 @@ export default function KalkulatorPage() {
                 <div className={`${isConfigExpanded ? 'block' : 'hidden md:block'} p-3`}>
                     <div className="flex flex-wrap lg:flex-nowrap gap-3 mb-2">
                         <div className="w-full lg:w-1/3">
-                            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Pilih Toko ({storeConfigs.find(s=>s.id===selectedStoreId)?.name || '...'})</label>
+                            <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">Pilih Toko ({storeConfigs.find(s=>s.id===selectedStoreId)?.name || '...'})</label>
                             <select
                                 value={selectedStoreId}
                                 onChange={(e) => {
                                     setSelectedStoreId(e.target.value);
                                     setSelectedCategory('');
                                 }}
-                                className="w-full text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none"
+                                className="w-full text-xs px-2 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none"
                             >
                                 <option value="">-- Pilih Toko --</option>
                                 {storeConfigs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                             </select>
                         </div>
                         <div className="w-full lg:w-1/3">
-                            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Kategori Barang</label>
+                            <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">Kategori Barang</label>
                             <select
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
-                                className="w-full text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none"
+                                className="w-full text-xs px-2 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none"
                             >
                                 <option value="">-- Pilih Kategori --</option>
                                 {storeConfigs.find(s => s.id === selectedStoreId)?.categories.map(c => (
@@ -393,14 +393,14 @@ export default function KalkulatorPage() {
                     {activeFeeRules.length > 0 && (
                         <div className="flex flex-wrap lg:flex-nowrap gap-2 bg-orange-50/50 border border-orange-100 p-2 rounded-lg">
                             {activeFeeRules.map((rule, idx) => (
-                                <div key={rule.id} className="flex-1 bg-white border border-orange-100 rounded px-2 py-1.5 shadow-sm">
-                                    <label className="block text-[9px] font-bold text-gray-600 uppercase leading-tight mb-1 truncate" title={rule.name}>
+                                <div key={rule.id} className="flex-1 bg-card border border-orange-100 rounded px-2 py-1.5 shadow-sm">
+                                    <label className="block text-[9px] font-bold text-muted-foreground uppercase leading-tight mb-1 truncate" title={rule.name}>
                                         {rule.name}
                                     </label>
                                     
                                     <div className="flex gap-1">
                                         <div className="relative flex-1">
-                                            {rule.type === 'flat' && <span className="absolute left-1.5 top-1 text-[9px] text-gray-400 font-bold">Rp</span>}
+                                            {rule.type === 'flat' && <span className="absolute left-1.5 top-1 text-[9px] text-muted-foreground font-bold">Rp</span>}
                                             <input 
                                                 type={rule.type === 'percent' ? "number" : "text"} 
                                                 min="0"
@@ -421,14 +421,14 @@ export default function KalkulatorPage() {
                                                         setActiveFeeRules(n);
                                                     }
                                                 }} 
-                                                className={`w-full text-[11px] py-1 border border-gray-200 rounded focus:ring-1 ring-blue-400 outline-none ${rule.type === 'flat' ? 'pl-5 pr-1' : 'pl-1 pr-4'}`} 
+                                                className={`w-full text-[11px] py-1 border border-border rounded focus:ring-1 ring-blue-400 outline-none ${rule.type === 'flat' ? 'pl-5 pr-1' : 'pl-1 pr-4'}`} 
                                             />
-                                            {rule.type === 'percent' && <span className="absolute right-1.5 top-1 text-[9px] text-gray-400 font-bold">%</span>}
+                                            {rule.type === 'percent' && <span className="absolute right-1.5 top-1 text-[9px] text-muted-foreground font-bold">%</span>}
                                         </div>
                                         
                                         {rule.type === 'percent' && (
-                                            <div className="relative flex-1 bg-gray-50 rounded border border-gray-100 group/max">
-                                                <span className="absolute left-1.5 top-1.5 text-[7px] font-black text-gray-400 uppercase tracking-tighter">MAX</span>
+                                            <div className="relative flex-1 bg-muted rounded border border-border group/max">
+                                                <span className="absolute left-1.5 top-1.5 text-[7px] font-black text-muted-foreground uppercase tracking-tighter">MAX</span>
                                                 <input 
                                                     type="text" 
                                                     min="0"
@@ -468,8 +468,8 @@ export default function KalkulatorPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
                     <div>
 
-                    <div className="bg-white border rounded-xl shadow-sm p-4">
-                        <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 flex justify-between items-center">
+                    <div className="bg-card border rounded-xl shadow-sm p-4">
+                        <h3 className="font-bold text-foreground mb-4 border-b pb-2 flex justify-between items-center">
                             Barang Fisik
                             <button onClick={() => setModalSatuan([...modalSatuan, 0])} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200">+ Baris Barang</button>
                         </h3>
@@ -479,7 +479,7 @@ export default function KalkulatorPage() {
                                 <div key={idx} className="flex items-center gap-2">
                                     <span className="text-xs font-medium w-32">Harga Modal {idx + 1}</span>
                                     <div className="relative flex-1">
-                                        <span className="absolute left-3 top-2.5 text-xs text-gray-500">Rp</span>
+                                        <span className="absolute left-3 top-2.5 text-xs text-muted-foreground">Rp</span>
                                         <input 
                                             type="text" 
                                             min="0"
@@ -503,12 +503,12 @@ export default function KalkulatorPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-semibold text-gray-700 mb-1">Kemasan/Packing (Rp)</label>
+                                <label className="block text-xs font-semibold text-foreground mb-1">Kemasan/Packing (Rp)</label>
                                 <input type="text" min="0" value={packingSatuan === 0 ? '' : packingSatuan.toLocaleString('id-ID')} onChange={(e) => {
                                     const rawValue = e.target.value.replace(/\./g, '');
                                     const numValue = parseInt(rawValue, 10);
                                     setPackingSatuan(isNaN(numValue) ? 0 : Math.max(0, numValue));
-                                }} className="w-full text-sm px-3 py-2 border bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#3B82F6]" />
+                                }} className="w-full text-sm px-3 py-2 border bg-muted rounded-lg focus:ring-2 focus:ring-[#3B82F6]" />
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-emerald-700 mb-1">Target Margin Bersih</label>
@@ -537,7 +537,7 @@ export default function KalkulatorPage() {
                 </div>
 
                 <div>
-                    <div className="bg-white border rounded-xl shadow-lg overflow-hidden sticky top-4">
+                    <div className="bg-card border rounded-xl shadow-lg overflow-hidden sticky top-4">
                         <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 text-white text-center">
                             <h2 className="text-lg font-bold">HASIL KALKULASI E-COMMERCE</h2>
                             <p className="text-xs text-gray-300">Pendapatan Bersih / Target Kantong: Rp {marginSatuan.toLocaleString('id-ID')}</p>
@@ -551,13 +551,13 @@ export default function KalkulatorPage() {
                                 <span className="text-xl font-bold text-emerald-700">Rp {result.hargaOffline.toLocaleString('id-ID')}</span>
                             </div>
 
-                            <div className="border border-gray-100 rounded-lg p-3 space-y-2">
-                                <p className="text-xs font-bold text-gray-800 border-b pb-1 mb-2">Simulasi Potongan Marketplace:</p>
-                                <div className="flex justify-between text-xs"><span className="text-gray-500">Admin Kategori ({activeAdminPercent}%)</span><span className="text-gray-800">Rp {result.admin.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
+                            <div className="border border-border rounded-lg p-3 space-y-2">
+                                <p className="text-xs font-bold text-foreground border-b pb-1 mb-2">Simulasi Potongan Marketplace:</p>
+                                <div className="flex justify-between text-xs"><span className="text-muted-foreground">Admin Kategori ({activeAdminPercent}%)</span><span className="text-foreground">Rp {result.admin.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
                                 {result.potonganLainnya.map(rule => (
                                     <div key={rule.id} className="flex justify-between text-[11px]">
-                                        <span className="text-gray-500">{rule.name} {rule.type === 'percent' ? `(${rule.value}%)` : `(Flat)`}</span>
-                                        <span className="text-gray-800">Rp {rule.calculatedNominal.toLocaleString('id-ID', {maximumFractionDigits:0})}</span>
+                                        <span className="text-muted-foreground">{rule.name} {rule.type === 'percent' ? `(${rule.value}%)` : `(Flat)`}</span>
+                                        <span className="text-foreground">Rp {rule.calculatedNominal.toLocaleString('id-ID', {maximumFractionDigits:0})}</span>
                                     </div>
                                 ))}
                                 <div className="flex justify-between text-xs font-bold pt-2 border-t mt-2"><span className="text-red-700">TOTAL POTONGAN ONLINE</span><span className="text-red-700">Rp {result.totalPotongan.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
@@ -595,15 +595,15 @@ export default function KalkulatorPage() {
                     {!screenshotMode && (
                         <div className="space-y-4">
                         
-                        <div className="bg-white border rounded-xl shadow-sm p-4">
-                            <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 flex justify-between items-center">
-                                <span>Daftar Komponen Rakitan <span className="text-[10px] font-normal text-gray-400 italic ml-2">(Auto-saved)</span></span>
+                        <div className="bg-card border rounded-xl shadow-sm p-4">
+                            <h3 className="font-bold text-foreground mb-4 border-b pb-2 flex justify-between items-center">
+                                <span>Daftar Komponen Rakitan <span className="text-[10px] font-normal text-muted-foreground italic ml-2">(Auto-saved)</span></span>
                                 <div className="flex gap-2">
                                     <button onClick={resetRakitan} className="text-xs bg-red-50 text-red-600 px-3 py-1 rounded hover:bg-red-100 font-bold border border-red-200">Kosongkan</button>
                                     <button onClick={() => setRakitanItems([...rakitanItems, { id: Date.now().toString(), kategori: 'TAMBAHAN', nama: '', qty: 1, modal: 0 }])} className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-bold">+ Komponen</button>
                                 </div>
                             </h3>
-                                                       <div className="hidden md:flex gap-2 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                                                       <div className="hidden md:flex gap-2 px-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
                                 <div className="w-5 text-center">No</div>
                                 <div className="w-[15%] md:w-[15%]">Kategori</div>
                                 <div className="w-[45%] md:w-[47%]">Nama Komponen</div>
@@ -616,10 +616,10 @@ export default function KalkulatorPage() {
                                     const availableProducts = products.filter(p => !item.kategori || item.kategori === 'CUSTOM' || p.category?.name?.toUpperCase() === item.kategori);
 
                                     return (
-                                        <div key={item.id} className="bg-gray-50 border border-gray-200 p-1.5 rounded-lg relative group" style={{ zIndex: rakitanItems.length - idx }}>
+                                        <div key={item.id} className="bg-muted border border-border p-1.5 rounded-lg relative group" style={{ zIndex: rakitanItems.length - idx }}>
                                             {/* Desktop Layout */}
                                             <div className="hidden md:flex items-center gap-2 w-full">
-                                                <div className="w-5 text-[10px] font-bold text-gray-400 text-center flex-shrink-0">
+                                                <div className="w-5 text-[10px] font-bold text-muted-foreground text-center flex-shrink-0">
                                                     {idx + 1}
                                                 </div>
                                                 <div className="w-[15%] md:w-[15%]">
@@ -631,7 +631,7 @@ export default function KalkulatorPage() {
                                                             if (e.target.value !== 'CUSTOM') n[idx].nama = '';
                                                             setRakitanItems(n); 
                                                         }} 
-                                                        className="w-full text-[11px] px-1.5 py-1.5 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400 font-semibold text-gray-700"
+                                                        className="w-full text-[11px] px-1.5 py-1.5 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400 font-semibold text-foreground"
                                                     >
                                                         <option value="">-- Kat --</option>
                                                         {dbCategories.map(c => <option key={c} value={c?.toUpperCase()}>{c?.toUpperCase()}</option>)}
@@ -648,7 +648,7 @@ export default function KalkulatorPage() {
                                                             type="text" 
                                                             value={item.nama} 
                                                             onChange={(e) => { const n = [...rakitanItems]; n[idx].nama = e.target.value; setRakitanItems(n); }} 
-                                                            className="w-full text-xs px-2 py-1 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400" 
+                                                            className="w-full text-xs px-2 py-1 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400" 
                                                             placeholder="Ketik Nama Komponen..." 
                                                         />
                                                     ) : (
@@ -673,7 +673,7 @@ export default function KalkulatorPage() {
                                                 </div>
 
                                                 <div className="w-[12%] md:w-[10%]">
-                                                    <input type="number" min="1" value={item.qty} onChange={(e) => { const n = [...rakitanItems]; n[idx].qty = Math.max(1, Number(e.target.value)); setRakitanItems(n); }} className="w-full text-xs px-1 py-1 border border-gray-200 rounded-md bg-white text-center outline-none focus:ring-1 ring-blue-400 font-bold" />
+                                                    <input type="number" min="1" value={item.qty} onChange={(e) => { const n = [...rakitanItems]; n[idx].qty = Math.max(1, Number(e.target.value)); setRakitanItems(n); }} className="w-full text-xs px-1 py-1 border border-border rounded-md bg-card text-center outline-none focus:ring-1 ring-blue-400 font-bold" />
                                                 </div>
 
                                                 <div className="flex-1">
@@ -681,7 +681,7 @@ export default function KalkulatorPage() {
                                                         const rawValue = e.target.value.replace(/\./g, '');
                                                         const numValue = parseInt(rawValue, 10);
                                                         const n = [...rakitanItems]; n[idx].modal = isNaN(numValue) ? 0 : Math.max(0, numValue); setRakitanItems(n); 
-                                                    }} className="w-full text-xs px-2 py-1 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400 text-right font-medium" />
+                                                    }} className="w-full text-xs px-2 py-1 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400 text-right font-medium" />
                                                 </div>
 
                                                 <button onClick={() => setRakitanItems(rakitanItems.filter(r => r.id !== item.id))} className="absolute -right-1 -top-1 opacity-0 group-hover:opacity-100 transition p-1 bg-red-500 text-white rounded-full shadow-sm hover:bg-red-600 z-10"><Trash2 size={12}/></button>
@@ -691,7 +691,7 @@ export default function KalkulatorPage() {
                                             <div className="flex md:hidden flex-col gap-2 w-full p-0.5">
                                                 {/* Row 1: Category & Name */}
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-5 text-[10px] font-bold text-gray-400 text-center flex-shrink-0">
+                                                    <div className="w-5 text-[10px] font-bold text-muted-foreground text-center flex-shrink-0">
                                                         {idx + 1}
                                                     </div>
                                                     <div className="w-[28%] flex-shrink-0">
@@ -703,7 +703,7 @@ export default function KalkulatorPage() {
                                                                 if (e.target.value !== 'CUSTOM') n[idx].nama = '';
                                                                 setRakitanItems(n); 
                                                             }} 
-                                                            className="w-full text-[11px] px-1.5 py-1.5 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400 font-semibold text-gray-700"
+                                                            className="w-full text-[11px] px-1.5 py-1.5 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400 font-semibold text-foreground"
                                                         >
                                                             <option value="">-- Kat --</option>
                                                             {dbCategories.map(c => <option key={c} value={c?.toUpperCase()}>{c?.toUpperCase()}</option>)}
@@ -719,7 +719,7 @@ export default function KalkulatorPage() {
                                                                 type="text" 
                                                                 value={item.nama} 
                                                                 onChange={(e) => { const n = [...rakitanItems]; n[idx].nama = e.target.value; setRakitanItems(n); }} 
-                                                                className="w-full text-xs px-2 py-1.5 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400" 
+                                                                className="w-full text-xs px-2 py-1.5 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400" 
                                                                 placeholder="Nama Komponen..." 
                                                             />
                                                         ) : (
@@ -746,19 +746,19 @@ export default function KalkulatorPage() {
                                                 {/* Row 2: Qty, Modal/Pcs, Delete button */}
                                                 <div className="flex items-center gap-2 pl-7">
                                                     <div className="w-[30%] flex items-center gap-1.5">
-                                                        <span className="text-[10px] font-bold text-gray-400">Qty:</span>
+                                                        <span className="text-[10px] font-bold text-muted-foreground">Qty:</span>
                                                         <input 
                                                             type="number" 
                                                             min="1" 
                                                             value={item.qty} 
                                                             onChange={(e) => { const n = [...rakitanItems]; n[idx].qty = Math.max(1, Number(e.target.value)); setRakitanItems(n); }} 
-                                                            className="w-full text-xs px-1 py-1 border border-gray-200 rounded-md bg-white text-center outline-none focus:ring-1 ring-blue-400 font-bold" 
+                                                            className="w-full text-xs px-1 py-1 border border-border rounded-md bg-card text-center outline-none focus:ring-1 ring-blue-400 font-bold" 
                                                         />
                                                     </div>
                                                     <div className="flex-1 flex items-center gap-1.5">
-                                                        <span className="text-[10px] font-bold text-gray-400">Modal:</span>
+                                                        <span className="text-[10px] font-bold text-muted-foreground">Modal:</span>
                                                         <div className="relative flex-1">
-                                                            <span className="absolute left-1.5 top-1 text-[9px] text-gray-400">Rp</span>
+                                                            <span className="absolute left-1.5 top-1 text-[9px] text-muted-foreground">Rp</span>
                                                             <input 
                                                                 type="text" 
                                                                 min="0" 
@@ -768,7 +768,7 @@ export default function KalkulatorPage() {
                                                                     const numValue = parseInt(rawValue, 10);
                                                                     const n = [...rakitanItems]; n[idx].modal = isNaN(numValue) ? 0 : Math.max(0, numValue); setRakitanItems(n); 
                                                                 }} 
-                                                                className="w-full text-xs pl-5 pr-1 py-1 border border-gray-200 rounded-md bg-white outline-none focus:ring-1 ring-blue-400 text-right font-medium" 
+                                                                className="w-full text-xs pl-5 pr-1 py-1 border border-border rounded-md bg-card outline-none focus:ring-1 ring-blue-400 text-right font-medium" 
                                                             />
                                                         </div>
                                                     </div>
@@ -787,12 +787,12 @@ export default function KalkulatorPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label className="block text-xs font-semibold text-gray-700 mb-1">Packing Kayu (Rp)</label>
+                                    <label className="block text-xs font-semibold text-foreground mb-1">Packing Kayu (Rp)</label>
                                     <input type="text" min="0" value={packingRakitan === 0 ? '' : packingRakitan.toLocaleString('id-ID')} onChange={(e) => {
                                         const rawValue = e.target.value.replace(/\./g, '');
                                         const numValue = parseInt(rawValue, 10);
                                         setPackingRakitan(isNaN(numValue) ? 0 : Math.max(0, numValue));
-                                    }} className="w-full text-sm px-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#3B82F6]" />
+                                    }} className="w-full text-sm px-3 py-2 border border-border bg-muted rounded-lg focus:ring-2 focus:ring-[#3B82F6]" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-emerald-700 mb-1">Target Margin Bersih</label>
@@ -821,11 +821,11 @@ export default function KalkulatorPage() {
                             {/* Rincian Admin/Potongan */}
                             <div className="border border-red-100 bg-red-50/30 rounded-lg p-3 space-y-1 mb-4">
                                 <p className="text-[11px] font-bold text-red-800 border-b border-red-100 pb-1 mb-1">Rincian Potongan Market:</p>
-                                <div className="flex justify-between text-[11px]"><span className="text-gray-500">Admin Kategori ({activeAdminPercent}%)</span><span className="text-gray-800 font-medium">Rp {result.admin.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
+                                <div className="flex justify-between text-[11px]"><span className="text-muted-foreground">Admin Kategori ({activeAdminPercent}%)</span><span className="text-foreground font-medium">Rp {result.admin.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
                                 {result.potonganLainnya.map(rule => (
                                     <div key={rule.id} className="flex justify-between text-[11px]">
-                                        <span className="text-gray-500">{rule.name} {rule.type === 'percent' ? `(${rule.value}%)` : `(Flat)`}</span>
-                                        <span className="text-gray-800 font-medium">Rp {rule.calculatedNominal.toLocaleString('id-ID', {maximumFractionDigits:0})}</span>
+                                        <span className="text-muted-foreground">{rule.name} {rule.type === 'percent' ? `(${rule.value}%)` : `(Flat)`}</span>
+                                        <span className="text-foreground font-medium">Rp {rule.calculatedNominal.toLocaleString('id-ID', {maximumFractionDigits:0})}</span>
                                     </div>
                                 ))}
                                 <div className="flex justify-between text-[11px] font-bold pt-1.5 border-t border-red-100 mt-1.5"><span className="text-red-700">TOTAL POTONGAN ONLINE</span><span className="text-red-700">Rp {result.totalPotongan.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
@@ -840,37 +840,37 @@ export default function KalkulatorPage() {
 
                 {/* Mode Screenshot Customer (Layar Kanan / Penuh) */}
                 <div className={`transition-all duration-300 ${screenshotMode ? 'max-w-2xl mx-auto' : ''}`}>
-                    <div className={`bg-white overflow-hidden ${screenshotMode ? 'rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-gray-200' : 'border rounded-xl shadow-lg'}`}>
+                    <div className={`bg-card overflow-hidden ${screenshotMode ? 'rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-border' : 'border rounded-xl shadow-lg'}`}>
                         {screenshotMode && (
-                            <div className="bg-gray-100 print:hidden p-3 border-b flex justify-between items-center shadow-inner">
-                                <div className="text-xs font-bold text-gray-500 flex items-center gap-2"><Camera size={14}/> LAYAR SCREENSHOT AKTIF</div>
+                            <div className="bg-accent print:hidden p-3 border-b flex justify-between items-center shadow-inner">
+                                <div className="text-xs font-bold text-muted-foreground flex items-center gap-2"><Camera size={14}/> LAYAR SCREENSHOT AKTIF</div>
                                 <button onClick={() => setScreenshotMode(false)} className="bg-red-500 text-white px-4 py-1.5 rounded-lg shadow-md hover:bg-red-600 font-bold text-xs uppercase tracking-wide">Tutup Screenshot</button>
                             </div>
                         )}
                         
-                        <div className="bg-white px-5 pt-4 pb-5">
+                        <div className="bg-card px-5 pt-4 pb-5">
                             <div className="text-center mb-3">
-                                <h2 className="text-lg md:text-xl font-black text-gray-900 uppercase tracking-widest border-b-2 border-black pb-1.5 inline-block">KALKULATOR RAKITAN BARANG</h2>
-                                <p className="text-[10px] font-medium text-gray-400 mt-0.5">Spesifikasi Detail PC Anda</p>
+                                <h2 className="text-lg md:text-xl font-black text-foreground uppercase tracking-widest border-b-2 border-black pb-1.5 inline-block">KALKULATOR RAKITAN BARANG</h2>
+                                <p className="text-[10px] font-medium text-muted-foreground mt-0.5">Spesifikasi Detail PC Anda</p>
                             </div>
                             
                             {/* Compact Table for Customer */}
                             <table className="w-full text-left border-collapse font-sans">
                                 <thead>
-                                    <tr className="border-y-2 border-gray-800 bg-gray-50">
-                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-gray-700 w-7 text-center">No</th>
-                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-gray-700 w-[20%]">Kategori</th>
-                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-gray-700">Nama Barang</th>
-                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-gray-700 text-center w-10">Qty</th>
+                                    <tr className="border-y-2 border-gray-800 bg-muted">
+                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-foreground w-7 text-center">No</th>
+                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-foreground w-[20%]">Kategori</th>
+                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-foreground">Nama Barang</th>
+                                        <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-foreground text-center w-10">Qty</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
                                     {rakitanItems.map((item, idx) => (
                                         <tr key={item.id} className={idx % 2 === 1 ? 'bg-gray-50/60' : ''}>
                                             <td className="py-[5px] px-1.5 text-[10px] font-semibold text-gray-300 text-center">{idx + 1}</td>
-                                            <td className="py-[5px] px-1.5 text-[11px] font-bold text-gray-500 uppercase">{item.kategori}</td>
-                                            <td className="py-[5px] px-1.5 text-[11px] font-medium text-gray-900 leading-tight">{item.nama}</td>
-                                            <td className="py-[5px] px-1.5 text-[11px] font-bold text-gray-800 text-center">{item.qty}x</td>
+                                            <td className="py-[5px] px-1.5 text-[11px] font-bold text-muted-foreground uppercase">{item.kategori}</td>
+                                            <td className="py-[5px] px-1.5 text-[11px] font-medium text-foreground leading-tight">{item.nama}</td>
+                                            <td className="py-[5px] px-1.5 text-[11px] font-bold text-foreground text-center">{item.qty}x</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -878,7 +878,7 @@ export default function KalkulatorPage() {
 
                             {/* Harga Final Banner */}
                             <div className="mt-4 space-y-2">
-                                <div className="border-t-2 border-dashed border-gray-200"></div>
+                                <div className="border-t-2 border-dashed border-border"></div>
 
                                 <div className="flex items-center justify-between bg-emerald-50 border-2 border-emerald-500 rounded-lg px-3 py-2.5 overflow-hidden relative">
                                     <div>
@@ -906,11 +906,11 @@ export default function KalkulatorPage() {
 
     const renderSettingToko = () => {
         return (
-            <div className="bg-white border rounded-xl shadow-sm p-4 mx-auto animate-in fade-in slide-in-from-bottom-2">
+            <div className="bg-card border rounded-xl shadow-sm p-4 mx-auto animate-in fade-in slide-in-from-bottom-2">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b">
                     <div>
-                        <h2 className="text-base font-bold text-gray-800">Master Data Toko & Biaya</h2>
-                        <p className="text-[11px] text-gray-500">Aturan Promo/Ongkir dinamis per E-commerce.</p>
+                        <h2 className="text-base font-bold text-foreground">Master Data Toko & Biaya</h2>
+                        <p className="text-[11px] text-muted-foreground">Aturan Promo/Ongkir dinamis per E-commerce.</p>
                     </div>
                     <button onClick={saveSettings} disabled={saving} className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-xs transition shadow-md active:scale-95">
                         <Save size={14}/> {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
@@ -919,7 +919,7 @@ export default function KalkulatorPage() {
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                     {storeConfigs.map((store, sIndex) => (
-                        <div key={store.id} className="border border-gray-200 rounded-xl p-3 bg-gray-50/30 overflow-hidden relative">
+                        <div key={store.id} className="border border-border rounded-xl p-3 bg-gray-50/30 overflow-hidden relative">
                             <div className="flex justify-between items-center mb-3 relative z-10">
                                 <div className="flex items-center gap-2">
                                     <div className="p-1.5 bg-blue-100 text-blue-600 rounded-md"><StoreIcon /></div>
@@ -931,7 +931,7 @@ export default function KalkulatorPage() {
                                             newly[sIndex].name = e.target.value;
                                             setStoreConfigs(newly);
                                         }} 
-                                        className="font-bold text-sm bg-transparent border-b border-dashed border-gray-300 hover:border-blue-500 focus:border-blue-500 focus:outline-none px-1 py-0.5 w-full transition-colors"
+                                        className="font-bold text-sm bg-transparent border-b border-dashed border-border hover:border-blue-500 focus:border-blue-500 focus:outline-none px-1 py-0.5 w-full transition-colors"
                                         placeholder="Nama Toko"
                                     />
                                 </div>
@@ -944,15 +944,15 @@ export default function KalkulatorPage() {
                                             toast.success('Toko berhasil dihapus');
                                         }
                                     });
-                                }} className="text-red-500 hover:bg-red-100 p-1 rounded text-[10px] font-bold flex items-center gap-0.5 border border-red-200 bg-white shrink-0">
+                                }} className="text-red-500 hover:bg-red-100 p-1 rounded text-[10px] font-bold flex items-center gap-0.5 border border-red-200 bg-card shrink-0">
                                     <Trash2 size={11}/> Hapus
                                 </button>
                             </div>
 
                             <div className="space-y-3 relative z-10">
                                 {/* Kategori % Setting */}
-                                <div className="bg-white border border-gray-200 rounded-lg p-2.5">
-                                    <h4 className="text-[11px] font-bold text-gray-700 mb-2 flex items-center gap-1"><Percent size={12} className="text-blue-500"/> Persentase Kategori</h4>
+                                <div className="bg-card border border-border rounded-lg p-2.5">
+                                    <h4 className="text-[11px] font-bold text-foreground mb-2 flex items-center gap-1"><Percent size={12} className="text-blue-500"/> Persentase Kategori</h4>
                                     <div className="space-y-1.5">
                                         {store.categories.map((cat, cIndex) => (
                                             <div key={cIndex} className="flex items-center gap-1.5 group">
@@ -964,7 +964,7 @@ export default function KalkulatorPage() {
                                                         newly[sIndex].categories[cIndex].name = e.target.value;
                                                         setStoreConfigs(newly);
                                                     }}
-                                                    className="flex-1 text-[11px] border border-gray-200 px-2 py-1 rounded outline-none focus:ring-1 focus:ring-blue-400" 
+                                                    className="flex-1 text-[11px] border border-border px-2 py-1 rounded outline-none focus:ring-1 focus:ring-blue-400" 
                                                     placeholder="Kategori"
                                                 />
                                                 <div className="relative w-24">
@@ -979,9 +979,9 @@ export default function KalkulatorPage() {
                                                             newly[sIndex].categories[cIndex].adminPercent = val;
                                                             setStoreConfigs(newly);
                                                         }}
-                                                        className="w-full text-[11px] border border-gray-200 rounded px-2 py-1 pr-6 outline-none focus:ring-1 focus:ring-blue-400 font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                                                        className="w-full text-[11px] border border-border rounded px-2 py-1 pr-6 outline-none focus:ring-1 focus:ring-blue-400 font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                                                     />
-                                                    <span className="absolute right-2 top-1.5 text-[9px] text-gray-400">%</span>
+                                                    <span className="absolute right-2 top-1.5 text-[9px] text-muted-foreground">%</span>
                                                 </div>
                                                 <button onClick={() => {
                                                     const newly = [...storeConfigs];
@@ -1001,19 +1001,19 @@ export default function KalkulatorPage() {
                                 </div>
 
                                 {/* Dynamic Fee Rules */}
-                                <div className="bg-white border border-gray-200 rounded-lg p-2.5">
-                                    <h4 className="text-[11px] font-bold text-gray-700 mb-2 flex items-center gap-1"><Receipt size={12} className="text-orange-500"/> Aturan Ekstra</h4>
+                                <div className="bg-card border border-border rounded-lg p-2.5">
+                                    <h4 className="text-[11px] font-bold text-foreground mb-2 flex items-center gap-1"><Receipt size={12} className="text-orange-500"/> Aturan Ekstra</h4>
                                     <div className="space-y-2">
                                         {store.feeRules.map((r, rIndex) => (
                                             <div key={rIndex} className="bg-orange-50/50 p-2 rounded border border-orange-100/50 relative group">
                                                 <div className="flex gap-1.5 mb-1.5">
                                                     <input type="text" value={r.name} onChange={(e) => {
                                                         const newly = [...storeConfigs]; newly[sIndex].feeRules[rIndex].name = e.target.value; setStoreConfigs(newly);
-                                                    }} className="flex-1 text-[11px] font-bold bg-transparent border-b border-gray-300 focus:border-orange-500 outline-none pb-0" placeholder="Nama Biaya" />
+                                                    }} className="flex-1 text-[11px] font-bold bg-transparent border-b border-border focus:border-orange-500 outline-none pb-0" placeholder="Nama Biaya" />
                                                     
                                                     <select value={r.type} onChange={(e) => {
                                                         const newly = [...storeConfigs]; newly[sIndex].feeRules[rIndex].type = e.target.value as 'percent'|'flat'; setStoreConfigs(newly);
-                                                    }} className="text-[9px] bg-white border rounded px-1 text-gray-600 outline-none">
+                                                    }} className="text-[9px] bg-card border rounded px-1 text-muted-foreground outline-none">
                                                         <option value="percent">%</option>
                                                         <option value="flat">Rp</option>
                                                     </select>
@@ -1021,17 +1021,17 @@ export default function KalkulatorPage() {
 
                                                 <div className="flex gap-1.5">
                                                     <div className="relative flex-1">
-                                                        {r.type === 'flat' && <span className="absolute left-1.5 top-1 text-[9px] text-gray-400">Rp</span>}
+                                                        {r.type === 'flat' && <span className="absolute left-1.5 top-1 text-[9px] text-muted-foreground">Rp</span>}
                                                         <input type="number" min="0" step={r.type==='percent'?'0.1':'100'} value={r.value} onChange={(e) => {
                                                             const val = Math.max(0, Number(e.target.value));
                                                             const newly = [...storeConfigs]; newly[sIndex].feeRules[rIndex].value = val; setStoreConfigs(newly);
                                                         }} className={`w-full text-[11px] py-1 border rounded outline-none focus:ring-1 ring-orange-400 ${r.type === 'flat' ? 'pl-5 pr-1' : 'px-2'}`}/>
-                                                        {r.type === 'percent' && <span className="absolute right-1.5 top-1 text-[9px] text-gray-400">%</span>}
+                                                        {r.type === 'percent' && <span className="absolute right-1.5 top-1 text-[9px] text-muted-foreground">%</span>}
                                                     </div>
                                                     
                                                     {r.type === 'percent' && (
                                                         <div className="flex-1 flex items-center gap-1">
-                                                            <span className="text-[9px] font-bold text-gray-400 whitespace-nowrap">Max:</span>
+                                                            <span className="text-[9px] font-bold text-muted-foreground whitespace-nowrap">Max:</span>
                                                             <input type="number" min="0" value={r.capRp} onChange={(e) => {
                                                                 const val = Math.max(0, Number(e.target.value));
                                                                 const newly = [...storeConfigs]; newly[sIndex].feeRules[rIndex].capRp = val; setStoreConfigs(newly);
@@ -1076,14 +1076,14 @@ export default function KalkulatorPage() {
 
             {confirmAction && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm animate-in fade-in transition-all">
-                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm animate-in zoom-in-95 duration-200">
+                    <div className="bg-card rounded-2xl shadow-2xl p-6 w-full max-w-sm animate-in zoom-in-95 duration-200">
                         <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-5 shadow-inner">
                            <Trash2 className="text-red-600" size={28} />
                         </div>
-                        <h3 className="text-xl font-black text-center text-gray-900 mb-2">{confirmAction.title}</h3>
-                        <p className="text-sm text-center text-gray-500 mb-8 leading-relaxed px-2">{confirmAction.desc}</p>
+                        <h3 className="text-xl font-black text-center text-foreground mb-2">{confirmAction.title}</h3>
+                        <p className="text-sm text-center text-muted-foreground mb-8 leading-relaxed px-2">{confirmAction.desc}</p>
                         <div className="flex gap-3">
-                            <button onClick={() => setConfirmAction(null)} className="flex-1 py-3 rounded-xl font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition active:scale-95">Batal</button>
+                            <button onClick={() => setConfirmAction(null)} className="flex-1 py-3 rounded-xl font-bold text-muted-foreground bg-accent hover:bg-accent transition active:scale-95">Batal</button>
                             <button onClick={() => {
                                 confirmAction.onConfirm();
                                 setConfirmAction(null);

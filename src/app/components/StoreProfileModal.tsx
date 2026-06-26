@@ -84,7 +84,7 @@ export default function StoreProfileModal({ isOpen, onClose }: StoreProfileModal
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="bg-card rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
                 {/* Header */}
                 <div className="bg-[#3B82F6] px-6 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -104,24 +104,24 @@ export default function StoreProfileModal({ isOpen, onClose }: StoreProfileModal
                 <div className="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
                     {loading ? (
                         <div className="space-y-4 animate-pulse">
-                            <div className="h-40 bg-gray-100 rounded-xl" />
+                            <div className="h-40 bg-accent rounded-xl" />
                             <div className="space-y-2">
-                                <div className="h-10 bg-gray-100 rounded-lg" />
-                                <div className="h-10 bg-gray-100 rounded-lg" />
+                                <div className="h-10 bg-accent rounded-lg" />
+                                <div className="h-10 bg-accent rounded-lg" />
                             </div>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="space-y-2">
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Logo Toko</label>
+                                <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider">Logo Toko</label>
                                 <div className="relative group">
-                                    <div className="w-full aspect-square bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center overflow-hidden">
+                                    <div className="w-full aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
                                         {logoPreview ? (
                                             <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-3" />
                                         ) : (
                                             <div className="text-center p-3">
                                                 <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                                <p className="text-[10px] text-gray-400">Upload Logo</p>
+                                                <p className="text-[10px] text-muted-foreground">Upload Logo</p>
                                             </div>
                                         )}
                                         <input
@@ -136,68 +136,68 @@ export default function StoreProfileModal({ isOpen, onClose }: StoreProfileModal
 
                             <div className="md:col-span-2 space-y-4">
                                 <div className="space-y-1">
-                                    <label className="block text-[10px] font-bold text-gray-500 uppercase">Nama Toko</label>
+                                    <label className="block text-[10px] font-bold text-muted-foreground uppercase">Nama Toko</label>
                                     <input
                                         type="text"
                                         value={storeName}
                                         onChange={(e) => setStoreName(e.target.value)}
-                                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
+                                        className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                                     />
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="block text-[10px] font-bold text-gray-500 uppercase">Telepon / WA</label>
+                                        <label className="block text-[10px] font-bold text-muted-foreground uppercase">Telepon / WA</label>
                                         <input
                                             type="text"
                                             value={storePhone}
                                             onChange={(e) => setStorePhone(e.target.value)}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
+                                            className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                                         />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="block text-[10px] font-bold text-gray-500 uppercase">Mulai No. Faktur</label>
+                                        <label className="block text-[10px] font-bold text-muted-foreground uppercase">Mulai No. Faktur</label>
                                         <input
                                             type="number"
                                             value={invoiceStartNumber}
                                             onChange={(e) => setInvoiceStartNumber(e.target.value)}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
+                                            className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="block text-[10px] font-bold text-gray-500 uppercase">Rekening Bank</label>
+                                        <label className="block text-[10px] font-bold text-muted-foreground uppercase">Rekening Bank</label>
                                         <input
                                             type="text"
                                             value={storeBankAccounts}
                                             onChange={(e) => setStoreBankAccounts(e.target.value)}
                                             placeholder="Cth: BCA 123456"
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
+                                            className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                                         />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="block text-[10px] font-bold text-gray-500 uppercase">Atas Nama (a.n)</label>
+                                        <label className="block text-[10px] font-bold text-muted-foreground uppercase">Atas Nama (a.n)</label>
                                         <input
                                             type="text"
                                             value={storeBankAccountName}
                                             onChange={(e) => setStoreBankAccountName(e.target.value)}
                                             placeholder="Cth: Syahrul Sidik"
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
+                                            className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="block text-[10px] font-bold text-gray-500 uppercase flex items-center gap-1">
+                                    <label className="block text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
                                         <MapPin size={10} /> Alamat Lengkap
                                     </label>
                                     <textarea
                                         value={storeAddress}
                                         onChange={(e) => setStoreAddress(e.target.value)}
                                         rows={2}
-                                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-sm"
+                                        className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-sm"
                                     />
                                 </div>
 
@@ -207,10 +207,10 @@ export default function StoreProfileModal({ isOpen, onClose }: StoreProfileModal
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+                <div className="p-4 bg-muted border-t border-border flex justify-end gap-3">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 text-sm font-bold text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="px-4 py-2 text-sm font-bold text-muted-foreground hover:bg-accent rounded-lg transition-colors"
                     >
                         Batal
                     </button>

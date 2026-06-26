@@ -32,16 +32,16 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-[400px] flex items-center justify-center p-6 bg-gray-50 rounded-xl border border-red-100 m-4">
+        <div className="min-h-[400px] flex items-center justify-center p-6 bg-muted rounded-xl border border-red-100 m-4">
           <div className="text-center max-w-md">
             <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-8 h-8 text-red-600" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Terjadi Kesalahan Sistem</h2>
-            <p className="text-gray-500 mb-6 text-sm">
+            <h2 className="text-xl font-bold text-foreground mb-2">Terjadi Kesalahan Sistem</h2>
+            <p className="text-muted-foreground mb-6 text-sm">
               Maaf, terjadi kendala saat memuat bagian ini. Silakan muat ulang halaman untuk mencoba kembali.
             </p>
-            <div className="bg-white p-3 rounded-lg border border-gray-200 text-left mb-6 overflow-auto max-h-32 text-xs text-red-500 font-mono">
+            <div className="bg-card p-3 rounded-lg border border-border text-left mb-6 overflow-auto max-h-32 text-xs text-red-500 font-mono">
               {this.state.error?.message || 'Unknown Error'}
             </div>
             <button

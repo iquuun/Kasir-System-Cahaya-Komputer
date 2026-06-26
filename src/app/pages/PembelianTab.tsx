@@ -602,13 +602,13 @@ export default function PembelianTab() {
   if (loading) return (
     <div className="space-y-6 animate-pulse">
       <div className="flex items-center justify-between">
-        <div><div className="h-5 bg-gray-200 rounded w-40 mb-2" /><div className="h-3 bg-gray-200 rounded w-56" /></div>
-        <div className="h-9 bg-gray-200 rounded-lg w-36" />
+        <div><div className="h-5 bg-accent rounded w-40 mb-2" /><div className="h-3 bg-accent rounded w-56" /></div>
+        <div className="h-9 bg-accent rounded-lg w-36" />
       </div>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="flex gap-3"><div className="flex-1 h-9 bg-gray-200 rounded-lg" /><div className="w-48 h-9 bg-gray-200 rounded-lg" /></div></div>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="h-10 bg-gray-100 border-b border-gray-200" />
-        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-gray-200 rounded w-1/6" /><div className="h-4 bg-gray-200 rounded w-1/4" /><div className="h-4 bg-gray-200 rounded w-1/6" /><div className="h-4 bg-gray-200 rounded w-1/6 ml-auto" /></div>))}</div>
+      <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="flex gap-3"><div className="flex-1 h-9 bg-accent rounded-lg" /><div className="w-48 h-9 bg-accent rounded-lg" /></div></div>
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+        <div className="h-10 bg-accent border-b border-border" />
+        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
       </div>
     </div>
   );
@@ -660,10 +660,10 @@ export default function PembelianTab() {
       </div>
 
       {/* Filter */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div className="flex flex-col sm:flex-row gap-3 w-full flex-1">
-          <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-2 w-full sm:max-w-md focus-within:ring-1 focus-within:ring-[#3B82F6] focus-within:border-[#3B82F6] transition-all">
-            <Search size={14} className="text-gray-400 shrink-0" />
+          <div className="flex items-center bg-muted border border-border rounded-lg px-2 w-full sm:max-w-md focus-within:ring-1 focus-within:ring-[#3B82F6] focus-within:border-[#3B82F6] transition-all">
+            <Search size={14} className="text-muted-foreground shrink-0" />
             <input 
               type="text" 
               placeholder="Cari invoice atau distributor..." 
@@ -676,20 +676,20 @@ export default function PembelianTab() {
           <div className="relative w-full sm:w-auto z-20">
             <button 
               onClick={() => setShowDatePicker(!showDatePicker)}
-              className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] font-bold text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 w-full sm:w-[265px] justify-between whitespace-nowrap"
+              className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg text-[11px] font-bold text-foreground hover:bg-muted focus:ring-2 focus:ring-blue-500 w-full sm:w-[265px] justify-between whitespace-nowrap"
             >
               <div className="flex items-center gap-2">
-                <span className="text-gray-400">📅</span>
+                <span className="text-muted-foreground">📅</span>
                 {dateRange.preset === 'all' ? 'Semua Waktu' : 
                  `${dateRange.start} s/d ${dateRange.end}`}
               </div>
-              <ChevronRight size={14} className={`text-gray-400 transition-transform ${showDatePicker ? 'rotate-90' : ''}`} />
+              <ChevronRight size={14} className={`text-muted-foreground transition-transform ${showDatePicker ? 'rotate-90' : ''}`} />
             </button>
 
             {showDatePicker && (
-              <div className="absolute top-11 right-0 w-[320px] md:w-[450px] bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in duration-200">
+              <div className="absolute top-11 right-0 w-[320px] md:w-[450px] bg-card rounded-xl shadow-2xl border border-border overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in duration-200">
                 {/* Presets Sidebar */}
-                <div className="w-full md:w-40 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col p-2 gap-1 relative z-10">
+                <div className="w-full md:w-40 bg-muted border-b md:border-b-0 md:border-r border-border flex flex-col p-2 gap-1 relative z-10">
                   {[
                     { id: 'today', label: 'Hari Ini' },
                     { id: 'yesterday', label: 'Kemarin' },
@@ -702,7 +702,7 @@ export default function PembelianTab() {
                     <button
                       key={p.id}
                       onClick={() => applyPreset(p.id)}
-                      className={`text-left px-3 py-2 rounded-lg text-xs font-bold transition-all ${dateRange.preset === p.id ? 'bg-[#3B82F6] text-white shadow-md' : 'text-gray-600 hover:bg-white'}`}
+                      className={`text-left px-3 py-2 rounded-lg text-xs font-bold transition-all ${dateRange.preset === p.id ? 'bg-[#3B82F6] text-white shadow-md' : 'text-muted-foreground hover:bg-white'}`}
                     >
                       {p.label}
                     </button>
@@ -710,25 +710,25 @@ export default function PembelianTab() {
                 </div>
                 
                 {/* Custom Date Picker Inputs */}
-                <div className="p-4 flex-1 bg-white relative z-10">
-                  <h4 className="text-[10px] font-black uppercase text-gray-400 mb-3 tracking-wider">Rentang Waktu</h4>
+                <div className="p-4 flex-1 bg-card relative z-10">
+                  <h4 className="text-[10px] font-black uppercase text-muted-foreground mb-3 tracking-wider">Rentang Waktu</h4>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-[11px] font-bold text-gray-700 mb-1">Mulai Tanggal</label>
+                      <label className="block text-[11px] font-bold text-foreground mb-1">Mulai Tanggal</label>
                       <input 
                         type="date"
                         value={dateRange.start}
                         onChange={(e) => setDateRange({ ...dateRange, start: e.target.value, preset: 'custom' })}
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                        className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-[#3B82F6]"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-bold text-gray-700 mb-1">Sampai Tanggal</label>
+                      <label className="block text-[11px] font-bold text-foreground mb-1">Sampai Tanggal</label>
                       <input 
                         type="date"
                         value={dateRange.end}
                         onChange={(e) => setDateRange({ ...dateRange, end: e.target.value, preset: 'custom' })}
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                        className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-[#3B82F6]"
                       />
                     </div>
                     <button 
@@ -760,25 +760,25 @@ export default function PembelianTab() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Invoice</th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Distributor</th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Tanggal</th>
-                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Total</th>
-                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Sisa Hutang</th>
-                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Jatuh Tempo</th>
-                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Status</th>
-                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Aksi</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Invoice</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Distributor</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Tanggal</th>
+                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Total</th>
+                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Sisa Hutang</th>
+                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Jatuh Tempo</th>
+                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Status</th>
+                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-500 text-sm">
+                  <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground text-sm">
                     Pencarian pembelian tidak ditemukan
                   </td>
                 </tr>
@@ -788,15 +788,15 @@ export default function PembelianTab() {
                 const terbayar = Number(purchase.terbayar);
                 const sisa = total - terbayar;
                 return (
-                  <tr key={purchase.id} className="hover:bg-blue-50/50 transition-colors border-b border-gray-50 last:border-0">
+                  <tr key={purchase.id} className="hover:bg-blue-50/50 transition-colors border-b border-border last:border-0">
                     <td className="px-3 py-2 text-xs">
-                      <p className="font-bold text-gray-800">{purchase.invoice || '-'}</p>
+                      <p className="font-bold text-foreground">{purchase.invoice || '-'}</p>
                     </td>
-                    <td className="px-3 py-2 text-xs text-gray-700">{purchase.distributor?.name || '-'}</td>
-                    <td className="px-3 py-2 text-xs text-gray-700">
+                    <td className="px-3 py-2 text-xs text-foreground">{purchase.distributor?.name || '-'}</td>
+                    <td className="px-3 py-2 text-xs text-foreground">
                       {new Date(purchase.tanggal).toLocaleDateString('id-ID')}
                     </td>
-                    <td className="px-3 py-2 text-xs text-right font-medium text-gray-800">
+                    <td className="px-3 py-2 text-xs text-right font-medium text-foreground">
                       Rp {total.toLocaleString('id-ID')}
                     </td>
                     <td className="px-3 py-2 text-right text-xs">
@@ -805,10 +805,10 @@ export default function PembelianTab() {
                           Rp {sisa.toLocaleString('id-ID')}
                         </span>
                       ) : (
-                        <span className="text-gray-400">-</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                     </td>
-                    <td className="px-3 py-2 text-center text-xs text-gray-500">
+                    <td className="px-3 py-2 text-center text-xs text-muted-foreground">
                       {(sisa > 0 && purchase.jatuh_tempo) ? new Date(purchase.jatuh_tempo).toLocaleDateString('id-ID') : '-'}
                     </td>
                     <td className="px-3 py-2 text-center text-xs">
@@ -854,51 +854,51 @@ export default function PembelianTab() {
         </div>
 
         {/* Mobile Card View */}
-        <div className="block md:hidden divide-y divide-gray-100 bg-white">
+        <div className="block md:hidden divide-y divide-gray-100 bg-card">
           {currentItems.length === 0 ? (
-            <div className="px-4 py-8 text-center text-gray-400 text-xs">Pencarian data tidak ditemukan.</div>
+            <div className="px-4 py-8 text-center text-muted-foreground text-xs">Pencarian data tidak ditemukan.</div>
           ) : currentItems.map((purchase) => {
             const total = Number(purchase.total_pembelian);
             const terbayar = Number(purchase.terbayar);
             const sisa = total - terbayar;
             return (
-              <div key={purchase.id} className="p-2.5 space-y-1.5 hover:bg-gray-50 transition-colors">
+              <div key={purchase.id} className="p-2.5 space-y-1.5 hover:bg-muted transition-colors">
                 {/* Row 1: Invoice & Date */}
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-800 text-xs">{purchase.invoice || '-'}</span>
-                  <span className="text-[10px] text-gray-500 font-medium">{new Date(purchase.tanggal).toLocaleDateString('id-ID')}</span>
+                  <span className="font-bold text-foreground text-xs">{purchase.invoice || '-'}</span>
+                  <span className="text-[10px] text-muted-foreground font-medium">{new Date(purchase.tanggal).toLocaleDateString('id-ID')}</span>
                 </div>
 
                 {/* Row 2: Distributor */}
-                <div className="text-[11px] text-gray-700">
-                  <span className="text-gray-400">Distributor: </span>
-                  <span className="font-semibold text-gray-900">{purchase.distributor?.name || '-'}</span>
+                <div className="text-[11px] text-foreground">
+                  <span className="text-muted-foreground">Distributor: </span>
+                  <span className="font-semibold text-foreground">{purchase.distributor?.name || '-'}</span>
                 </div>
 
                 {/* Row 3: Financial Details */}
-                <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 bg-gray-50 p-1.5 rounded text-[10px] text-gray-700">
+                <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 bg-muted p-1.5 rounded text-[10px] text-foreground">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Total:</span>
+                    <span className="text-muted-foreground">Total:</span>
                     <span className="font-bold text-gray-950">Rp {total.toLocaleString('id-ID')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Sisa Hutang:</span>
+                    <span className="text-muted-foreground">Sisa Hutang:</span>
                     {sisa > 0 ? (
                       <span className="text-red-600 font-bold">Rp {sisa.toLocaleString('id-ID')}</span>
                     ) : (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-muted-foreground">-</span>
                     )}
                   </div>
                   {sisa > 0 && purchase.jatuh_tempo && (
                     <div className="flex justify-between col-span-2 border-t border-gray-200/50 pt-0.5 mt-0.5">
-                      <span className="text-gray-400">Jatuh Tempo:</span>
+                      <span className="text-muted-foreground">Jatuh Tempo:</span>
                       <span className="font-medium text-amber-600">{new Date(purchase.jatuh_tempo).toLocaleDateString('id-ID')}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Row 4: Status and Action Buttons */}
-                <div className="flex justify-between items-center pt-1.5 border-t border-gray-100">
+                <div className="flex justify-between items-center pt-1.5 border-t border-border">
                   <span
                     className={`inline-flex px-2 py-0.5 rounded text-[9px] font-bold ${purchase.status_pembayaran === 'lunas'
                       ? 'bg-green-100 text-green-700'
@@ -926,31 +926,31 @@ export default function PembelianTab() {
         </div>
 
         {/* Pagination Footer */}
-        <div className="border-t border-gray-100 px-3 py-2 flex items-center justify-between bg-gray-50/50">
-          <p className="text-[10px] text-gray-500 font-medium">
+        <div className="border-t border-border px-3 py-2 flex items-center justify-between bg-muted/50">
+          <p className="text-[10px] text-muted-foreground font-medium">
             Menampilkan {currentItems.length} dari {filteredPurchases.length} riwayat pembelian
           </p>
           <div className="flex items-center gap-1">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage <= 1}
-              className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              <ChevronLeft size={14} className="text-gray-600" />
+              <ChevronLeft size={14} className="text-muted-foreground" />
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1)
               .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
               .map((p, idx, arr) => (
                 <span key={p} className="flex items-center">
                   {idx > 0 && arr[idx - 1] !== p - 1 && (
-                    <span className="text-gray-400 text-[10px] px-0.5">...</span>
+                    <span className="text-muted-foreground text-[10px] px-0.5">...</span>
                   )}
                   <button
                     onClick={() => setCurrentPage(p)}
                     className={`min-w-[24px] h-6 text-[11px] font-bold rounded transition-colors ${
                       currentPage === p
                         ? 'bg-[#3B82F6] text-white shadow-sm'
-                        : 'text-gray-600 hover:bg-gray-200'
+                        : 'text-muted-foreground hover:bg-accent'
                     }`}
                   >
                     {p}
@@ -961,9 +961,9 @@ export default function PembelianTab() {
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage >= totalPages}
-              className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              <ChevronRight size={14} className="text-gray-600" />
+              <ChevronRight size={14} className="text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -972,17 +972,17 @@ export default function PembelianTab() {
       {/* Add Purchase Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center md:p-3 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-4xl overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-4xl overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
             {/* Header - sticky on mobile */}
-            <div className="p-3 md:p-4 border-b border-gray-100 shrink-0 flex items-center gap-3 bg-white sticky top-0 z-20">
+            <div className="p-3 md:p-4 border-b border-border shrink-0 flex items-center gap-3 bg-card sticky top-0 z-20">
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="md:hidden p-1.5 -ml-1 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:text-gray-800 hover:bg-accent rounded-lg transition-colors"
               >
                 <ChevronLeft size={20} />
               </button>
-              <h3 className="text-base md:text-lg font-semibold text-gray-800">
+              <h3 className="text-base md:text-lg font-semibold text-foreground">
                 {isEditMode ? 'Edit Pembelian' : 'Tambah Pembelian'}
               </h3>
             </div>
@@ -993,7 +993,7 @@ export default function PembelianTab() {
                 {/* Invoice & Tanggal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                    <label className="block text-xs font-medium text-foreground mb-1">
                       No. Invoice (Opsional)
                     </label>
                     <input
@@ -1001,29 +1001,29 @@ export default function PembelianTab() {
                       value={formData.invoice}
                       onChange={(e) => setFormData({ ...formData, invoice: e.target.value })}
                       placeholder="Dibebaskan ke sistem jika kosong"
-                      className="w-full px-3 py-2.5 md:py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none"
+                      className="w-full px-3 py-2.5 md:py-1.5 border border-border rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-muted focus:ring-[#3B82F6] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Tanggal</label>
+                    <label className="block text-xs font-medium text-foreground mb-1">Tanggal</label>
                     <input
                       type="date"
                       required
                       value={formData.tanggal}
                       onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
-                      className="w-full px-3 py-2.5 md:py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none"
+                      className="w-full px-3 py-2.5 md:py-1.5 border border-border rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-muted focus:ring-[#3B82F6] outline-none"
                     />
                   </div>
                 </div>
 
                 {/* Distributor */}
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Distributor</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Distributor</label>
                   <select
                     required
                     value={formData.distributor_id}
                     onChange={(e) => setFormData({ ...formData, distributor_id: e.target.value })}
-                    className="w-full px-3 py-2.5 md:py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none"
+                    className="w-full px-3 py-2.5 md:py-1.5 border border-border rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-muted focus:ring-[#3B82F6] outline-none"
                   >
                     <option value="" disabled>Pilih Distributor</option>
                     {distributors.map(d => (
@@ -1033,9 +1033,9 @@ export default function PembelianTab() {
                 </div>
 
                 {/* Items Input */}
-                <div className="border border-gray-200 rounded-lg p-2.5 md:p-3 bg-gray-50 overflow-hidden flex flex-col">
+                <div className="border border-border rounded-lg p-2.5 md:p-3 bg-muted overflow-hidden flex flex-col">
                   <div className="flex items-center justify-between mb-2 md:mb-3">
-                    <label className="block text-xs font-medium text-gray-700">Barang yang dibeli</label>
+                    <label className="block text-xs font-medium text-foreground">Barang yang dibeli</label>
                     <div className="flex gap-2">
                       <button
                         type="button"
@@ -1048,7 +1048,7 @@ export default function PembelianTab() {
                       <button
                         type="button"
                         onClick={handleAddItem}
-                        className="text-[11px] flex items-center gap-1 bg-white border border-gray-300 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 active:scale-95 transition-all font-medium"
+                        className="text-[11px] flex items-center gap-1 bg-card border border-border px-2.5 py-1.5 rounded-lg hover:bg-accent active:scale-95 transition-all font-medium"
                       >
                         <Plus size={14} /> Tambah
                       </button>
@@ -1056,24 +1056,24 @@ export default function PembelianTab() {
                   </div>
 
                   {formData.items.length === 0 ? (
-                    <p className="text-xs text-gray-500 text-center py-3">Tidak ada barang spesifik dicatat (Hanya mencatat total).</p>
+                    <p className="text-xs text-muted-foreground text-center py-3">Tidak ada barang spesifik dicatat (Hanya mencatat total).</p>
                   ) : (
                     <>
                       {/* Desktop View - table layout */}
-                      <div className="hidden md:block bg-white border border-gray-200 rounded max-h-[400px] min-h-[120px] overflow-y-auto">
+                      <div className="hidden md:block bg-card border border-border rounded max-h-[400px] min-h-[120px] overflow-y-auto">
                         <div className="min-w-[600px]">
-                          <div className="flex gap-2 items-center bg-gray-50/80 px-2 py-1.5 border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm">
-                            <div className="w-5 text-center text-[10px] font-bold text-gray-500 uppercase tracking-wider">No</div>
-                            <div className="flex-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Produk</div>
-                            <div className="w-24 text-[10px] font-bold text-gray-500 uppercase tracking-wider text-center">Qty</div>
-                            <div className="w-28 text-[10px] font-bold text-gray-500 uppercase tracking-wider text-right">Harga Satuan</div>
+                          <div className="flex gap-2 items-center bg-muted/80 px-2 py-1.5 border-b border-border sticky top-0 z-10 backdrop-blur-sm">
+                            <div className="w-5 text-center text-[10px] font-bold text-muted-foreground uppercase tracking-wider">No</div>
+                            <div className="flex-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Produk</div>
+                            <div className="w-24 text-[10px] font-bold text-muted-foreground uppercase tracking-wider text-center">Qty</div>
+                            <div className="w-28 text-[10px] font-bold text-muted-foreground uppercase tracking-wider text-right">Harga Satuan</div>
                             <div className="w-6"></div>
                           </div>
                           <div className="divide-y divide-gray-100">
                             {formData.items.map((item, idx) => (
-                              <div key={idx} className="flex gap-2 items-center p-1.5 hover:bg-gray-50/50 transition-colors">
+                              <div key={idx} className="flex gap-2 items-center p-1.5 hover:bg-muted/50 transition-colors">
                                 <div className="w-5 text-center">
-                                  <span className="text-[10px] font-bold text-gray-400">{idx + 1}.</span>
+                                  <span className="text-[10px] font-bold text-muted-foreground">{idx + 1}.</span>
                                 </div>
                                 <div className="flex-1 flex gap-1 items-center">
                                   <Select
@@ -1126,7 +1126,7 @@ export default function PembelianTab() {
                                     type="text"
                                     value={formatNumber(item.qty)}
                                     onChange={(e) => handleItemChange(idx, 'qty', parseNumber(e.target.value).toString())}
-                                    className="w-10 px-1 py-1 border-y border-gray-300 focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-center"
+                                    className="w-10 px-1 py-1 border-y border-border focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-center"
                                   />
                                   <button
                                     type="button"
@@ -1141,7 +1141,7 @@ export default function PembelianTab() {
                                     type="text"
                                     value={formatNumber(item.harga_beli)}
                                     onChange={(e) => handleItemChange(idx, 'harga_beli', parseNumber(e.target.value).toString())}
-                                    className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-right"
+                                    className="w-full px-2 py-1 border border-border rounded focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs h-[28px] text-right"
                                   />
                                 </div>
                                 <button
@@ -1161,7 +1161,7 @@ export default function PembelianTab() {
                       {/* Mobile View - compact card layout */}
                       <div className="block md:hidden space-y-1.5">
                         {formData.items.map((item, idx) => (
-                          <div key={idx} className="bg-white border border-gray-200 rounded-lg p-2 space-y-1.5">
+                          <div key={idx} className="bg-card border border-border rounded-lg p-2 space-y-1.5">
                             {/* Row 1: badge + product selector + delete */}
                             <div className="flex gap-1 items-center">
                               <span className="text-[9px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded shrink-0">{idx + 1}</span>
@@ -1217,7 +1217,7 @@ export default function PembelianTab() {
                             {/* Row 2: Qty + Harga + Subtotal in one row */}
                             <div className="flex gap-1.5 items-end">
                               <div className="flex-1">
-                                <label className="block text-[9px] text-gray-400 mb-0.5 font-semibold uppercase">Qty</label>
+                                <label className="block text-[9px] text-muted-foreground mb-0.5 font-semibold uppercase">Qty</label>
                                 <div className="flex items-center">
                                   <button
                                     type="button"
@@ -1230,7 +1230,7 @@ export default function PembelianTab() {
                                     type="text"
                                     value={formatNumber(item.qty)}
                                     onChange={(e) => handleItemChange(idx, 'qty', parseNumber(e.target.value).toString())}
-                                    className="w-full px-1 border-y border-gray-300 outline-none text-xs h-[30px] text-center font-semibold"
+                                    className="w-full px-1 border-y border-border outline-none text-xs h-[30px] text-center font-semibold"
                                   />
                                   <button
                                     type="button"
@@ -1242,16 +1242,16 @@ export default function PembelianTab() {
                                 </div>
                               </div>
                               <div className="flex-[1.3]">
-                                <label className="block text-[9px] text-gray-400 mb-0.5 font-semibold uppercase">Harga (Rp)</label>
+                                <label className="block text-[9px] text-muted-foreground mb-0.5 font-semibold uppercase">Harga (Rp)</label>
                                 <input
                                   type="text"
                                   value={formatNumber(item.harga_beli)}
                                   onChange={(e) => handleItemChange(idx, 'harga_beli', parseNumber(e.target.value).toString())}
-                                  className="w-full px-2 border border-gray-300 rounded outline-none text-xs h-[30px] text-right font-semibold"
+                                  className="w-full px-2 border border-border rounded outline-none text-xs h-[30px] text-right font-semibold"
                                 />
                               </div>
                               <div className="shrink-0 text-right pb-0.5">
-                                <span className="text-[9px] text-gray-400 block">Subtotal</span>
+                                <span className="text-[9px] text-muted-foreground block">Subtotal</span>
                                 <span className="text-[11px] font-bold text-blue-600">Rp {(parseNumber(item.qty) * parseNumber(item.harga_beli)).toLocaleString('id-ID')}</span>
                               </div>
                             </div>
@@ -1265,21 +1265,21 @@ export default function PembelianTab() {
                 {/* Total & Terbayar */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Total Pembelian (Rp)</label>
+                    <label className="block text-xs font-medium text-foreground mb-1">Total Pembelian (Rp)</label>
                     <input
                       type="text"
                       value={formatNumber(formData.total_pembelian)}
                       onChange={(e) => setFormData({ ...formData, total_pembelian: parseNumber(e.target.value).toString() })}
-                      className="w-full px-3 py-2.5 md:py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none"
+                      className="w-full px-3 py-2.5 md:py-1.5 border border-border rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-muted focus:ring-[#3B82F6] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Jumlah Terbayar (Rp)</label>
+                    <label className="block text-xs font-medium text-foreground mb-1">Jumlah Terbayar (Rp)</label>
                     <input
                       type="text"
                       value={formatNumber(formData.terbayar)}
                       onChange={(e) => setFormData({ ...formData, terbayar: parseNumber(e.target.value).toString() })}
-                      className="w-full px-3 py-2.5 md:py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-gray-50 focus:ring-[#3B82F6] outline-none"
+                      className="w-full px-3 py-2.5 md:py-1.5 border border-border rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-muted focus:ring-[#3B82F6] outline-none"
                     />
                   </div>
                 </div>
@@ -1295,7 +1295,7 @@ export default function PembelianTab() {
                         required
                         value={formData.jatuh_tempo}
                         onChange={(e) => setFormData({ ...formData, jatuh_tempo: e.target.value })}
-                        className="w-full px-3 py-2.5 md:py-1.5 border border-red-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-white focus:ring-red-400 outline-none text-red-800"
+                        className="w-full px-3 py-2.5 md:py-1.5 border border-red-200 rounded-lg focus:ring-1 text-sm md:text-xs font-medium bg-card focus:ring-red-400 outline-none text-red-800"
                       />
                     </div>
                   </div>
@@ -1304,11 +1304,11 @@ export default function PembelianTab() {
             </div>
 
             {/* Footer - sticky on mobile */}
-            <div className="p-3 md:p-4 border-t border-gray-100 flex justify-end gap-3 shrink-0 bg-white sticky bottom-0 z-20">
+            <div className="p-3 md:p-4 border-t border-border flex justify-end gap-3 shrink-0 bg-card sticky bottom-0 z-20">
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="hidden md:block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="hidden md:block px-3 py-2 text-muted-foreground hover:bg-accent rounded-lg transition-colors"
               >
                 Batal
               </button>
@@ -1328,20 +1328,20 @@ export default function PembelianTab() {
       {/* Pay Modal */}
       {isPayModalOpen && selectedPurchase && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center md:p-3 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-sm overflow-hidden h-full md:h-auto flex flex-col">
-            <div className="p-4 border-b border-gray-100 flex items-center justify-between shrink-0 sticky top-0 bg-white z-20">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-sm overflow-hidden h-full md:h-auto flex flex-col">
+            <div className="p-4 border-b border-border flex items-center justify-between shrink-0 sticky top-0 bg-card z-20">
               <div className="flex items-center gap-2">
-                <button onClick={() => setIsPayModalOpen(false)} className="md:hidden p-1.5 -ml-1 text-gray-500 hover:bg-gray-100 rounded-lg"><ChevronLeft size={20}/></button>
-                <h3 className="text-lg font-semibold text-gray-800">Bayar Cicilan Hutang</h3>
+                <button onClick={() => setIsPayModalOpen(false)} className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:bg-accent rounded-lg"><ChevronLeft size={20}/></button>
+                <h3 className="text-lg font-semibold text-foreground">Bayar Cicilan Hutang</h3>
               </div>
-              <button onClick={() => setIsPayModalOpen(false)} className="hidden md:block text-gray-400 hover:text-gray-600">&times;</button>
+              <button onClick={() => setIsPayModalOpen(false)} className="hidden md:block text-muted-foreground hover:text-gray-600">&times;</button>
             </div>
             <form onSubmit={handlePay} className="p-4 space-y-4 flex-1 overflow-y-auto">
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-muted-foreground">
                 Sisa hutang untuk Invoice <b>{selectedPurchase.invoice}</b> adalah Rp {(Number(selectedPurchase.total_pembelian) - Number(selectedPurchase.terbayar)).toLocaleString('id-ID')}
               </p>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Nominal Pembayaran (Rp)</label>
+                <label className="block text-xs font-medium text-foreground mb-1">Nominal Pembayaran (Rp)</label>
                 <input
                   type="text"
                   required
@@ -1351,14 +1351,14 @@ export default function PembelianTab() {
                     const max = Number(selectedPurchase.total_pembelian) - Number(selectedPurchase.terbayar);
                     setPayAmount(Math.min(parsed, max).toString());
                   }}
-                  className="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 text-xs font-medium bg-gray-50 focus:ring-green-500 outline-none"
+                  className="w-full px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 text-xs font-medium bg-muted focus:ring-green-500 outline-none"
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-4 sticky bottom-0 bg-white mt-auto md:mt-0 border-t border-gray-100 md:border-none">
+              <div className="flex justify-end gap-3 pt-4 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-none">
                 <button
                   type="button"
                   onClick={() => setIsPayModalOpen(false)}
-                  className="hidden md:block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                  className="hidden md:block px-3 py-2 text-muted-foreground hover:bg-accent rounded-lg"
                 >
                   Batal
                 </button>
@@ -1377,53 +1377,53 @@ export default function PembelianTab() {
       {/* Detail Modal */}
       {isDetailModalOpen && selectedDetailPurchase && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center md:p-3 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-2xl overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
-            <div className="p-4 border-b border-gray-100 flex justify-between items-center shrink-0 sticky top-0 bg-white z-20">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-2xl overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
+            <div className="p-4 border-b border-border flex justify-between items-center shrink-0 sticky top-0 bg-card z-20">
               <div className="flex items-center gap-2">
-                <button onClick={() => setIsDetailModalOpen(false)} className="md:hidden p-1.5 -ml-1 text-gray-500 hover:bg-gray-100 rounded-lg"><ChevronLeft size={20}/></button>
-                <h3 className="text-lg font-semibold text-gray-800 truncate">
+                <button onClick={() => setIsDetailModalOpen(false)} className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:bg-accent rounded-lg"><ChevronLeft size={20}/></button>
+                <h3 className="text-lg font-semibold text-foreground truncate">
                   Detail Invoice: {selectedDetailPurchase.invoice || '-'}
                 </h3>
               </div>
-              <button onClick={() => setIsDetailModalOpen(false)} className="hidden md:block text-gray-400 hover:text-gray-600">
+              <button onClick={() => setIsDetailModalOpen(false)} className="hidden md:block text-muted-foreground hover:text-gray-600">
                 &times;
               </button>
             </div>
             <div className="p-4 overflow-y-auto flex-1">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                 <div>
-                  <p className="text-xs text-gray-500">Distributor</p>
-                  <p className="font-bold text-xs text-gray-800">{selectedDetailPurchase.distributor?.name || '-'}</p>
+                  <p className="text-xs text-muted-foreground">Distributor</p>
+                  <p className="font-bold text-xs text-foreground">{selectedDetailPurchase.distributor?.name || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Tanggal</p>
-                  <p className="font-bold text-xs text-gray-800">{new Date(selectedDetailPurchase.tanggal).toLocaleDateString('id-ID')}</p>
+                  <p className="text-xs text-muted-foreground">Tanggal</p>
+                  <p className="font-bold text-xs text-foreground">{new Date(selectedDetailPurchase.tanggal).toLocaleDateString('id-ID')}</p>
                 </div>
               </div>
 
-              <h4 className="font-medium text-gray-800 mb-3 border-b pb-2">Daftar Barang Dibeli</h4>
+              <h4 className="font-medium text-foreground mb-3 border-b pb-2">Daftar Barang Dibeli</h4>
 
               {!selectedDetailPurchase.items || selectedDetailPurchase.items.length === 0 ? (
-                <p className="text-gray-500 italic text-xs text-center py-3 bg-gray-50 rounded">
+                <p className="text-muted-foreground italic text-xs text-center py-3 bg-muted rounded">
                   Tidak ada rincian barang untuk transaksi ini. (Hanya nominal total).
                 </p>
               ) : (
-                <div className="border border-gray-200 rounded overflow-x-auto">
+                <div className="border border-border rounded overflow-x-auto">
                   <div className="min-w-[500px]">
                     <table className="w-full text-xs">
-                      <thead className="bg-gray-50 border-b border-gray-100">
+                      <thead className="bg-muted border-b border-border">
                       <tr>
-                        <th className="text-left px-3 py-2 text-gray-700 font-medium">Produk</th>
-                        <th className="text-right px-3 py-2 text-gray-700 font-medium w-24">Qty</th>
-                        <th className="text-right px-3 py-2 text-gray-700 font-medium w-32">Harga Beli</th>
-                        <th className="text-right px-3 py-2 text-gray-700 font-medium w-32">Subtotal</th>
+                        <th className="text-left px-3 py-2 text-foreground font-medium">Produk</th>
+                        <th className="text-right px-3 py-2 text-foreground font-medium w-24">Qty</th>
+                        <th className="text-right px-3 py-2 text-foreground font-medium w-32">Harga Beli</th>
+                        <th className="text-right px-3 py-2 text-foreground font-medium w-32">Subtotal</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {selectedDetailPurchase.items.map((item, idx) => {
                         const subtotal = Number(item.qty) * Number(item.harga_beli);
                         return (
-                          <tr key={idx} className="hover:bg-gray-50">
+                          <tr key={idx} className="hover:bg-muted">
                             <td className="px-3 py-2">{item.product?.name || `Product ID: ${item.product_id}`}</td>
                             <td className="px-3 py-2 text-right">{item.qty}</td>
                             <td className="px-3 py-2 text-right">Rp {Number(item.harga_beli).toLocaleString('id-ID')}</td>
@@ -1432,7 +1432,7 @@ export default function PembelianTab() {
                         );
                       })}
                     </tbody>
-                    <tfoot className="bg-gray-50 border-t border-gray-200 font-semibold">
+                    <tfoot className="bg-muted border-t border-border font-semibold">
                       <tr>
                         <td colSpan={3} className="px-3 py-2 text-right">Total Keseluruhan</td>
                         <td className="px-3 py-2 text-right text-[#3B82F6]">
@@ -1459,11 +1459,11 @@ export default function PembelianTab() {
                 </div>
               )}
             </div>
-            <div className="p-3 border-t border-gray-100 shrink-0 flex justify-end sticky bottom-0 bg-white z-20">
+            <div className="p-3 border-t border-border shrink-0 flex justify-end sticky bottom-0 bg-card z-20">
               <button
                 type="button"
                 onClick={() => setIsDetailModalOpen(false)}
-                className="w-full md:w-auto px-4 py-2.5 md:py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl md:rounded-lg transition-colors font-bold"
+                className="w-full md:w-auto px-4 py-2.5 md:py-2 bg-accent text-foreground hover:bg-accent rounded-xl md:rounded-lg transition-colors font-bold"
               >
                 Tutup
               </button>
@@ -1474,27 +1474,27 @@ export default function PembelianTab() {
       {/* Quick Add Product Modal */}
       {isQuickProductModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center md:p-3 z-[60]">
-          <div className="bg-white md:rounded-2xl shadow-2xl modal-content w-full max-w-md overflow-hidden flex flex-col h-full md:h-auto">
-            <div className="p-4 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-20">
+          <div className="bg-card md:rounded-2xl shadow-2xl modal-content w-full max-w-md overflow-hidden flex flex-col h-full md:h-auto">
+            <div className="p-4 border-b border-border flex justify-between items-center sticky top-0 bg-card z-20">
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setIsQuickProductModalOpen(false)}
-                  className="md:hidden p-1.5 -ml-1 text-gray-500 hover:bg-gray-100 rounded-lg"
+                  className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:bg-accent rounded-lg"
                 >
                   <ChevronLeft size={20} />
                 </button>
-                <h3 className="text-sm font-bold text-gray-800">Tambah Produk Cepat</h3>
+                <h3 className="text-sm font-bold text-foreground">Tambah Produk Cepat</h3>
               </div>
               <button 
                 onClick={() => setIsQuickProductModalOpen(false)}
-                className="hidden md:block text-gray-400 hover:text-gray-600"
+                className="hidden md:block text-muted-foreground hover:text-gray-600"
               >
                 &times;
               </button>
             </div>
             <form onSubmit={handleQuickProductSubmit} className="p-4 space-y-4 flex-1 overflow-y-auto">
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                   Nama Produk
                 </label>
                 <input
@@ -1503,12 +1503,12 @@ export default function PembelianTab() {
                   placeholder="Cth: HDD External 1TB..."
                   value={quickProductFormData.name}
                   onChange={(e) => setQuickProductFormData({ ...quickProductFormData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-gray-50"
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-muted"
                 />
               </div>
 
               <div className="col-span-full">
-                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                   Kategori Produk
                 </label>
                 <div className="flex gap-2">
@@ -1545,7 +1545,7 @@ export default function PembelianTab() {
                         required
                         value={quickProductFormData.category_id}
                         onChange={(e) => setQuickProductFormData({ ...quickProductFormData, category_id: e.target.value })}
-                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-gray-50"
+                        className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-medium bg-muted"
                       >
                         <option value="" disabled>Pilih Kategori</option>
                         {categories.map(cat => (
@@ -1566,7 +1566,7 @@ export default function PembelianTab() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                   Harga Jual
                 </label>
                 <input
@@ -1575,15 +1575,15 @@ export default function PembelianTab() {
                   placeholder="Rp 0"
                   value={quickProductFormData.harga_jual}
                   onChange={(e) => setQuickProductFormData({ ...quickProductFormData, harga_jual: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-bold text-blue-600 bg-blue-50/30"
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs font-bold text-blue-600 bg-blue-50/30"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 sticky bottom-0 bg-white mt-auto md:mt-0 border-t border-gray-100 md:border-t-gray-50 md:pt-4">
+              <div className="flex justify-end gap-2 pt-3 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-t-gray-50 md:pt-4">
                 <button
                   type="button"
                   onClick={() => setIsQuickProductModalOpen(false)}
-                  className="hidden md:block px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg text-xs font-bold uppercase tracking-wider"
+                  className="hidden md:block px-4 py-2 text-muted-foreground hover:bg-accent rounded-lg text-xs font-bold uppercase tracking-wider"
                 >
                   Batal
                 </button>

@@ -116,9 +116,9 @@ function StatCard({ title, value, subtitle, icon: Icon, trend, colorTheme = 'blu
       </div>
 
       <div>
-        <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">{title}</p>
-        <p className={`text-sm md:text-lg font-black tracking-tight text-gray-800 mb-0.5 transition-colors line-clamp-1 ${theme.textColor}`}>{value}</p>
-        <p className="text-[8px] md:text-[9px] text-gray-400 font-medium line-clamp-1">{subtitle}</p>
+        <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground mb-0.5">{title}</p>
+        <p className={`text-sm md:text-lg font-black tracking-tight text-foreground mb-0.5 transition-colors line-clamp-1 ${theme.textColor}`}>{value}</p>
+        <p className="text-[8px] md:text-[9px] text-muted-foreground font-medium line-clamp-1">{subtitle}</p>
       </div>
     </motion.div>
   );
@@ -153,35 +153,35 @@ export default function Dashboard() {
       <div className="space-y-6 animate-pulse">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 md:p-4">
+            <div key={i} className="bg-card rounded-xl shadow-sm border border-border p-3 md:p-4">
               <div className="flex flex-col gap-3">
-                <div className="w-8 h-8 md:w-12 md:h-12 bg-gray-200 rounded-lg md:rounded-xl" />
+                <div className="w-8 h-8 md:w-12 md:h-12 bg-accent rounded-lg md:rounded-xl" />
                 <div className="space-y-1.5">
-                  <div className="h-2.5 bg-gray-200 rounded w-16" />
-                  <div className="h-5 bg-gray-200 rounded w-24" />
-                  <div className="h-2 bg-gray-200 rounded w-12" />
+                  <div className="h-2.5 bg-accent rounded w-16" />
+                  <div className="h-5 bg-accent rounded w-24" />
+                  <div className="h-2 bg-accent rounded w-12" />
                 </div>
               </div>
             </div>
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
-            <div className="h-4 bg-gray-200 rounded w-48 mb-3" />
-            <div className="h-[220px] bg-gray-100 rounded-lg" />
+          <div className="bg-card rounded-xl shadow-sm border border-border p-3">
+            <div className="h-4 bg-accent rounded w-48 mb-3" />
+            <div className="h-[220px] bg-accent rounded-lg" />
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
-            <div className="h-4 bg-gray-200 rounded w-32 mb-3" />
+          <div className="bg-card rounded-xl shadow-sm border border-border p-3">
+            <div className="h-4 bg-accent rounded w-32 mb-3" />
             <div className="space-y-2">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="flex justify-between p-2.5 bg-gray-50 rounded-xl">
+                <div key={i} className="flex justify-between p-2.5 bg-muted rounded-xl">
                   <div className="space-y-1.5">
-                    <div className="h-4 bg-gray-200 rounded w-24" />
-                    <div className="h-3 bg-gray-200 rounded w-16" />
+                    <div className="h-4 bg-accent rounded w-24" />
+                    <div className="h-3 bg-accent rounded w-16" />
                   </div>
                   <div className="space-y-1.5 text-right">
-                    <div className="h-4 bg-gray-200 rounded w-20 ml-auto" />
-                    <div className="h-3 bg-gray-200 rounded w-12 ml-auto" />
+                    <div className="h-4 bg-accent rounded w-20 ml-auto" />
+                    <div className="h-3 bg-accent rounded w-12 ml-auto" />
                   </div>
                 </div>
               ))}
@@ -202,22 +202,22 @@ export default function Dashboard() {
         animate={{ opacity: 1, x: 0 }}
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
-        <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100 w-fit">
+        <div className="flex bg-card p-1 rounded-xl shadow-sm border border-border w-fit">
           <button
             onClick={() => setRange('weekly')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'weekly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'weekly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-muted-foreground hover:bg-muted'}`}
           >
             MINGGUAN
           </button>
           <button
             onClick={() => setRange('monthly')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'monthly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'monthly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-muted-foreground hover:bg-muted'}`}
           >
             BULANAN
           </button>
           <button
             onClick={() => setRange('yearly')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'yearly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${range === 'yearly' ? 'bg-[#3B82F6] text-white shadow-md' : 'text-muted-foreground hover:bg-muted'}`}
           >
             TAHUNAN
           </button>
@@ -292,8 +292,8 @@ export default function Dashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Sales Chart */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col h-[330px]">
-          <h3 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-3 flex flex-col h-[330px]">
+          <h3 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
             {range === 'weekly' 
               ? 'Grafik Kinerja Mingguan' 
               : range === 'monthly' 
@@ -364,28 +364,28 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Transactions */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col h-[330px]">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-3 flex flex-col h-[330px]">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Transaksi Terbaru</h3>
+            <h3 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Transaksi Terbaru</h3>
           </div>
           {data.recent_transactions.length === 0 ? (
-            <p className="text-gray-500 text-xs text-center py-3">Belum ada transaksi</p>
+            <p className="text-muted-foreground text-xs text-center py-3">Belum ada transaksi</p>
           ) : (
             <div className="space-y-1 overflow-y-auto pr-1 flex-1 min-h-0">
               {data.recent_transactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between py-1 px-2.5 bg-gray-50 rounded-xl hover:bg-white hover:shadow-[0_2px_8px_-2px_rgba(59,130,246,0.15)] hover:-translate-y-0.5 hover:ring-1 hover:ring-blue-100 transition-all duration-300 group cursor-pointer"
+                  className="flex items-center justify-between py-1 px-2.5 bg-muted rounded-xl hover:bg-white hover:shadow-[0_2px_8px_-2px_rgba(59,130,246,0.15)] hover:-translate-y-0.5 hover:ring-1 hover:ring-blue-100 transition-all duration-300 group cursor-pointer"
                 >
                   <div>
-                    <p className="font-bold text-gray-800 text-sm group-hover:text-[#3B82F6] transition-colors">{transaction.id}</p>
-                    <p className="text-[10px] text-gray-500 font-medium">{transaction.customer}</p>
+                    <p className="font-bold text-foreground text-sm group-hover:text-[#3B82F6] transition-colors">{transaction.id}</p>
+                    <p className="text-[10px] text-muted-foreground font-medium">{transaction.customer}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-black text-[#3B82F6]">
                       Rp {transaction.total.toLocaleString('id-ID')}
                     </p>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">{transaction.date} | {transaction.time}</p>
+                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5">{transaction.date} | {transaction.time}</p>
                   </div>
                 </div>
               ))}

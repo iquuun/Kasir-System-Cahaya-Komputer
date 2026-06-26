@@ -240,22 +240,22 @@ export default function PengaturanPage() {
 
     if (loading) return (
       <div className="max-w-4xl mx-auto space-y-6 animate-pulse">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-50">
-            <div className="w-10 h-10 bg-gray-200 rounded-lg" />
-            <div><div className="h-5 bg-gray-200 rounded w-24 mb-2" /><div className="h-3 bg-gray-200 rounded w-48" /></div>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-border">
+            <div className="w-10 h-10 bg-accent rounded-lg" />
+            <div><div className="h-5 bg-accent rounded w-24 mb-2" /><div className="h-3 bg-accent rounded w-48" /></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="h-40 bg-gray-100 rounded-2xl border-2 border-dashed border-gray-200" />
-            <div className="md:col-span-2 space-y-4">{[...Array(4)].map((_, i) => (<div key={i}><div className="h-3 bg-gray-200 rounded w-24 mb-2" /><div className="h-10 bg-gray-100 rounded-lg w-full" /></div>))}</div>
+            <div className="h-40 bg-accent rounded-2xl border-2 border-dashed border-border" />
+            <div className="md:col-span-2 space-y-4">{[...Array(4)].map((_, i) => (<div key={i}><div className="h-3 bg-accent rounded w-24 mb-2" /><div className="h-10 bg-accent rounded-lg w-full" /></div>))}</div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-50">
-            <div className="w-10 h-10 bg-gray-200 rounded-lg" />
-            <div><div className="h-5 bg-gray-200 rounded w-36 mb-2" /><div className="h-3 bg-gray-200 rounded w-56" /></div>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+          <div className="flex items-center gap-3 mb-4 pb-4 border-b border-border">
+            <div className="w-10 h-10 bg-accent rounded-lg" />
+            <div><div className="h-5 bg-accent rounded w-36 mb-2" /><div className="h-3 bg-accent rounded w-56" /></div>
           </div>
-          <div className="h-20 bg-gray-100 rounded-lg" />
+          <div className="h-20 bg-accent rounded-lg" />
         </div>
       </div>
     );
@@ -263,29 +263,29 @@ export default function PengaturanPage() {
     return (
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-7">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 h-full">
-                <div className="flex items-center gap-3 mb-4 border-b border-gray-50 pb-3">
+                <div className="bg-card rounded-xl shadow-sm border border-border p-4 h-full">
+                <div className="flex items-center gap-3 mb-4 border-b border-border pb-3">
                     <div className="p-2.5 bg-[#3B82F6]/10 rounded-lg text-[#3B82F6]">
                         <Store size={14} />
                     </div>
                     <div>
-                        <h2 className="text-sm font-bold text-gray-800">Profil Toko</h2>
-                        <p className="text-[10px] text-gray-500">Atur logo, nama, dan alamat toko Anda untuk nota/faktur.</p>
+                        <h2 className="text-sm font-bold text-foreground">Profil Toko</h2>
+                        <p className="text-[10px] text-muted-foreground">Atur logo, nama, dan alamat toko Anda untuk nota/faktur.</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Logo Upload */}
                     <div className="space-y-2">
-                        <label className="block text-xs font-medium text-gray-700">Logo Toko</label>
+                        <label className="block text-xs font-medium text-foreground">Logo Toko</label>
                         <div className="relative group">
-                            <div className="w-full aspect-square bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center overflow-hidden">
+                            <div className="w-full aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
                                 {logoPreview ? (
                                     <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-3" />
                                 ) : (
                                     <div className="text-center p-3">
                                         <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                        <p className="text-[11px] text-gray-400">Klik untuk upload logo toko</p>
+                                        <p className="text-[11px] text-muted-foreground">Klik untuk upload logo toko</p>
                                     </div>
                                 )}
                                 <input
@@ -300,15 +300,15 @@ export default function PengaturanPage() {
                     
                     {/* Stamp Upload */}
                     <div className="space-y-2">
-                        <label className="block text-xs font-medium text-gray-700">Cap / Tanda Tangan (PNG Transparan)</label>
+                        <label className="block text-xs font-medium text-foreground">Cap / Tanda Tangan (PNG Transparan)</label>
                         <div className="relative group">
-                            <div className="w-full aspect-square bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center overflow-hidden">
+                            <div className="w-full aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
                                 {stampPreview ? (
                                     <img src={stampPreview} alt="Stamp Preview" className="w-full h-full object-contain p-3 opacity-80" />
                                 ) : (
                                     <div className="text-center p-3">
                                         <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                        <p className="text-[11px] text-gray-400">Klik untuk upload cap toko</p>
+                                        <p className="text-[11px] text-muted-foreground">Klik untuk upload cap toko</p>
                                     </div>
                                 )}
                                 <input
@@ -325,20 +325,20 @@ export default function PengaturanPage() {
                     {/* Store Info */}
                     <div className="md:col-span-2 space-y-3">
                         <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-xs font-medium text-gray-700">
-                                <Store size={16} className="text-gray-400" /> Nama Toko
+                            <label className="flex items-center gap-2 text-xs font-medium text-foreground">
+                                <Store size={16} className="text-muted-foreground" /> Nama Toko
                             </label>
                             <input
                                 type="text"
                                 value={storeName}
                                 onChange={(e) => setStoreName(e.target.value)}
                                 placeholder="Contoh: CAHAYA KOMPUTER"
-                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all"
+                                className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all"
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
+                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
                                 Telepon / WhatsApp
                             </label>
                             <input
@@ -346,12 +346,12 @@ export default function PengaturanPage() {
                                 value={storePhone}
                                 onChange={(e) => setStorePhone(e.target.value)}
                                 placeholder="08xxxx..."
-                                className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs outline-none"
+                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs outline-none"
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
+                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
                                 Mulai Nomor Faktur
                             </label>
                             <input
@@ -359,28 +359,28 @@ export default function PengaturanPage() {
                                 value={invoiceStartNumber}
                                 onChange={(e) => setInvoiceStartNumber(e.target.value)}
                                 placeholder="Contoh: 10000"
-                                className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
+                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
                             />
-                            <p className="text-[9px] text-gray-400 leading-tight">
+                            <p className="text-[9px] text-muted-foreground leading-tight">
                                 Faktur selanjutnya akan dimulai dari angka ini (misal: INV-10000) dan terus berlanjut tanpa reset harian.
                             </p>
                         </div>
 
                         <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
-                                <MapPin size={12} className="text-gray-400" /> Alamat Lengkap
+                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                                <MapPin size={12} className="text-muted-foreground" /> Alamat Lengkap
                             </label>
                             <textarea
                                 value={storeAddress}
                                 onChange={(e) => setStoreAddress(e.target.value)}
                                 placeholder="Jl. Gajah Mada No. 123..."
                                 rows={2}
-                                className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
+                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
+                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
                                 Keterangan Faktur (Notes)
                             </label>
                             <textarea
@@ -388,7 +388,7 @@ export default function PengaturanPage() {
                                 onChange={(e) => setStoreNotes(e.target.value)}
                                 placeholder="Keterangan yang akan muncul di bawah faktur..."
                                 rows={4}
-                                className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
+                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
                             />
                         </div>
                     </div>
@@ -409,15 +409,15 @@ export default function PengaturanPage() {
 
             <div className="lg:col-span-5 space-y-4">
             {/* BACKUP SECTION */}
-            <div className="bg-white rounded-xl shadow-sm border border-emerald-100 p-4 text-xs">
+            <div className="bg-card rounded-xl shadow-sm border border-emerald-100 p-4 text-xs">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 border-b border-emerald-50 pb-3">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-600">
                             <Database size={14} />
                         </div>
                         <div>
-                            <h2 className="text-sm font-bold text-gray-800">Backup & Keamanan</h2>
-                            <p className="text-[10px] text-gray-500 mt-0.5">Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file.</p>
+                            <h2 className="text-sm font-bold text-foreground">Backup & Keamanan</h2>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file.</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -452,15 +452,15 @@ export default function PengaturanPage() {
             </div>
 
             {/* SYNC DB SECTION */}
-            <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-4 border-l-4 border-l-blue-500">
+            <div className="bg-card rounded-xl shadow-sm border border-blue-100 p-4 border-l-4 border-l-blue-500">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-blue-500/10 rounded-lg text-blue-600">
                             <RefreshCw size={14} />
                         </div>
                         <div>
-                            <h2 className="text-sm font-bold text-gray-800">Sinkronisasi Database</h2>
-                            <p className="text-[10px] text-gray-500 mt-0.5">Gunakan ini jika Anda baru saja memindahkan aplikasi ke PC lain agar terhindar dari Error struktur database.</p>
+                            <h2 className="text-sm font-bold text-foreground">Sinkronisasi Database</h2>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">Gunakan ini jika Anda baru saja memindahkan aplikasi ke PC lain agar terhindar dari Error struktur database.</p>
                         </div>
                     </div>
                     <button
@@ -477,7 +477,7 @@ export default function PengaturanPage() {
             {/* ============================== */}
             {/* DANGER ZONE */}
             {/* ============================== */}
-            <div className="bg-white rounded-xl shadow-sm border border-red-200 p-4">
+            <div className="bg-card rounded-xl shadow-sm border border-red-200 p-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 border-b border-red-100 pb-3">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-red-500/10 rounded-lg text-red-600">
@@ -519,7 +519,7 @@ export default function PengaturanPage() {
             {/* ============================== */}
             {showResetModal && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center z-50 md:p-4 modal-backdrop">
-                    <div className="bg-white md:rounded-2xl shadow-2xl w-full max-w-md modal-content overflow-hidden h-full md:h-auto flex flex-col">
+                    <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-md modal-content overflow-hidden h-full md:h-auto flex flex-col">
                         {/* Header */}
                         <div className="bg-red-600 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-20">
                             <div className="flex items-center gap-3">
@@ -556,7 +556,7 @@ export default function PengaturanPage() {
                             </div>
 
                             <div className="space-y-2 mb-5">
-                                <label className="text-xs font-bold text-gray-700">
+                                <label className="text-xs font-bold text-foreground">
                                     Ketik <span className="text-red-600 font-mono bg-red-50 px-1.5 py-0.5 rounded">HAPUS SEMUA DATA</span> untuk melanjutkan:
                                 </label>
                                 <input
@@ -565,7 +565,7 @@ export default function PengaturanPage() {
                                     onChange={(e) => setResetConfirmText(e.target.value)}
                                     placeholder="Ketik di sini..."
                                     autoComplete="off"
-                                    className="w-full px-3 py-2.5 bg-gray-50 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm font-mono"
+                                    className="w-full px-3 py-2.5 bg-muted border-2 border-border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm font-mono"
                                 />
                             </div>
 
@@ -583,7 +583,7 @@ export default function PengaturanPage() {
                                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 border-4 border-red-300 mb-3">
                                         <span className="text-2xl font-bold text-red-600">{resetCountdown}</span>
                                     </div>
-                                    <p className="text-xs text-gray-500">Menunggu {resetCountdown} detik sebelum tombol hapus aktif...</p>
+                                    <p className="text-xs text-muted-foreground">Menunggu {resetCountdown} detik sebelum tombol hapus aktif...</p>
                                 </div>
                             )}
 
@@ -613,7 +613,7 @@ export default function PengaturanPage() {
             {/* ============================== */}
             {showRestoreModal && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center z-50 md:p-4">
-                    <div className="bg-white md:rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
+                    <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
                         <div className="bg-amber-600 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-20">
                             <div className="flex items-center gap-3">
                                 <button onClick={() => { setShowRestoreModal(false); setPendingRestoreFile(null); }} className="md:hidden p-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-white">
@@ -639,17 +639,17 @@ export default function PengaturanPage() {
                                 </p>
                             </div>
 
-                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-6">
-                                <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">File Terpilih:</p>
-                                <p className="text-xs font-mono text-gray-700 bg-white px-2 py-1.5 border border-gray-100 rounded truncate">
+                            <div className="bg-muted border border-border rounded-lg p-3 mb-6">
+                                <p className="text-[10px] text-muted-foreground uppercase font-bold mb-1">File Terpilih:</p>
+                                <p className="text-xs font-mono text-foreground bg-card px-2 py-1.5 border border-border rounded truncate">
                                     {pendingRestoreFile?.name}
                                 </p>
                             </div>
 
-                            <div className="flex gap-3 mt-auto md:mt-0 pt-4 md:pt-0 sticky bottom-0 bg-white border-t border-gray-100 md:border-none">
+                            <div className="flex gap-3 mt-auto md:mt-0 pt-4 md:pt-0 sticky bottom-0 bg-card border-t border-border md:border-none">
                                 <button
                                     onClick={() => { setShowRestoreModal(false); setPendingRestoreFile(null); }}
-                                    className="hidden md:block flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-bold text-sm hover:bg-gray-200 transition-all active:scale-95"
+                                    className="hidden md:block flex-1 py-2.5 bg-accent text-foreground rounded-lg font-bold text-sm hover:bg-accent transition-all active:scale-95"
                                 >
                                     Batal
                                 </button>

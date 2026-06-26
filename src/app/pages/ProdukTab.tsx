@@ -313,26 +313,26 @@ export default function ProdukTab() {
       <div className="space-y-6 animate-pulse">
         <div className="flex items-center justify-between">
           <div>
-            <div className="h-6 bg-gray-200 rounded w-48 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-64"></div>
+            <div className="h-6 bg-accent rounded w-48 mb-2"></div>
+            <div className="h-4 bg-accent rounded w-64"></div>
           </div>
-          <div className="h-10 bg-gray-200 rounded-lg w-36"></div>
+          <div className="h-10 bg-accent rounded-lg w-36"></div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-4">
           <div className="flex flex-col md:flex-row gap-3">
-            <div className="flex-1 h-10 bg-gray-200 rounded-lg"></div>
-            <div className="w-full md:w-48 h-10 bg-gray-200 rounded-lg"></div>
+            <div className="flex-1 h-10 bg-accent rounded-lg"></div>
+            <div className="w-full md:w-48 h-10 bg-accent rounded-lg"></div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-          <div className="h-10 bg-gray-100 border-b border-gray-200"></div>
+        <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
+          <div className="h-10 bg-accent border-b border-border"></div>
           <div className="divide-y divide-gray-100">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="px-4 py-3 flex gap-4">
-                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/6"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/6 ml-auto"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/6 ml-auto"></div>
+                <div className="h-4 bg-accent rounded w-1/4"></div>
+                <div className="h-4 bg-accent rounded w-1/6"></div>
+                <div className="h-4 bg-accent rounded w-1/6 ml-auto"></div>
+                <div className="h-4 bg-accent rounded w-1/6 ml-auto"></div>
               </div>
             ))}
           </div>
@@ -363,25 +363,25 @@ export default function ProdukTab() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 space-y-2">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-3 space-y-2">
         <div className="flex flex-col md:flex-row gap-2">
           <div className="flex-1 relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
             <input
               type="text"
               placeholder="Cari produk..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50"
+              className="w-full pl-8 pr-3 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted"
             />
           </div>
           <div className="flex gap-2">
             <div className="relative">
-              <ArrowUpDown className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={13} />
+              <ArrowUpDown className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={13} />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="pl-8 pr-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium cursor-pointer"
+                className="pl-8 pr-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted font-medium cursor-pointer"
               >
                 <option value="az">Nama A–Z</option>
                 <option value="za">Nama Z–A</option>
@@ -394,7 +394,7 @@ export default function ProdukTab() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-2.5 py-1.5 border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-gray-50 font-medium"
+              className="px-2.5 py-1.5 border border-border rounded-lg focus:ring-1 focus:ring-[#3B82F6] outline-none text-xs bg-muted font-medium"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -407,38 +407,38 @@ export default function ProdukTab() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Nama Produk</th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Kategori</th>
-                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Harga Beli</th>
-                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Harga Jual</th>
-                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Stok</th>
-                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-gray-500">Aksi</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Nama Produk</th>
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Kategori</th>
+                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Harga Beli</th>
+                <th className="text-right px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Harga Jual</th>
+                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Stok</th>
+                <th className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500 text-sm">
+                  <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground text-sm">
                     Pencarian produk tidak ditemukan
                   </td>
                 </tr>
               ) : (
                 currentItems.map((product) => (
-                <tr key={product.id} className="hover:bg-blue-50/50 transition-colors border-b border-gray-50 last:border-0">
+                <tr key={product.id} className="hover:bg-blue-50/50 transition-colors border-b border-border last:border-0">
                   <td className="px-3 py-2">
-                    <p className="font-bold text-xs text-gray-800">{product.name}</p>
+                    <p className="font-bold text-xs text-foreground">{product.name}</p>
                   </td>
                   <td className="px-3 py-2">
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-700">
                       {product.category?.name || '-'}
                     </span>
                   </td>
-                  <td className="px-3 py-2 text-right text-xs text-gray-600 font-medium">
+                  <td className="px-3 py-2 text-right text-xs text-muted-foreground font-medium">
                     Rp {Number(product.harga_beli).toLocaleString('id-ID')}
                   </td>
                   <td className="px-3 py-2 text-right text-xs font-bold text-[#3B82F6]">
@@ -477,14 +477,14 @@ export default function ProdukTab() {
         </div>
 
         {/* Mobile Card View */}
-        <div className="block md:hidden divide-y divide-gray-100 bg-white">
+        <div className="block md:hidden divide-y divide-gray-100 bg-card">
           {currentItems.length === 0 ? (
-            <div className="px-4 py-8 text-center text-gray-400 text-xs">Pencarian produk tidak ditemukan.</div>
+            <div className="px-4 py-8 text-center text-muted-foreground text-xs">Pencarian produk tidak ditemukan.</div>
           ) : currentItems.map((product) => (
-            <div key={product.id} className="p-2.5 space-y-1.5 hover:bg-gray-50 transition-colors">
+            <div key={product.id} className="p-2.5 space-y-1.5 hover:bg-muted transition-colors">
               {/* Row 1: Product Name & Category */}
               <div className="flex justify-between items-start gap-1">
-                <span className="font-bold text-gray-800 text-xs">{product.name}</span>
+                <span className="font-bold text-foreground text-xs">{product.name}</span>
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-50 text-blue-600 uppercase shrink-0">
                   {product.category?.name || '-'}
                 </span>
@@ -494,17 +494,17 @@ export default function ProdukTab() {
               <div className="flex justify-between items-center text-[11px]">
                 <div className="flex items-center gap-3">
                   <div>
-                    <span className="text-gray-400 text-[10px]">Beli: </span>
-                    <span className="font-medium text-gray-600">Rp {Number(product.harga_beli).toLocaleString('id-ID')}</span>
+                    <span className="text-muted-foreground text-[10px]">Beli: </span>
+                    <span className="font-medium text-muted-foreground">Rp {Number(product.harga_beli).toLocaleString('id-ID')}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400 text-[10px]">Jual: </span>
+                    <span className="text-muted-foreground text-[10px]">Jual: </span>
                     <span className="font-bold text-[#3B82F6]">Rp {Number(product.harga_jual).toLocaleString('id-ID')}</span>
                   </div>
                 </div>
                 
                 <div className="flex items-center gap-1">
-                  <span className="text-gray-400 text-[10px]">Stok: </span>
+                  <span className="text-muted-foreground text-[10px]">Stok: </span>
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${product.stok_saat_ini < 10
                       ? 'bg-red-100 text-red-700'
@@ -517,7 +517,7 @@ export default function ProdukTab() {
               </div>
 
               {/* Row 3: Action Buttons */}
-              <div className="flex justify-end items-center pt-1.5 border-t border-gray-100 gap-2">
+              <div className="flex justify-end items-center pt-1.5 border-t border-border gap-2">
                 <button
                   onClick={() => handleOpenModal('edit', product)}
                   className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-bold flex items-center gap-1"
@@ -536,31 +536,31 @@ export default function ProdukTab() {
         </div>
         
         {/* Pagination Footer */}
-        <div className="border-t border-gray-100 px-3 py-2 flex items-center justify-between bg-gray-50/50">
-          <p className="text-[10px] text-gray-500 font-medium">
+        <div className="border-t border-border px-3 py-2 flex items-center justify-between bg-muted/50">
+          <p className="text-[10px] text-muted-foreground font-medium">
             Menampilkan {currentItems.length} dari {filteredProducts.length} produk
           </p>
           <div className="flex items-center gap-1">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage <= 1}
-              className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              <ChevronLeft size={14} className="text-gray-600" />
+              <ChevronLeft size={14} className="text-muted-foreground" />
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1)
               .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
               .map((p, idx, arr) => (
                 <span key={p}>
                   {idx > 0 && arr[idx - 1] !== p - 1 && (
-                    <span className="text-gray-400 text-[10px] px-0.5">...</span>
+                    <span className="text-muted-foreground text-[10px] px-0.5">...</span>
                   )}
                   <button
                     onClick={() => setCurrentPage(p)}
                     className={`min-w-[24px] h-6 text-[11px] font-bold rounded transition-colors ${
                       currentPage === p
                         ? 'bg-[#3B82F6] text-white shadow-sm'
-                        : 'text-gray-600 hover:bg-gray-200'
+                        : 'text-muted-foreground hover:bg-accent'
                     }`}
                   >
                     {p}
@@ -571,9 +571,9 @@ export default function ProdukTab() {
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage >= totalPages}
-              className="p-1 rounded hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="p-1 rounded hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              <ChevronRight size={14} className="text-gray-600" />
+              <ChevronRight size={14} className="text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -581,18 +581,18 @@ export default function ProdukTab() {
 
       {/* Summary */}
       <div className="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-3">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 md:p-3">
-          <p className="text-[8px] md:text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5 line-clamp-1">Total Produk</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2 md:p-3">
+          <p className="text-[8px] md:text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-0.5 line-clamp-1">Total Produk</p>
           <p className="text-base md:text-xl font-bold text-[#3B82F6]">{filteredProducts.length}</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 md:p-3">
-          <p className="text-[8px] md:text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5 line-clamp-1">Total Stok</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2 md:p-3">
+          <p className="text-[8px] md:text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-0.5 line-clamp-1">Total Stok</p>
           <p className="text-base md:text-xl font-bold text-[#3B82F6]">
             {filteredProducts.reduce((sum, p) => sum + p.stok_saat_ini, 0)}
           </p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 md:p-3">
-          <p className="text-[8px] md:text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-0.5 line-clamp-1">Stok Rendah</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2 md:p-3">
+          <p className="text-[8px] md:text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-0.5 line-clamp-1">Stok Rendah</p>
           <p className="text-base md:text-xl font-bold text-red-600">
             {filteredProducts.filter((p) => p.stok_saat_ini < 10).length}
           </p>
@@ -602,13 +602,13 @@ export default function ProdukTab() {
       {/* Modal Form */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm modal-backdrop flex items-end md:items-center justify-center md:p-3 z-50">
-          <div className="bg-white md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-2xl overflow-hidden h-full md:h-auto md:max-h-[90vh] flex flex-col">
-            <div className="p-3 md:p-4 border-b border-gray-100 shrink-0 bg-gray-50/50 sticky top-0 z-20">
+          <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-white/50 modal-content w-full max-w-2xl overflow-hidden h-full md:h-auto md:max-h-[90vh] flex flex-col">
+            <div className="p-3 md:p-4 border-b border-border shrink-0 bg-muted/50 sticky top-0 z-20">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="md:hidden p-1.5 -ml-1 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-colors"
+                  className="md:hidden p-1.5 -ml-1 text-muted-foreground hover:text-gray-800 hover:bg-accent rounded-lg transition-colors"
                 >
                   <ChevronLeft size={20} />
                 </button>
@@ -616,41 +616,41 @@ export default function ProdukTab() {
                   {modalMode === 'add' ? <Plus size={20} /> : <Edit size={20} />}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-gray-800">
+                  <h3 className="text-sm font-bold text-foreground">
                     {modalMode === 'add' ? 'Tambah Produk Baru' : 'Edit Detail Produk'}
                   </h3>
-                  <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wider">
+                  <p className="text-[10px] text-muted-foreground uppercase font-medium tracking-wider">
                     {modalMode === 'add' ? 'Input stok & harga barang' : 'Perbarui informasi produk'}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="p-4 md:p-5 overflow-y-auto flex-1 bg-white overscroll-contain">
+            <div className="p-4 md:p-5 overflow-y-auto flex-1 bg-card overscroll-contain">
               <form id="productForm" onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
                 <div className="col-span-full">
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                     Nama Produk
                   </label>
                   <div className="relative">
-                    <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                    <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
                     <input
                       type="text"
                       required
                       placeholder="Cth: HDD External 1TB..."
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2.5 md:py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-xs font-medium bg-gray-50/50"
+                      className="w-full pl-9 pr-3 py-2.5 md:py-2 border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-xs font-medium bg-muted/50"
                     />
                   </div>
                 </div>
 
                 <div className="col-span-full">
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                     Kategori Produk
                   </label>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
-                      <Tags className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10" size={14} />
+                      <Tags className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={14} />
                       <Select
                         required
                         placeholder="Pilih Kategori..."
@@ -749,28 +749,28 @@ export default function ProdukTab() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                     Harga Beli (HPP)
                   </label>
                   <div className="relative">
-                    <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                    <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
                     <input
                       type="number"
                       min="0"
                       placeholder="Rp 0"
                       value={formData.harga_beli}
                       onChange={(e) => setFormData({ ...formData, harga_beli: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2.5 md:py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold text-gray-700 bg-gray-50/50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
+                      className="w-full pl-9 pr-3 py-2.5 md:py-2 border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold text-foreground bg-muted/50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                     Harga Jual
                   </label>
                   <div className="relative">
-                    <Percent className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                    <Percent className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
                     <input
                       type="number"
                       min="0"
@@ -783,28 +783,28 @@ export default function ProdukTab() {
                 </div>
 
                 <div className="md:col-span-1">
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1 tracking-widest">
                     Stok Saat Ini
                   </label>
                   <div className="relative">
-                    <Box className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                    <Box className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
                     <input
                       type="number"
                       required
                       min="0"
                       value={formData.stok_saat_ini}
                       onChange={(e) => setFormData({ ...formData, stok_saat_ini: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2.5 md:py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold bg-gray-50/50"
+                      className="w-full pl-9 pr-3 py-2.5 md:py-2 border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-xs font-bold bg-muted/50"
                     />
                   </div>
                 </div>
               </form>
             </div>
-            <div className="p-3 md:p-4 border-t border-gray-100 shrink-0 flex justify-end gap-3 bg-gray-50/80 backdrop-blur-sm sticky bottom-0 z-20">
+            <div className="p-3 md:p-4 border-t border-border shrink-0 flex justify-end gap-3 bg-muted/80 backdrop-blur-sm sticky bottom-0 z-20">
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="hidden md:block px-4 py-2 text-gray-500 hover:bg-gray-200 bg-white rounded-lg transition-all font-bold text-xs uppercase tracking-widest border border-gray-200"
+                className="hidden md:block px-4 py-2 text-muted-foreground hover:bg-accent bg-card rounded-lg transition-all font-bold text-xs uppercase tracking-widest border border-border"
               >
                 Batal
               </button>
@@ -829,13 +829,13 @@ export default function ProdukTab() {
       {/* Confirm Delete Modal */}
       {confirmDelete.isOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-3 animate-in fade-in duration-200">
-           <div className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-hidden p-5">
-              <h3 className="text-sm font-bold text-gray-800 mb-2">Hapus Produk?</h3>
-              <p className="text-xs text-gray-500 mb-5">
-                Apakah Anda yakin ingin menghapus produk <span className="font-bold text-gray-800">"{confirmDelete.name}"</span>? Transaksi yang sudah menggunakan produk ini mungkin akan terpengaruh.
+           <div className="bg-card rounded-xl shadow-xl w-full max-w-sm overflow-hidden p-5">
+              <h3 className="text-sm font-bold text-foreground mb-2">Hapus Produk?</h3>
+              <p className="text-xs text-muted-foreground mb-5">
+                Apakah Anda yakin ingin menghapus produk <span className="font-bold text-foreground">"{confirmDelete.name}"</span>? Transaksi yang sudah menggunakan produk ini mungkin akan terpengaruh.
               </p>
               <div className="flex gap-2 justify-end">
-                <button onClick={() => setConfirmDelete({isOpen: false, id: null, name: ''})} className="px-4 py-2 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg">Batal</button>
+                <button onClick={() => setConfirmDelete({isOpen: false, id: null, name: ''})} className="px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-accent rounded-lg">Batal</button>
                 <button onClick={executeDelete} className="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg">Ya, Hapus</button>
               </div>
            </div>

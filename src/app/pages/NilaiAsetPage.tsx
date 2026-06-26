@@ -49,14 +49,14 @@ export default function NilaiAsetPage() {
   if (loading) {
     return (
       <div className="space-y-6 animate-pulse">
-        <div><div className="h-5 bg-gray-200 rounded w-32 mb-2" /><div className="h-3 bg-gray-200 rounded w-56" /></div>
+        <div><div className="h-5 bg-accent rounded w-32 mb-2" /><div className="h-3 bg-accent rounded w-56" /></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="bg-[#3B82F6]/20 rounded-lg p-4"><div className="h-4 bg-blue-200 rounded w-28 mb-3" /><div className="h-7 bg-blue-200 rounded w-40" /></div>
-          {[...Array(2)].map((_, i) => (<div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-4 bg-gray-200 rounded w-24 mb-3" /><div className="h-7 bg-gray-200 rounded w-16" /></div>))}
+          {[...Array(2)].map((_, i) => (<div key={i} className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-4 bg-accent rounded w-24 mb-3" /><div className="h-7 bg-accent rounded w-16" /></div>))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-4 bg-gray-200 rounded w-40 mb-3" /><div className="h-[300px] bg-gray-100 rounded-lg" /></div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3"><div className="h-4 bg-gray-200 rounded w-40 mb-3" /><div className="space-y-3">{[...Array(4)].map((_, i) => (<div key={i} className="p-3 bg-gray-50 rounded-lg"><div className="h-4 bg-gray-200 rounded w-24 mb-2" /><div className="h-5 bg-gray-200 rounded w-32" /></div>))}</div></div>
+          <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-4 bg-accent rounded w-40 mb-3" /><div className="h-[300px] bg-accent rounded-lg" /></div>
+          <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-4 bg-accent rounded w-40 mb-3" /><div className="space-y-3">{[...Array(4)].map((_, i) => (<div key={i} className="p-3 bg-muted rounded-lg"><div className="h-4 bg-accent rounded w-24 mb-2" /><div className="h-5 bg-accent rounded w-32" /></div>))}</div></div>
         </div>
       </div>
     );
@@ -77,34 +77,34 @@ export default function NilaiAsetPage() {
           <p className="text-xl md:text-2xl font-bold">Rp {data.total_nilai_aset.toLocaleString('id-ID')}</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 md:p-4">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-3 md:p-4">
           <div className="flex items-center gap-2 mb-1.5 md:mb-2">
             <div className="w-7 h-7 md:w-8 md:h-8 bg-green-100 rounded-md flex items-center justify-center">
               <Package className="text-green-600 w-3.5 h-3.5 md:w-4 md:h-4" />
             </div>
-            <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wide">Unit Stok</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide">Unit Stok</p>
           </div>
-          <p className="text-lg md:text-xl font-bold text-gray-800">{data.total_stok_keseluruhan}</p>
+          <p className="text-lg md:text-xl font-bold text-foreground">{data.total_stok_keseluruhan}</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 md:p-4">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-3 md:p-4">
           <div className="flex items-center gap-2 mb-1.5 md:mb-2">
             <div className="w-7 h-7 md:w-8 md:h-8 bg-purple-100 rounded-md flex items-center justify-center">
               <TrendingUp className="text-purple-600 w-3.5 h-3.5 md:w-4 md:h-4" />
             </div>
-            <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wide">Kategori</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide">Kategori</p>
           </div>
-          <p className="text-lg md:text-xl font-bold text-gray-800">{data.total_kategori_aktif}</p>
+          <p className="text-lg md:text-xl font-bold text-foreground">{data.total_kategori_aktif}</p>
         </div>
       </div>
 
       {/* Charts and Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Pie Chart */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
-          <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Distribusi Nilai Aset</h3>
+        <div className="bg-card rounded-lg shadow-sm border border-border p-3">
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-2">Distribusi Nilai Aset</h3>
           {data.data_kategori.length === 0 ? (
-            <p className="text-center text-gray-500 py-6 text-xs">Data aset tidak tersedia.</p>
+            <p className="text-center text-muted-foreground py-6 text-xs">Data aset tidak tersedia.</p>
           ) : (
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -132,17 +132,17 @@ export default function NilaiAsetPage() {
         </div>
 
         {/* Top Categories */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
-          <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nilai Aset Per Kategori</h3>
+        <div className="bg-card rounded-lg shadow-sm border border-border p-3">
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-2">Nilai Aset Per Kategori</h3>
           <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
             {data.data_kategori.length === 0 ? (
-              <p className="text-gray-500 text-xs">Tidak ada barang</p>
+              <p className="text-muted-foreground text-xs">Tidak ada barang</p>
             ) : (
               data.data_kategori
                 .map((item, index) => (
                   <div
                     key={item.kategori}
-                    className="px-2.5 py-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                    className="px-2.5 py-2 bg-muted rounded-md hover:bg-accent transition-colors"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
@@ -150,17 +150,17 @@ export default function NilaiAsetPage() {
                           className="w-3 h-3 rounded-sm shrink-0"
                           style={{ backgroundColor: COLORS[index % COLORS.length] }}
                         ></div>
-                        <span className="font-bold text-xs text-gray-800">{item.kategori}</span>
+                        <span className="font-bold text-xs text-foreground">{item.kategori}</span>
                       </div>
-                      <span className="text-[10px] text-gray-500">{item.total_stok} unit</span>
+                      <span className="text-[10px] text-muted-foreground">{item.total_stok} unit</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-[#3B82F6]">
                         Rp {item.nilai_aset.toLocaleString('id-ID')}
                       </span>
-                      <span className="text-[10px] text-gray-400">{item.persentase}%</span>
+                      <span className="text-[10px] text-muted-foreground">{item.persentase}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1 mt-1.5">
+                    <div className="w-full bg-accent rounded-full h-1 mt-1.5">
                       <div
                         className="h-1 rounded-full"
                         style={{
@@ -177,18 +177,18 @@ export default function NilaiAsetPage() {
       </div>
 
       {/* Detail Table */}
-      <div className="hidden md:block bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-3 py-2 border-b border-gray-100">
-          <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Detail Nilai Aset</h3>
+      <div className="hidden md:block bg-card rounded-lg shadow-sm border border-border overflow-hidden">
+        <div className="px-3 py-2 border-b border-border">
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Detail Nilai Aset</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-gray-500">Kategori</th>
-                <th className="text-center px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-gray-500">Total Stok</th>
-                <th className="text-right px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-gray-500">Nilai Aset</th>
-                <th className="text-center px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-gray-500">Persentase</th>
+                <th className="text-left px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Kategori</th>
+                <th className="text-center px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Total Stok</th>
+                <th className="text-right px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Nilai Aset</th>
+                <th className="text-center px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Persentase</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -200,10 +200,10 @@ export default function NilaiAsetPage() {
                         className="w-2.5 h-2.5 rounded-full shrink-0"
                         style={{ backgroundColor: COLORS[index % COLORS.length] }}
                       ></div>
-                      <span className="font-bold text-gray-800">{item.kategori}</span>
+                      <span className="font-bold text-foreground">{item.kategori}</span>
                     </div>
                   </td>
-                  <td className="px-3 py-1.5 text-center text-xs text-gray-600">{item.total_stok} unit</td>
+                  <td className="px-3 py-1.5 text-center text-xs text-muted-foreground">{item.total_stok} unit</td>
                   <td className="px-3 py-1.5 text-right text-xs font-bold text-[#3B82F6]">
                     Rp {item.nilai_aset.toLocaleString('id-ID')}
                   </td>
@@ -216,19 +216,19 @@ export default function NilaiAsetPage() {
               ))}
               {data.data_kategori.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-3 py-4 text-center text-gray-500 text-xs">
+                  <td colSpan={4} className="px-3 py-4 text-center text-muted-foreground text-xs">
                     Tidak ada data aset untuk ditampilkan.
                   </td>
                 </tr>
               )}
               {data.data_kategori.length > 0 && (
                 <tr className="bg-[#3B82F6]/10 font-bold">
-                  <td className="px-3 py-2 text-xs text-gray-800">TOTAL KESELURUHAN</td>
-                  <td className="px-3 py-2 text-center text-xs text-gray-800">{data.total_stok_keseluruhan} unit</td>
+                  <td className="px-3 py-2 text-xs text-foreground">TOTAL KESELURUHAN</td>
+                  <td className="px-3 py-2 text-center text-xs text-foreground">{data.total_stok_keseluruhan} unit</td>
                   <td className="px-3 py-2 text-right text-xs text-[#3B82F6]">
                     Rp {data.total_nilai_aset.toLocaleString('id-ID')}
                   </td>
-                  <td className="px-3 py-2 text-center text-xs text-gray-800">100%</td>
+                  <td className="px-3 py-2 text-center text-xs text-foreground">100%</td>
                 </tr>
               )}
             </tbody>
@@ -239,39 +239,39 @@ export default function NilaiAsetPage() {
       {/* Mobile Card List */}
       <div className="space-y-3 md:hidden">
         {data.data_kategori.map((item, index) => (
-          <div key={item.kategori} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 space-y-2">
+          <div key={item.kategori} className="bg-card rounded-xl shadow-sm border border-border p-4 space-y-2">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <div
                   className="w-2.5 h-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: COLORS[index % COLORS.length] }}
                 />
-                <h4 className="font-bold text-sm text-gray-800">{item.kategori}</h4>
+                <h4 className="font-bold text-sm text-foreground">{item.kategori}</h4>
               </div>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700">
                 {item.persentase}%
               </span>
             </div>
             
-            <div className="border-t border-gray-50 pt-2 flex justify-between text-xs">
+            <div className="border-t border-border pt-2 flex justify-between text-xs">
               <div className="flex flex-col">
-                <span className="text-gray-500 text-[10px] uppercase font-semibold">Total Stok</span>
-                <span className="text-gray-700 font-medium">{item.total_stok} unit</span>
+                <span className="text-muted-foreground text-[10px] uppercase font-semibold">Total Stok</span>
+                <span className="text-foreground font-medium">{item.total_stok} unit</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-gray-500 text-[10px] uppercase font-semibold">Nilai Aset</span>
+                <span className="text-muted-foreground text-[10px] uppercase font-semibold">Nilai Aset</span>
                 <span className="text-blue-600 font-bold">Rp {item.nilai_aset.toLocaleString('id-ID')}</span>
               </div>
             </div>
           </div>
         ))}
         {data.data_kategori.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center text-gray-500 text-xs">
+          <div className="bg-card rounded-xl shadow-sm border border-border p-8 text-center text-muted-foreground text-xs">
             Tidak ada data aset untuk ditampilkan.
           </div>
         ) : (
-          <div className="bg-[#3B82F6]/5 rounded-xl border border-[#3B82F6]/10 p-4 space-y-2 text-xs font-bold text-gray-800">
-            <div className="flex justify-between border-b border-blue-100/50 pb-1 text-[10px] text-gray-500 uppercase font-black tracking-wider">
+          <div className="bg-[#3B82F6]/5 rounded-xl border border-[#3B82F6]/10 p-4 space-y-2 text-xs font-bold text-foreground">
+            <div className="flex justify-between border-b border-blue-100/50 pb-1 text-[10px] text-muted-foreground uppercase font-black tracking-wider">
               <span>Ringkasan</span>
               <span>Total</span>
             </div>

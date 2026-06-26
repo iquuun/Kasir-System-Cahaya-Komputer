@@ -71,7 +71,7 @@ export default function LoginPage() {
             <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl">
               <Monitor className="text-white" size={28} />
             </div>
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-card rounded-full flex items-center justify-center shadow-md">
               <Loader2 className="text-[#3B82F6] animate-spin" size={14} />
             </div>
           </div>
@@ -87,12 +87,12 @@ export default function LoginPage() {
   if (!serverOnline) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center p-4 font-['Inter']">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 text-center">
+        <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md p-6 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 rounded-full mb-4 border border-red-100">
             <WifiOff className="text-red-500" size={28} />
           </div>
-          <h2 className="text-lg font-bold text-gray-800 mb-2">Gagal Terhubung ke Server</h2>
-          <p className="text-sm text-gray-500 mb-5 leading-relaxed">
+          <h2 className="text-lg font-bold text-foreground mb-2">Gagal Terhubung ke Server</h2>
+          <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
             Aplikasi tidak dapat menghubungi server utama. Silakan periksa koneksi internet Anda.
           </p>
           
@@ -122,23 +122,23 @@ export default function LoginPage() {
   // ==========================================
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center p-3 font-['Inter']">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-5">
+      <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md p-5">
         <div className="text-center mb-5">
           <div className="inline-flex items-center justify-center w-16 h-12 bg-[#3B82F6] rounded-full mb-3">
             <LogIn className="text-white" size={16} />
           </div>
-          <h1 className="text-xl font-semibold text-gray-800">CAHAYA KOMPUTER</h1>
-          <p className="text-gray-600 mt-2 text-sm">Sistem Kasir & Manajemen Toko</p>
+          <h1 className="text-xl font-semibold text-foreground">CAHAYA KOMPUTER</h1>
+          <p className="text-muted-foreground mt-2 text-sm">Sistem Kasir & Manajemen Toko</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-2">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-sm" placeholder="email@cahaya.id" required />
+            <label className="block text-xs font-medium text-foreground mb-2">Email</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-sm" placeholder="email@cahaya.id" required />
           </div>
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="block text-xs font-medium text-gray-700">Password</label>
+              <label className="block text-xs font-medium text-foreground">Password</label>
               <button 
                 type="button" 
                 onClick={() => setShowForgotModal(true)}
@@ -148,8 +148,8 @@ export default function LoginPage() {
               </button>
             </div>
             <div className="relative">
-              <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-sm" placeholder="••••••••" required />
-              <button type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none" onClick={() => setShowPassword(!showPassword)}>
+              <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-3 pr-10 py-2 border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent outline-none text-sm" placeholder="••••••••" required />
+              <button type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-gray-600 focus:outline-none" onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
@@ -164,7 +164,7 @@ export default function LoginPage() {
       {/* Modal Lupa Password */}
       {showForgotModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-card rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="bg-blue-50 px-5 py-4 border-b border-blue-100 flex items-center justify-between">
               <div className="flex items-center gap-2 text-blue-700">
                 <Info size={18} />
@@ -177,9 +177,9 @@ export default function LoginPage() {
                 <X size={18} />
               </button>
             </div>
-            <div className="p-5 space-y-4 text-sm text-gray-600">
-              <div className="bg-gray-50 border border-gray-200 p-3 rounded-xl">
-                <h4 className="font-bold text-gray-800 mb-1 flex items-center gap-1.5">
+            <div className="p-5 space-y-4 text-sm text-muted-foreground">
+              <div className="bg-muted border border-border p-3 rounded-xl">
+                <h4 className="font-bold text-foreground mb-1 flex items-center gap-1.5">
                   <span>👤</span> Untuk Karyawan / Kasir:
                 </h4>
                 <p className="text-xs leading-relaxed pl-6">
@@ -198,20 +198,20 @@ export default function LoginPage() {
                   <li>Login ke panel <b>Hostinger</b>.</li>
                   <li>Buka menu <b>Advanced &gt; Cron Jobs</b>.</li>
                   <li>Buat Custom Cron Job baru dengan perintah berikut:<br/>
-                    <code className="block bg-white border border-orange-200 p-1.5 rounded mt-1 font-mono text-[9px] text-gray-800 break-all select-all">
+                    <code className="block bg-card border border-orange-200 p-1.5 rounded mt-1 font-mono text-[9px] text-foreground break-all select-all">
                       cd /home/u879259877/domains/cahayapos.id/laravel && php artisan user:reset-owner
                     </code>
                   </li>
                   <li>Atur jadwal ke <b>Every minute (* * * * *)</b> lalu Save.</li>
-                  <li>Tunggu 1 menit, lalu login menggunakan password default: <b className="bg-white px-1 rounded border border-orange-200">password123</b></li>
+                  <li>Tunggu 1 menit, lalu login menggunakan password default: <b className="bg-card px-1 rounded border border-orange-200">password123</b></li>
                   <li><b className="text-red-600">PENTING:</b> Hapus kembali Cron Job tersebut setelah berhasil masuk!</li>
                 </ol>
               </div>
             </div>
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+            <div className="p-4 bg-muted border-t border-border flex justify-end">
               <button 
                 onClick={() => setShowForgotModal(false)}
-                className="px-5 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+                className="px-5 py-2 bg-card border border-border rounded-lg text-xs font-bold text-foreground hover:bg-muted transition-colors"
               >
                 Tutup Peringatan
               </button>
