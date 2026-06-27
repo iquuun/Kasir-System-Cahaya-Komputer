@@ -196,6 +196,7 @@ export default function PenjualanPage() {
   const [showScanner, setShowScanner] = useState(false);
   const [scanTarget, setScanTarget] = useState<'pos' | 'edit' | 'inline'>('pos');
   const [inlineScanTarget, setInlineScanTarget] = useState<number | null>(null);
+  const [isScannerPaused, setIsScannerPaused] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const originalResiVal = useRef<string>('');
   const scannerContainerId = 'barcode-scanner-container';
@@ -360,6 +361,7 @@ export default function PenjualanPage() {
       scannerRef.current = null;
     }
     setShowScanner(false);
+    setIsScannerPaused(false);
   }, []);
 
   useEffect(() => {
@@ -672,6 +674,16 @@ export default function PenjualanPage() {
                   // Fallback: if all following are scanned, just go to the very next one
                   setInlineScanTarget(scannable[currentIndex + 1].id);
                 }
+              }
+
+              // Pause scanner to prevent accidental multiple scans
+              try {
+                if (html5QrCode.isScanning) {
+                  html5QrCode.pause();
+                  setIsScannerPaused(true);
+                }
+              } catch (e) {
+                console.warn('Failed to pause scanner', e);
               }
             }
           }
@@ -2994,6 +3006,28 @@ export default function PenjualanPage() {
                   id={scannerContainerId} 
                   className="w-full h-full aspect-square"
                 />
+                
+                {isScannerPaused && (
+                  <div 
+                    className="absolute inset-0 bg-black/60 backdrop-blur-sm z-20 flex flex-col items-center justify-center cursor-pointer animate-in fade-in duration-200"
+                    onClick={() => {
+                      if (scannerRef.current) {
+                        try {
+                          scannerRef.current.resume();
+                          setIsScannerPaused(false);
+                        } catch (e) {
+                          console.warn('Failed to resume scanner', e);
+                        }
+                      }
+                    }}
+                  >
+                    <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(59,130,246,0.6)] animate-pulse">
+                      <Camera size={28} className="text-white" />
+                    </div>
+                    <p className="text-white font-bold text-sm drop-shadow-md">Ketuk untuk Lanjut Scan</p>
+                  </div>
+                )}
+
                 <p className="absolute top-3 left-0 right-0 text-[10px] text-white/70 text-center font-medium drop-shadow-md z-10 pointer-events-none">
                   Arahkan kamera ke barcode resi pengiriman
                 </p>
