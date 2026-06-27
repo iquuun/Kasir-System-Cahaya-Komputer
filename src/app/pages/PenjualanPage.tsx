@@ -2977,16 +2977,30 @@ export default function PenjualanPage() {
                 <XIcon size={18} />
               </button>
             </div>
-            <div className="p-4 flex-1 overflow-y-auto">
-              <p className="text-[11px] text-muted-foreground mb-3 text-center">Arahkan kamera ke barcode resi pengiriman</p>
-              <div 
-                id={scannerContainerId} 
-                className="w-full rounded-lg overflow-hidden border-2 border-blue-200"
-                style={{ minHeight: '280px' }}
-              />
+            <div className="flex-1 overflow-y-auto bg-muted/30 flex flex-col">
+              {/* Scanner Camera Area (Edge to Edge) */}
+              <div className="w-full bg-black relative shrink-0">
+                <style>{`
+                  #${scannerContainerId} video {
+                    object-fit: cover !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                  }
+                  #${scannerContainerId} {
+                    border: none !important;
+                  }
+                `}</style>
+                <div 
+                  id={scannerContainerId} 
+                  className="w-full h-full aspect-square"
+                />
+                <p className="absolute top-3 left-0 right-0 text-[10px] text-white/70 text-center font-medium drop-shadow-md z-10 pointer-events-none">
+                  Arahkan kamera ke barcode resi pengiriman
+                </p>
+              </div>
 
               {/* Order Info & Navigation - Show when scanning inline for a specific sale */}
-              {scanTarget === 'inline' && inlineScanTarget && (() => {
+              {scanTarget === 'inline' && inlineScanTarget ? (() => {
                 const targetSale = sales.find(s => s.id === inlineScanTarget);
                 if (!targetSale) return null;
                 
@@ -2995,14 +3009,14 @@ export default function PenjualanPage() {
                 const hasNext = currentIndex < scannableSales.length - 1;
 
                 return (
-                  <div className="mt-3 space-y-3">
+                  <div className="p-4 bg-card rounded-t-[20px] shadow-[0_-10px_20px_rgba(0,0,0,0.1)] -mt-4 relative z-10 flex-1 space-y-3 flex flex-col">
                     {/* Navigation buttons */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 shrink-0">
                       <button
                         type="button"
                         disabled={!hasPrev}
                         onClick={() => navigateScanner('prev')}
-                        className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-accent border border-border text-gray-750 disabled:opacity-40 rounded-xl text-xs font-bold transition-all hover:bg-gray-205 active:scale-95"
+                        className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-accent border border-border text-foreground disabled:opacity-40 rounded-xl text-xs font-bold transition-all hover:bg-accent/80 active:scale-95"
                       >
                         <ChevronLeft size={16} /> Sebelumnya
                       </button>
@@ -3010,22 +3024,22 @@ export default function PenjualanPage() {
                         type="button"
                         disabled={!hasNext}
                         onClick={() => navigateScanner('next')}
-                        className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 disabled:opacity-40 rounded-xl text-xs font-bold transition-all hover:bg-blue-100/80 active:scale-95"
+                        className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-primary/10 border border-primary/20 text-primary disabled:opacity-40 rounded-xl text-xs font-bold transition-all hover:bg-primary/20 active:scale-95"
                       >
                         Selanjutnya <ChevronRight size={16} />
                       </button>
                     </div>
 
                     {/* Order Details Card */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
-                      <div className="flex justify-between items-center border-b border-blue-100 pb-1.5">
-                        <p className="text-[11px] font-black uppercase text-blue-700 tracking-wide">📋 Data Pesanan ({currentIndex + 1} / {scannableSales.length})</p>
+                    <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 space-y-2 shrink-0">
+                      <div className="flex justify-between items-center border-b border-primary/10 pb-1.5">
+                        <p className="text-[11px] font-black uppercase text-primary tracking-wide">📋 Data Pesanan ({currentIndex + 1} / {scannableSales.length})</p>
                         {targetSale.no_resi ? (
-                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[9px] font-bold">
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-full text-[9px] font-bold">
                             ✓ Ter-scan
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-rose-100 text-rose-700 rounded-full text-[9px] font-bold">
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 rounded-full text-[9px] font-bold">
                             ⚠️ Belum Ter-scan
                           </span>
                         )}
@@ -3042,11 +3056,11 @@ export default function PenjualanPage() {
                           </>
                         )}
                         <span className="text-muted-foreground">Channel</span>
-                        <span className="font-bold text-blue-600 uppercase">{targetSale.channel}</span>
+                        <span className="font-bold text-primary uppercase">{targetSale.channel}</span>
                         
                         <span className="text-muted-foreground">No. Resi</span>
                         <div className="flex items-center gap-1.5">
-                          <span className={`font-mono font-bold text-[10px] break-all ${targetSale.no_resi ? 'text-green-600' : 'text-muted-foreground italic'}`}>
+                          <span className={`font-mono font-bold text-[10px] break-all ${targetSale.no_resi ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground italic'}`}>
                             {targetSale.no_resi || 'Belum di-scan'}
                           </span>
                           {targetSale.no_resi && (
@@ -3063,7 +3077,7 @@ export default function PenjualanPage() {
                                   toast.error("Gagal menghapus No. Resi");
                                 }
                               }}
-                              className="text-[9px] font-bold text-red-500 bg-red-100 hover:bg-red-200 px-1.5 py-0.5 rounded transition-all"
+                              className="text-[9px] font-bold text-red-500 bg-red-100 dark:bg-red-500/20 hover:bg-red-200 dark:hover:bg-red-500/30 px-1.5 py-0.5 rounded transition-all"
                             >
                               Hapus
                             </button>
@@ -3071,18 +3085,29 @@ export default function PenjualanPage() {
                         </div>
                       </div>
                     </div>
+
+                    <div className="mt-auto flex justify-center pt-2 shrink-0">
+                      <button 
+                        onClick={closeScanner} 
+                        className="w-full md:w-auto px-6 py-2.5 md:py-2 bg-accent text-foreground rounded-xl md:rounded-lg text-xs font-bold hover:bg-accent/80 transition-colors"
+                      >
+                        Tutup Scanner
+                      </button>
+                    </div>
                   </div>
                 );
-              })()}
-
-              <div className="mt-4 flex justify-center sticky bottom-0 bg-card pt-2">
-                <button 
-                  onClick={closeScanner} 
-                  className="w-full md:w-auto px-6 py-2.5 md:py-2 bg-accent text-foreground rounded-xl md:rounded-lg text-xs font-bold hover:bg-accent transition-colors"
-                >
-                  Tutup Scanner
-                </button>
-              </div>
+              })() : (
+                <div className="p-4 bg-card rounded-t-[20px] shadow-[0_-10px_20px_rgba(0,0,0,0.1)] -mt-4 relative z-10 flex-1 flex flex-col justify-end">
+                  <div className="flex justify-center shrink-0">
+                    <button 
+                      onClick={closeScanner} 
+                      className="w-full md:w-auto px-6 py-2.5 md:py-2 bg-accent text-foreground rounded-xl md:rounded-lg text-xs font-bold hover:bg-accent/80 transition-colors"
+                    >
+                      Tutup Scanner
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
