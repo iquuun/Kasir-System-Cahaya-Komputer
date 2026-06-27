@@ -864,10 +864,10 @@ export default function KalkulatorPage() {
                                         <th className="py-1.5 px-1.5 text-[10px] font-black uppercase text-foreground text-center w-10">Qty</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-100">
+                                <tbody className="divide-y divide-border">
                                     {rakitanItems.map((item, idx) => (
-                                        <tr key={item.id} className={idx % 2 === 1 ? 'bg-gray-50/60' : ''}>
-                                            <td className="py-[5px] px-1.5 text-[10px] font-semibold text-gray-300 text-center">{idx + 1}</td>
+                                        <tr key={item.id} className={idx % 2 === 1 ? 'bg-muted/50' : ''}>
+                                            <td className="py-[5px] px-1.5 text-[10px] font-semibold text-muted-foreground text-center">{idx + 1}</td>
                                             <td className="py-[5px] px-1.5 text-[11px] font-bold text-muted-foreground uppercase">{item.kategori}</td>
                                             <td className="py-[5px] px-1.5 text-[11px] font-medium text-foreground leading-tight">{item.nama}</td>
                                             <td className="py-[5px] px-1.5 text-[11px] font-bold text-foreground text-center">{item.qty}x</td>
