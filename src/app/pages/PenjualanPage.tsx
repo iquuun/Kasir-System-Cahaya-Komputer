@@ -631,14 +631,12 @@ export default function PenjualanPage() {
                 return;
               }
 
-              // 3. Confirm overwrite if resi already exists, or regular confirm
+              // 3. Confirm overwrite if resi already exists (still need this for safety if overwriting)
               if (targetSale.no_resi) {
                 const overwriteConfirm = window.confirm(`⚠️ Transaksi ini sudah memiliki No. Resi: "${targetSale.no_resi}".\nApakah Anda yakin ingin menimpa dengan No. Resi yang baru?`);
                 if (!overwriteConfirm) return;
-              } else {
-                const isConfirmed = window.confirm(`Barcode terdeteksi:\n\n${decodedText}\n\nApakah ini sudah benar dan ingin disimpan?`);
-                if (!isConfirmed) return;
               }
+              // If it's empty, we just proceed automatically!
 
               playBeep();
 
