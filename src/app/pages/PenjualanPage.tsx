@@ -2957,7 +2957,7 @@ export default function PenjualanPage() {
       {/* ====== BARCODE SCANNER MODAL ====== */}
       {showScanner && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-[70] no-print">
-          <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
+          <div className="bg-card md:rounded-2xl shadow-2xl w-full md:max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-3 md:px-4 py-3 flex justify-between items-center shrink-0 sticky top-0 z-20">
               <div className="flex items-center gap-2">
                 <button 
