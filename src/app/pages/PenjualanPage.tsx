@@ -552,6 +552,11 @@ export default function PenjualanPage() {
     return sorted;
   }, [sales, historySearch, dateRange, historyChannel, sortField, sortDirection]);
 
+  const scannableSalesRef = useRef<Sale[]>([]);
+  useEffect(() => {
+    scannableSalesRef.current = scannableSales;
+  }, [scannableSales]);
+
   // Navigate between scannable orders inside the barcode scanner modal
   const navigateScanner = (direction: 'prev' | 'next') => {
     if (scanTarget !== 'inline' || !inlineScanTarget) return;
@@ -636,15 +641,38 @@ export default function PenjualanPage() {
               playBeep();
 
               // 4. Match check and save
+              const customerName = targetSale.username_pembeli || 'UMUM';
+              const channelInfo = targetSale.channel || 'OFFLINE';
+
               if (targetSale.no_pesanan && targetSale.no_pesanan === decodedText) {
-                toast.success(`✓ COCOK! Barcode sesuai dengan No. Pesanan pada Invoice ${targetSale.invoice}!`, { duration: 4000 });
+                toast.success(`✓ COCOK! Barcode sesuai dengan No. Pesanan pada Invoice ${targetSale.invoice}\nPelanggan: ${customerName}\nChannel: ${channelInfo}`, { duration: 4000 });
               } else {
-                toast.success(`✓ COCOK! Resi berhasil di-scan & disimpan untuk Invoice ${targetSale.invoice}!`, { duration: 4000 });
+                toast.success(`✓ BERHASIL! Resi disimpan untuk Invoice ${targetSale.invoice}\nPelanggan: ${customerName}\nChannel: ${channelInfo}`, { duration: 4000 });
               }
 
               setSales((prevSales: any[]) => prevSales.map(s => s.id === currentInlineScanTarget ? { ...s, no_resi: decodedText } : s));
               api.put(`/sales/${currentInlineScanTarget}`, { no_resi: decodedText })
                 .catch(() => toast.error('Gagal menyimpan No. Resi ke server.'));
+
+              // 5. Auto-advance to next unscanned order
+              const scannable = scannableSalesRef.current;
+              const currentIndex = scannable.findIndex(s => s.id === currentInlineScanTarget);
+              if (currentIndex !== -1) {
+                let nextUnscannedIndex = -1;
+                for (let i = currentIndex + 1; i < scannable.length; i++) {
+                  if (!scannable[i].no_resi) {
+                    nextUnscannedIndex = i;
+                    break;
+                  }
+                }
+                
+                if (nextUnscannedIndex !== -1) {
+                  setInlineScanTarget(scannable[nextUnscannedIndex].id);
+                } else if (currentIndex < scannable.length - 1) {
+                  // Fallback: if all following are scanned, just go to the very next one
+                  setInlineScanTarget(scannable[currentIndex + 1].id);
+                }
+              }
             }
           }
         },
