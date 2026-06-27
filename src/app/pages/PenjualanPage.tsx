@@ -596,15 +596,31 @@ export default function PenjualanPage() {
           const currentEditForm = editFormRef.current;
 
           if (currentScanTarget === 'pos') {
-            const isConfirmed = window.confirm(`Barcode terdeteksi:\n\n${decodedText}\n\nApakah ini sudah benar dan ingin disimpan?`);
-            if (!isConfirmed) return;
+            const isConfirmed = window.confirm(`Konfirmasi Scan Resi\n\nBarcode terdeteksi:\n${decodedText}\n\nApakah ini sudah benar dan ingin digunakan?`);
+            if (!isConfirmed) {
+              try {
+                if (html5QrCode.isScanning) {
+                  html5QrCode.pause();
+                  setIsScannerPaused(true);
+                }
+              } catch (e) {}
+              return;
+            }
             playBeep();
             setNoResi(decodedText);
             toast.success(`Barcode berhasil disimpan: ${decodedText}`);
             closeScanner();
           } else if (currentScanTarget === 'edit' && currentEditForm) {
-            const isConfirmed = window.confirm(`Barcode terdeteksi:\n\n${decodedText}\n\nApakah ini sudah benar dan ingin disimpan?`);
-            if (!isConfirmed) return;
+            const isConfirmed = window.confirm(`Konfirmasi Scan Resi (Edit Faktur ${currentEditForm.invoice})\n\nBarcode terdeteksi:\n${decodedText}\n\nSimpan nomor resi ini?`);
+            if (!isConfirmed) {
+              try {
+                if (html5QrCode.isScanning) {
+                  html5QrCode.pause();
+                  setIsScannerPaused(true);
+                }
+              } catch (e) {}
+              return;
+            }
             playBeep();
             setEditForm((prev: any) => ({ ...prev, no_resi: decodedText }));
             toast.success(`Barcode berhasil disimpan: ${decodedText}`);
@@ -631,12 +647,34 @@ export default function PenjualanPage() {
                 return;
               }
 
-              // 3. Confirm overwrite if resi already exists (still need this for safety if overwriting)
+              // 3. Confirm overwrite if resi already exists, or regular confirm
+              const customerNameInfo = targetSale.username_pembeli || 'UMUM';
+              const invoiceInfo = targetSale.invoice;
+              const pesananInfo = targetSale.no_pesanan ? `\nNo. Pesanan: ${targetSale.no_pesanan}` : '';
+
               if (targetSale.no_resi) {
-                const overwriteConfirm = window.confirm(`⚠️ Transaksi ini sudah memiliki No. Resi: "${targetSale.no_resi}".\nApakah Anda yakin ingin menimpa dengan No. Resi yang baru?`);
-                if (!overwriteConfirm) return;
+                const overwriteConfirm = window.confirm(`⚠️ Transaksi ini sudah memiliki No. Resi: "${targetSale.no_resi}".\n\nPelanggan: ${customerNameInfo}\nNo. Faktur: ${invoiceInfo}${pesananInfo}\n\nApakah Anda yakin ingin menimpa dengan No. Resi baru: ${decodedText}?`);
+                if (!overwriteConfirm) {
+                  try {
+                    if (html5QrCode.isScanning) {
+                      html5QrCode.pause();
+                      setIsScannerPaused(true);
+                    }
+                  } catch (e) {}
+                  return;
+                }
+              } else {
+                const isConfirmed = window.confirm(`Konfirmasi Scan Resi\n\nPelanggan: ${customerNameInfo}\nNo. Faktur: ${invoiceInfo}${pesananInfo}\n\nBarcode terdeteksi:\n${decodedText}\n\nSimpan nomor resi ini untuk pesanan di atas?`);
+                if (!isConfirmed) {
+                  try {
+                    if (html5QrCode.isScanning) {
+                      html5QrCode.pause();
+                      setIsScannerPaused(true);
+                    }
+                  } catch (e) {}
+                  return;
+                }
               }
-              // If it's empty, we just proceed automatically!
 
               playBeep();
 
