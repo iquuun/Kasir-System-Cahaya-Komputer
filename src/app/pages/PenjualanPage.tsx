@@ -3254,14 +3254,16 @@ export default function PenjualanPage() {
                           value={slot.search}
                           onChange={(e) => updateRakitanSlot(slot.id, { search: e.target.value, showDropdown: true })}
                           onFocus={() => updateRakitanSlot(slot.id, { showDropdown: true })}
-                          className={`w-full text-[10px] border rounded px-1.5 py-1 outline-none focus:ring-1 focus:ring-cyan-300 transition-all ${
-                            slot.product ? 'bg-cyan-50 border-cyan-300 font-semibold text-cyan-800' : 'bg-card border-border'
+                          className={`w-full text-[10px] border rounded px-1.5 py-1 outline-none transition-all ${
+                            slot.product 
+                              ? 'bg-primary/10 border-primary/30 font-semibold text-primary focus:ring-1 focus:ring-primary/50' 
+                              : 'bg-background border-border text-foreground focus:ring-1 focus:ring-primary'
                           }`}
                         />
                         {slot.product && (
                           <button
                             onClick={() => updateRakitanSlot(slot.id, { product: null, search: '' })}
-                            className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-red-500"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-destructive"
                           >
                             <XIcon size={12} />
                           </button>
@@ -3270,7 +3272,7 @@ export default function PenjualanPage() {
                         {slot.showDropdown && !slot.product && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => updateRakitanSlot(slot.id, { showDropdown: false })} />
-                            <div className={`absolute left-0 right-0 ${isBottomHalf ? 'bottom-full mb-0.5' : 'top-full mt-0.5'} bg-card border border-border rounded shadow-xl z-50 max-h-36 overflow-y-auto`}>
+                            <div className={`absolute left-0 right-0 ${isBottomHalf ? 'bottom-full mb-0.5' : 'top-full mt-0.5'} bg-card border border-border rounded shadow-xl z-50 max-h-36 overflow-y-auto custom-scrollbar`}>
                               {filteredProds.length === 0 ? (
                                 <div className="px-2 py-1 text-[10px] text-muted-foreground text-center">Tidak ditemukan</div>
                               ) : (
@@ -3284,9 +3286,9 @@ export default function PenjualanPage() {
                                         showDropdown: false,
                                       });
                                     }}
-                                    className="px-2 py-1 text-[10px] cursor-pointer hover:bg-cyan-50 border-b border-border last:border-0 flex justify-between items-center"
+                                    className="px-2 py-1 text-[10px] cursor-pointer hover:bg-accent border-b border-border last:border-0 flex justify-between items-center group"
                                   >
-                                    <span className="font-semibold text-foreground truncate">{p.name}</span>
+                                    <span className="font-semibold text-foreground group-hover:text-primary truncate transition-colors">{p.name}</span>
                                     <span className="text-[8px] text-muted-foreground ml-2 whitespace-nowrap">
                                       Rp {p.harga_jual.toLocaleString('id-ID')}
                                     </span>

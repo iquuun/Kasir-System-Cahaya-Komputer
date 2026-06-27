@@ -94,23 +94,23 @@ const SearchableSelect = ({ options, value, onChange, placeholder }: { options: 
             </div>
             {open && (
                 <div className="absolute z-50 w-full mt-1 bg-card border rounded shadow-xl max-h-60 flex flex-col" style={{ minWidth: "15rem" }}>
-                    <div className="p-1 border-b bg-muted rounded-t">
+                    <div className="p-1 border-b border-border bg-muted rounded-t">
                         <input 
                             autoFocus
                             type="text" 
-                            className="w-full text-[11px] px-2 py-1.5 border border-blue-200 rounded outline-none focus:ring-1 ring-blue-400" 
+                            className="w-full text-[11px] px-2 py-1.5 border border-border rounded outline-none focus:ring-1 ring-blue-400 bg-background text-foreground" 
                             placeholder="Ketik untuk mencari..." 
                             value={search} 
                             onChange={e => setSearch(e.target.value)} 
                         />
                     </div>
                     <div className="overflow-y-auto custom-scrollbar">
-                        <div onClick={() => { onChange(''); setOpen(false); }} className="px-2 py-2 text-[11px] hover:bg-accent cursor-pointer text-muted-foreground italic border-b">-- Batal --</div>
+                        <div onClick={() => { onChange(''); setOpen(false); }} className="px-2 py-2 text-[11px] hover:bg-accent cursor-pointer text-muted-foreground italic border-b border-border">-- Batal --</div>
                         {options.filter(o => o.label.toLowerCase().includes(search.toLowerCase())).map(o => (
                             <div 
                                 key={o.value} 
                                 onClick={() => { onChange(o.value); setOpen(false); setSearch(''); }}
-                                className={`px-2 py-1.5 text-[11px] hover:bg-blue-50 cursor-pointer border-b last:border-b-0 ${value === o.value ? 'bg-blue-100 font-bold text-blue-700' : 'text-foreground'}`}
+                                className={`px-2 py-1.5 text-[11px] cursor-pointer border-b border-border last:border-b-0 ${value === o.value ? 'bg-primary/20 font-bold text-primary' : 'text-foreground hover:bg-accent'}`}
                             >
                                 {o.label}
                             </div>

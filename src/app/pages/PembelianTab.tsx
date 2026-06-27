@@ -1096,13 +1096,14 @@ export default function PembelianTab() {
                                     isSearchable
                                     menuPortalTarget={document.body}
                                     styles={{
-                                      control: (base) => ({ ...base, minHeight: '28px', height: '28px' }),
+                                      control: (base) => ({ ...base, minHeight: '28px', height: '28px', backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }),
                                       valueContainer: (base) => ({ ...base, padding: '0 6px' }),
-                                      input: (base) => ({ ...base, margin: 0, padding: 0 }),
-                                      option: (base) => ({ ...base, fontSize: '11px', padding: '6px 8px' }),
-                                      singleValue: (base) => ({ ...base, fontSize: '11px' }),
-                                      indicatorsContainer: (base) => ({ ...base, height: '28px' }),
-                                      menuPortal: (base) => ({ ...base, zIndex: 9999 })
+                                      singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
+                                      input: (base) => ({ ...base, margin: 0, padding: 0, color: 'var(--foreground)' }),
+                                      menu: (base) => ({ ...base, backgroundColor: 'var(--card)' }),
+                                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                      option: (base, state) => ({ ...base, backgroundColor: state.isFocused ? 'var(--accent)' : 'transparent', color: state.isFocused ? 'var(--primary)' : 'var(--foreground)', cursor: 'pointer', fontSize: '11px', padding: '6px 8px' }),
+                                      indicatorsContainer: (base) => ({ ...base, height: '28px' })
                                     }}
                                   />
                                   <button
@@ -1185,11 +1186,12 @@ export default function PembelianTab() {
                                 isSearchable
                                 menuPortalTarget={document.body}
                                 styles={{
-                                  control: (base) => ({ ...base, minHeight: '32px', borderRadius: '6px', borderColor: '#e5e7eb', fontSize: '12px' }),
+                                  control: (base) => ({ ...base, minHeight: '32px', borderRadius: '6px', borderColor: 'var(--border)', backgroundColor: 'var(--card)', fontSize: '12px', color: 'var(--foreground)' }),
                                   valueContainer: (base) => ({ ...base, padding: '0 6px' }),
-                                  input: (base) => ({ ...base, margin: 0, padding: 0, fontSize: '12px' }),
-                                  option: (base) => ({ ...base, fontSize: '12px', padding: '8px 10px' }),
-                                  singleValue: (base) => ({ ...base, fontSize: '12px' }),
+                                  input: (base) => ({ ...base, margin: 0, padding: 0, fontSize: '12px', color: 'var(--foreground)' }),
+                                  singleValue: (base) => ({ ...base, fontSize: '12px', color: 'var(--foreground)' }),
+                                  menu: (base) => ({ ...base, backgroundColor: 'var(--card)' }),
+                                  option: (base, state) => ({ ...base, fontSize: '12px', padding: '8px 10px', backgroundColor: state.isFocused ? 'var(--accent)' : 'transparent', color: state.isFocused ? 'var(--primary)' : 'var(--foreground)', cursor: 'pointer' }),
                                   indicatorsContainer: (base) => ({ ...base, height: '32px' }),
                                   menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                                   placeholder: (base) => ({ ...base, fontSize: '12px' }),

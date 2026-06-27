@@ -666,25 +666,25 @@ export default function ProdukTab() {
                             ...base, 
                             minHeight: '40px', 
                             borderRadius: '8px', 
-                            borderColor: theme === 'dark' ? '#334155' : '#E5E7EB', 
+                            borderColor: 'var(--border)', 
                             fontSize: '12px',
-                            backgroundColor: theme === 'dark' ? '#1e293b' : '#F9FAFB',
+                            backgroundColor: 'var(--card)',
                             paddingLeft: '28px',
-                            color: theme === 'dark' ? '#f8fafc' : '#1F2937'
+                            color: 'var(--foreground)'
                           }),
                           menu: (base) => ({
                             ...base,
-                            backgroundColor: theme === 'dark' ? '#1e293b' : '#FFFFFF',
-                            borderColor: theme === 'dark' ? '#334155' : '#E5E7EB',
+                            backgroundColor: 'var(--card)',
+                            borderColor: 'var(--border)',
                           }),
                           option: (base, state) => ({
                             ...base,
                             backgroundColor: state.isSelected 
-                              ? '#3B82F6' 
+                              ? 'var(--primary)' 
                               : state.isFocused 
-                                ? theme === 'dark' ? '#334155' : '#F3F4F6' 
+                                ? 'var(--accent)' 
                                 : 'transparent',
-                            color: state.isSelected ? '#FFFFFF' : theme === 'dark' ? '#f8fafc' : '#1F2937',
+                            color: state.isSelected ? 'var(--primary-foreground)' : 'var(--foreground)',
                             fontSize: '11px',
                             fontWeight: state.isSelected ? 'bold' : 'normal',
                             padding: '10px 12px',
@@ -694,16 +694,16 @@ export default function ProdukTab() {
                             ...base,
                             fontSize: '12px',
                             fontWeight: '600',
-                            color: theme === 'dark' ? '#f8fafc' : '#1F2937'
+                            color: 'var(--foreground)'
                           }),
                           input: (base) => ({
                             ...base,
-                            color: theme === 'dark' ? '#f8fafc' : '#1F2937'
+                            color: 'var(--foreground)'
                           }),
                           placeholder: (base) => ({
                             ...base,
                             fontSize: '12px',
-                            color: '#9CA3AF'
+                            color: 'var(--muted-foreground)'
                           })
                         }}
                       />
