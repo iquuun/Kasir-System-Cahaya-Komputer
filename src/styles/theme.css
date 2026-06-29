@@ -404,6 +404,13 @@
   border-color: #334155 !important;
 }
 
+/* Fix react-select dummy input background inherited from above in dark mode */
+.dark .rs__input input {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
 .dark input::placeholder,
 .dark textarea::placeholder {
   color: #64748b !important;

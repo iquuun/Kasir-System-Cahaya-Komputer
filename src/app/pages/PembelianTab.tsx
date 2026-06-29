@@ -374,8 +374,8 @@ export default function PembelianTab() {
           .filter(i => i.product_id) // Filter out empty rows
           .map(i => ({
             product_id: parseInt(i.product_id),
-            qty: parseInt(i.qty),
-            harga_beli: parseFloat(i.harga_beli),
+            qty: parseInt(i.qty) || 1,
+            harga_beli: parseFloat(i.harga_beli) || 0,
           }))
       };
 
@@ -488,7 +488,7 @@ export default function PembelianTab() {
         name: quickProductFormData.name,
         category_id: parseInt(quickProductFormData.category_id),
         harga_beli: purchasePrice || 0,
-        harga_jual: parseFloat(quickProductFormData.harga_jual) || 0,
+        harga_jual: parseNumber(quickProductFormData.harga_jual),
         stok_saat_ini: 0 // New product starts with 0 stock, will be increased by purchase
       };
 
@@ -1094,6 +1094,7 @@ export default function PembelianTab() {
                                     }}
                                     placeholder="Cari..."
                                     isSearchable
+                                    classNamePrefix="rs"
                                     menuPortalTarget={document.body}
                                     styles={{
                                       control: (base) => ({ ...base, minHeight: '28px', height: '28px', backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }),
@@ -1184,6 +1185,7 @@ export default function PembelianTab() {
                                 }}
                                 placeholder="Pilih Produk..."
                                 isSearchable
+                                classNamePrefix="rs"
                                 menuPortalTarget={document.body}
                                 styles={{
                                   control: (base) => ({ ...base, minHeight: '32px', borderRadius: '6px', borderColor: 'var(--border)', backgroundColor: 'var(--card)', fontSize: '12px', color: 'var(--foreground)' }),
