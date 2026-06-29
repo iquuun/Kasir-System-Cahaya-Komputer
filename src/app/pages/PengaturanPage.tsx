@@ -445,9 +445,8 @@ export default function PengaturanPage() {
                     </div>
                 </div>
                 
-                <div className="text-xs leading-relaxed bg-amber-50 text-amber-800 p-3.5 rounded-lg border border-amber-200">
-                    <strong className="block mb-1 text-amber-900">💡 Tips Penting (Wajib Dibaca):</strong> 
-                    Klik tombol di atas untuk mengunduh seluruh data aplikasi. <strong>File backup yang terdownload WAJIB Anda pindahkan / seret ke dalam <span className="underline">Google Drive</span> atau simpan di Flashdisk Anda!</strong> Lakukan proses ini secara rutin <strong>minimal 1 minggu sekali</strong> untuk berjaga-jaga apabila komputer/laptop kasir ini mengalami kerusakan/mati total di kemudian hari.
+                <div className="text-xs bg-amber-50 text-amber-800 p-3 rounded-lg border border-amber-200">
+                    <strong>💡 Tips:</strong> Rutin Download Database dan simpan di <strong>Google Drive / Flashdisk</strong> minimal 1 minggu sekali untuk keamanan data.
                 </div>
             </div>
 
@@ -459,8 +458,8 @@ export default function PengaturanPage() {
                             <RefreshCw size={14} />
                         </div>
                         <div>
-                            <h2 className="text-sm font-bold text-foreground">Sinkronisasi Database</h2>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">Gunakan ini jika Anda baru saja memindahkan aplikasi ke PC lain agar terhindar dari Error struktur database.</p>
+                            <h2 className="text-sm font-bold text-foreground">Perbarui Struktur Database</h2>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">Gunakan tombol ini untuk menyesuaikan database setelah aplikasi mendapat pembaruan (update) fitur baru.</p>
                         </div>
                     </div>
                     <button
@@ -469,145 +468,12 @@ export default function PengaturanPage() {
                         className="flex-shrink-0 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg font-bold shadow-md shadow-blue-600/20 hover:bg-blue-700 disabled:opacity-75 disabled:cursor-wait transition-all flex-[0_0_auto] active:scale-95 text-xs"
                     >
                         <RefreshCw size={14} className={syncingDb ? "animate-spin" : ""} />
-                        {syncingDb ? 'Mensinkronkan...' : 'Sinkronkan Database PC'}
+                        {syncingDb ? 'Memproses...' : 'Perbarui Struktur Database'}
                     </button>
                 </div>
             </div>
 
-            {/* ============================== */}
-            {/* DANGER ZONE */}
-            {/* ============================== */}
-            <div className="bg-card rounded-xl shadow-sm border border-red-200 p-4">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 border-b border-red-100 pb-3">
-                    <div className="flex items-center gap-2">
-                        <div className="p-2 bg-red-500/10 rounded-lg text-red-600">
-                            <AlertTriangle size={14} />
-                        </div>
-                        <div>
-                            <h2 className="text-sm font-bold text-red-700">Zona Berbahaya</h2>
-                            <p className="text-[10px] text-red-400 mt-0.5">Tindakan di bawah ini tidak dapat dibatalkan. Harap berhati-hati!</p>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                        <div>
-                            <h3 className="text-xs font-bold text-red-800 flex items-center gap-1.5">
-                                <Trash2 size={12} />
-                                Hapus Semua Data
-                            </h3>
-                            <p className="text-[10px] text-red-600/70 mt-1 leading-relaxed">
-                                Menghapus seluruh data transaksi, produk, kategori, pembelian, penjualan, garansi, dan stok opname. 
-                                <strong> Akun pengguna dan pengaturan toko akan tetap disimpan.</strong>
-                            </p>
-                        </div>
-                        <button
-                            onClick={() => { setShowResetModal(true); setResetConfirmText(''); setResetCountdown(0); setCountdownDone(false); }}
-                            className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-2 bg-red-600 text-white rounded-lg font-bold shadow-md shadow-red-600/20 hover:bg-red-700 transition-all flex-[0_0_auto] active:scale-95 text-xs"
-                        >
-                            <Trash2 size={12} />
-                            Hapus Semua Data
-                        </button>
-                    </div>
-                </div>
-            </div>
-            </div>
-
-            {/* ============================== */}
-            {/* RESET CONFIRMATION MODAL */}
-            {/* ============================== */}
-            {showResetModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center z-50 md:p-4 modal-backdrop">
-                    <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-md modal-content overflow-hidden h-full md:h-auto flex flex-col">
-                        {/* Header */}
-                        <div className="bg-red-600 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-20">
-                            <div className="flex items-center gap-3">
-                                <button onClick={() => { setShowResetModal(false); setResetCountdown(0); }} className="md:hidden p-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-white">
-                                    <ChevronLeft size={20} />
-                                </button>
-                                <div className="hidden md:block p-2 bg-white/20 rounded-lg">
-                                    <Shield className="text-white" size={20} />
-                                </div>
-                                <div>
-                                    <h3 className="text-sm md:text-base font-bold text-white">Konfirmasi Penghapusan</h3>
-                                    <p className="text-[10px] md:text-xs text-red-200">Tindakan ini TIDAK DAPAT dibatalkan</p>
-                                </div>
-                            </div>
-                            <button onClick={() => { setShowResetModal(false); setResetCountdown(0); }} className="hidden md:block text-white/70 hover:text-white transition-colors">
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        {/* Body */}
-                        <div className="p-4 md:p-6 flex-1 overflow-y-auto">
-                            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-5">
-                                <p className="text-xs text-red-700 leading-relaxed">
-                                    <strong className="block mb-1">⚠️ Peringatan Serius:</strong>
-                                    Semua data berikut akan <strong>DIHAPUS PERMANEN</strong>:
-                                </p>
-                                <ul className="text-xs text-red-600 mt-2 space-y-1 ml-4 list-disc">
-                                    <li>Seluruh produk dan kategori</li>
-                                    <li>Seluruh transaksi penjualan</li>
-                                    <li>Seluruh data pembelian & distributor</li>
-                                    <li>Seluruh garansi & stok opname</li>
-                                    <li>Seluruh catatan arus kas</li>
-                                </ul>
-                            </div>
-
-                            <div className="space-y-2 mb-5">
-                                <label className="text-xs font-bold text-foreground">
-                                    Ketik <span className="text-red-600 font-mono bg-red-50 px-1.5 py-0.5 rounded">HAPUS SEMUA DATA</span> untuk melanjutkan:
-                                </label>
-                                <input
-                                    type="text"
-                                    value={resetConfirmText}
-                                    onChange={(e) => setResetConfirmText(e.target.value)}
-                                    placeholder="Ketik di sini..."
-                                    autoComplete="off"
-                                    className="w-full px-3 py-2.5 bg-muted border-2 border-border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm font-mono"
-                                />
-                            </div>
-
-                            {resetConfirmText === 'HAPUS SEMUA DATA' && !countdownDone && resetCountdown === 0 && !resetting && (
-                                <button
-                                    onClick={startResetCountdown}
-                                    className="w-full py-2.5 bg-amber-500 text-white rounded-lg font-bold text-sm hover:bg-amber-600 transition-all active:scale-95"
-                                >
-                                    ⏳ Mulai Hitung Mundur (5 Detik)
-                                </button>
-                            )}
-
-                            {resetCountdown > 0 && (
-                                <div className="text-center py-4">
-                                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 border-4 border-red-300 mb-3">
-                                        <span className="text-2xl font-bold text-red-600">{resetCountdown}</span>
-                                    </div>
-                                    <p className="text-xs text-muted-foreground">Menunggu {resetCountdown} detik sebelum tombol hapus aktif...</p>
-                                </div>
-                            )}
-
-                            {resetConfirmText === 'HAPUS SEMUA DATA' && countdownDone && resetCountdown === 0 && !resetting && (
-                                <button
-                                    onClick={handleResetAllData}
-                                    className="w-full py-3 bg-red-600 text-white rounded-lg font-bold text-sm hover:bg-red-700 transition-all active:scale-95 shadow-lg shadow-red-600/30 animate-pulse"
-                                >
-                                    🗑️ YA, HAPUS SEMUA DATA SEKARANG
-                                </button>
-                            )}
-
-                            {resetting && (
-                                <div className="text-center py-4">
-                                    <div className="inline-flex items-center gap-2 text-red-600">
-                                        <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
-                                        <span className="text-sm font-medium">Menghapus semua data...</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
             {/* ============================== */}
             {/* RESTORE CONFIRMATION MODAL */}
             {/* ============================== */}
