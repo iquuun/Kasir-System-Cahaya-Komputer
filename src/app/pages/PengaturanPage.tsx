@@ -472,6 +472,7 @@ export default function PengaturanPage() {
                     </button>
                 </div>
             </div>
+            </div>
 
 
             {/* ============================== */}
