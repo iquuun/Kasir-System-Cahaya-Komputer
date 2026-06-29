@@ -396,7 +396,7 @@
 .dark .border-orange-300 { border-color: rgba(249,115,22,0.2) !important; }
 
 /* --- Form Elements --- */
-.dark input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+.dark input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([id^="react-select-"]),
 .dark select,
 .dark textarea {
   background-color: #1e293b !important;
@@ -404,11 +404,9 @@
   border-color: #334155 !important;
 }
 
-/* Fix react-select input background */
-.dark div[class*="-Input"] input,
+/* Ensure react-select internal inputs remain transparent */
 .dark input[id^="react-select-"] {
   background-color: transparent !important;
-  border-color: transparent !important;
   box-shadow: none !important;
 }
 
