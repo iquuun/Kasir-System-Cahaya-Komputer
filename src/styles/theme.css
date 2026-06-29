@@ -404,8 +404,9 @@
   border-color: #334155 !important;
 }
 
-/* Fix react-select dummy input background inherited from above in dark mode */
-.dark .rs__input input {
+/* Fix react-select input background */
+.dark div[class*="-Input"] input,
+.dark input[id^="react-select-"] {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
