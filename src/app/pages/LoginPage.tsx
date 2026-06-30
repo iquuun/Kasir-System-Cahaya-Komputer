@@ -14,6 +14,15 @@ export default function LoginPage() {
   const [checkingServer, setCheckingServer] = useState(true);
   const [serverOnline, setServerOnline] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
+  
+  // Forgot Password State
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotRole, setForgotRole] = useState<'owner' | 'staf' | null>(null);
+  const [forgotRecoveryKey, setForgotRecoveryKey] = useState('');
+  const [forgotNewPassword, setForgotNewPassword] = useState('');
+  const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState('');
 
   useEffect(() => {
     checkServer();
@@ -58,6 +67,54 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // ==========================================
+  // FORGOT PASSWORD HANDLERS
+  // ==========================================
+  const handleCheckEmailRole = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError('');
+    setForgotLoading(true);
+    try {
+      const res = await api.post('/check-email-role', { email: forgotEmail });
+      setForgotRole(res.data.role);
+      if (res.data.role === 'owner') {
+        setForgotStep(2);
+      }
+    } catch (err: any) {
+      setForgotError(err.response?.data?.message || 'Gagal mengecek email.');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError('');
+    setForgotLoading(true);
+    try {
+      const res = await api.post('/reset-password-recovery', {
+        email: forgotEmail,
+        recovery_key: forgotRecoveryKey,
+        new_password: forgotNewPassword
+      });
+      setForgotStep(3);
+    } catch (err: any) {
+      setForgotError(err.response?.data?.message || 'Gagal mereset password.');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const closeForgotModal = () => {
+    setShowForgotModal(false);
+    setForgotEmail('');
+    setForgotRole(null);
+    setForgotRecoveryKey('');
+    setForgotNewPassword('');
+    setForgotStep(1);
+    setForgotError('');
   };
 
   // ==========================================
@@ -141,7 +198,11 @@ export default function LoginPage() {
               <label className="block text-xs font-medium text-foreground">Password</label>
               <button 
                 type="button" 
-                onClick={() => setShowForgotModal(true)}
+                onClick={() => {
+                  setShowForgotModal(true);
+                  setForgotStep(1);
+                  setForgotError('');
+                }}
                 className="text-xs text-[#3B82F6] hover:text-[#2563EB] font-medium"
               >
                 Lupa Password?
@@ -171,50 +232,103 @@ export default function LoginPage() {
                 <h3 className="font-bold text-sm">Lupa Password?</h3>
               </div>
               <button 
-                onClick={() => setShowForgotModal(false)}
+                onClick={closeForgotModal}
                 className="text-blue-400 hover:text-blue-700 transition-colors p-1"
               >
                 <X size={18} />
               </button>
             </div>
-            <div className="p-5 space-y-4 text-sm text-muted-foreground">
-              <div className="bg-muted border border-border p-3 rounded-xl">
-                <h4 className="font-bold text-foreground mb-1 flex items-center gap-1.5">
-                  <span>👤</span> Untuk Karyawan / Kasir:
-                </h4>
-                <p className="text-xs leading-relaxed pl-6">
-                  Silakan hubungi Owner (Pemilik) atau Manajer toko Anda. Mereka dapat langsung mereset password Anda melalui menu <b>Pengaturan &gt; Manajemen Akun</b>.
-                </p>
-              </div>
+            
+            <div className="p-5 space-y-4 text-sm text-foreground">
+              {forgotStep === 1 && (
+                <form onSubmit={handleCheckEmailRole} className="space-y-4">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Masukkan alamat email Anda. Sistem akan memeriksa peran Anda (Owner atau Staf) dan memberikan instruksi selanjutnya.
+                  </p>
+                  <div>
+                    <label className="block text-xs font-bold mb-1.5">Email Akun Anda</label>
+                    <input 
+                      type="email" 
+                      value={forgotEmail} 
+                      onChange={(e) => setForgotEmail(e.target.value)} 
+                      placeholder="email@contoh.com" 
+                      className="w-full px-3 py-2 border border-border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  {forgotRole === 'staf' && (
+                    <div className="bg-orange-50 border border-orange-200 p-3 rounded-lg flex gap-2">
+                      <span className="text-orange-600">⚠️</span>
+                      <p className="text-xs text-orange-800 leading-relaxed">
+                        Email ini terdeteksi sebagai <b>Staf Kasir</b>. Anda tidak dapat mereset password sendiri.<br/><br/>
+                        Silakan hubungi <b>Pemilik Toko (Owner)</b>. Mereka dapat mereset password Anda melalui menu <b>Pengaturan &gt; Manajemen Akun</b>.
+                      </p>
+                    </div>
+                  )}
+                  {forgotError && <div className="text-xs text-red-600 bg-red-50 p-2 rounded">{forgotError}</div>}
+                  <button 
+                    type="submit" 
+                    disabled={forgotLoading || forgotRole === 'staf'} 
+                    className="w-full py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  >
+                    {forgotLoading ? 'Memeriksa...' : 'Lanjutkan'}
+                  </button>
+                </form>
+              )}
 
-              <div className="bg-orange-50 border border-orange-200 p-3 rounded-xl">
-                <h4 className="font-bold text-orange-800 mb-1 flex items-center gap-1.5">
-                  <span>👑</span> Untuk Owner (Pemilik Toko):
-                </h4>
-                <p className="text-xs leading-relaxed pl-6 text-orange-900/80 mb-2">
-                  Karena Anda memiliki akses tertinggi, reset hanya bisa dilakukan langsung dari Server Hostinger Anda:
-                </p>
-                <ol className="list-decimal pl-9 text-[11px] space-y-1.5 text-orange-900/80">
-                  <li>Login ke panel <b>Hostinger</b>.</li>
-                  <li>Buka menu <b>Advanced &gt; Cron Jobs</b>.</li>
-                  <li>Buat Custom Cron Job baru dengan perintah berikut:<br/>
-                    <code className="block bg-card border border-orange-200 p-1.5 rounded mt-1 font-mono text-[9px] text-foreground break-all select-all">
-                      cd /home/u879259877/domains/cahayapos.id/laravel && php artisan user:reset-owner
-                    </code>
-                  </li>
-                  <li>Atur jadwal ke <b>Every minute (* * * * *)</b> lalu Save.</li>
-                  <li>Tunggu 1 menit, lalu login menggunakan password default: <b className="bg-card px-1 rounded border border-orange-200">password123</b></li>
-                  <li><b className="text-red-600">PENTING:</b> Hapus kembali Cron Job tersebut setelah berhasil masuk!</li>
-                </ol>
-              </div>
-            </div>
-            <div className="p-4 bg-muted border-t border-border flex justify-end">
-              <button 
-                onClick={() => setShowForgotModal(false)}
-                className="px-5 py-2 bg-card border border-border rounded-lg text-xs font-bold text-foreground hover:bg-muted transition-colors"
-              >
-                Tutup Peringatan
-              </button>
+              {forgotStep === 2 && (
+                <form onSubmit={handleResetPassword} className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-2">
+                    <p className="text-xs text-blue-800 leading-relaxed">
+                      Akun <b>Owner</b> terdeteksi. Silakan masukkan <b>Kode Brankas Rahasia</b> yang Anda simpan sebelumnya untuk mereset password.
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1.5">Kode Brankas Rahasia</label>
+                    <input 
+                      type="text" 
+                      value={forgotRecoveryKey} 
+                      onChange={(e) => setForgotRecoveryKey(e.target.value)} 
+                      placeholder="Masukkan kode rahasia..." 
+                      className="w-full px-3 py-2 border border-border rounded-lg text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1.5">Password Baru</label>
+                    <input 
+                      type="password" 
+                      value={forgotNewPassword} 
+                      onChange={(e) => setForgotNewPassword(e.target.value)} 
+                      placeholder="Minimal 6 karakter" 
+                      minLength={6}
+                      className="w-full px-3 py-2 border border-border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  {forgotError && <div className="text-xs text-red-600 bg-red-50 p-2 rounded">{forgotError}</div>}
+                  <button 
+                    type="submit" 
+                    disabled={forgotLoading} 
+                    className="w-full py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  >
+                    {forgotLoading ? 'Memproses...' : 'Reset Password Sekarang'}
+                  </button>
+                </form>
+              )}
+
+              {forgotStep === 3 && (
+                <div className="text-center py-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-green-600 text-xl">✓</span>
+                  </div>
+                  <h4 className="font-bold text-foreground mb-2">Password Berhasil Direset!</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Silakan tutup jendela ini dan login kembali menggunakan password baru Anda.
+                  </p>
+                </div>
+              )}
+
             </div>
           </div>
         </div>

@@ -16,7 +16,7 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->only(['store_name', 'store_address', 'store_phone', 'store_notes', 'invoice_start_number', 'ecommerce_calc_config', 'catatan_belanja', 'piutang_pembeli', 'pos_templates', 'store_bank_accounts', 'store_bank_account_name']);
+        $data = $request->only(['store_name', 'store_address', 'store_phone', 'store_notes', 'invoice_start_number', 'ecommerce_calc_config', 'catatan_belanja', 'piutang_pembeli', 'pos_templates', 'store_bank_accounts', 'store_bank_account_name', 'master_recovery_key']);
 
         foreach ($data as $key => $value) {
             DB::table('settings')->updateOrInsert(['key' => $key], ['value' => $value]);

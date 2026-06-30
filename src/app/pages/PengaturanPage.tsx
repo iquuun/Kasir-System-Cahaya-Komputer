@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Save, Upload, Store, MapPin, Database, DownloadCloud, UploadCloud, AlertTriangle, Trash2, Shield, X, RefreshCw, ChevronLeft } from 'lucide-react';
+import { Save, Upload, Store, MapPin, Database, DownloadCloud, UploadCloud, AlertTriangle, Trash2, Shield, X, RefreshCw, ChevronLeft, Key, Eye, EyeOff } from 'lucide-react';
 import api, { API_ASSET_URL } from '../api';
 import { toast } from 'sonner';
 
@@ -19,6 +19,11 @@ export default function PengaturanPage() {
     const [uploadingBackup, setUploadingBackup] = useState(false);
     const [syncingDb, setSyncingDb] = useState(false);
     const backupInputRef = useRef<HTMLInputElement>(null);
+    
+    // Emergency Recovery Key states
+    const [masterRecoveryKey, setMasterRecoveryKey] = useState('');
+    const [showRecoveryKey, setShowRecoveryKey] = useState(false);
+    const [generatingKey, setGeneratingKey] = useState(false);
 
     // DANGER ZONE states
     const [showResetModal, setShowResetModal] = useState(false);
@@ -95,6 +100,9 @@ export default function PengaturanPage() {
             if (res.data.store_stamp) {
                 setStampPreview(`${API_ASSET_URL}/storage/${res.data.store_stamp}?t=${Date.now()}`);
             }
+            if (res.data.master_recovery_key) {
+                setMasterRecoveryKey(res.data.master_recovery_key);
+            }
         } catch (err) {
             console.error('Failed to fetch settings', err);
         } finally {
@@ -127,6 +135,7 @@ export default function PengaturanPage() {
             formData.append('store_phone', storePhone);
             formData.append('store_notes', storeNotes);
             formData.append('invoice_start_number', invoiceStartNumber);
+            formData.append('master_recovery_key', masterRecoveryKey);
             if (logoFile) {
                 formData.append('store_logo', logoFile);
             }
@@ -470,6 +479,56 @@ export default function PengaturanPage() {
                         <RefreshCw size={14} className={syncingDb ? "animate-spin" : ""} />
                         {syncingDb ? 'Memproses...' : 'Perbarui Struktur Database'}
                     </button>
+                </div>
+            </div>
+
+            {/* MASTER RECOVERY KEY SECTION */}
+            <div className="bg-card rounded-xl shadow-sm border border-orange-100 p-4 border-l-4 border-l-orange-500">
+                <div className="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="p-2 bg-orange-500/10 rounded-lg text-orange-600">
+                                <Key size={14} />
+                            </div>
+                            <h2 className="text-sm font-bold text-foreground">Kunci Darurat (Lupa Password)</h2>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground leading-relaxed md:max-w-md">
+                            Jika Anda (Owner) lupa password, Anda membutuhkan kunci rahasia ini untuk meresetnya dari halaman Login. 
+                            <strong> Simpan kunci ini baik-baik!</strong>
+                        </p>
+                    </div>
+                    <div className="flex-shrink-0 w-full md:w-auto">
+                        <label className="block text-[10px] font-bold text-foreground mb-1.5">Kode Brankas Rahasia saat ini:</label>
+                        <div className="flex items-center gap-2">
+                            <div className="relative w-full md:w-48">
+                                <input 
+                                    type={showRecoveryKey ? "text" : "password"} 
+                                    value={masterRecoveryKey}
+                                    readOnly
+                                    placeholder="Belum ada kunci"
+                                    className="w-full pl-3 pr-10 py-2 border border-border rounded-lg text-xs font-mono outline-none bg-muted"
+                                />
+                                <button 
+                                    type="button" 
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground"
+                                    onClick={() => setShowRecoveryKey(!showRecoveryKey)}
+                                >
+                                    {showRecoveryKey ? <EyeOff size={14} /> : <Eye size={14} />}
+                                </button>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    const randomKey = 'CK-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                                    setMasterRecoveryKey(randomKey);
+                                    setShowRecoveryKey(true);
+                                    toast.info('Kunci baru dibuat. Jangan lupa klik SIMPAN PENGATURAN agar aktif!');
+                                }}
+                                className="px-3 py-2 bg-card border border-border text-foreground hover:bg-muted rounded-lg text-[10px] font-bold shrink-0 transition-colors"
+                            >
+                                Buat Baru
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             </div>

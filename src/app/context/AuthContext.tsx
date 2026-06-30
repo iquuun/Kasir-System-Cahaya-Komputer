@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (error) {
           console.error("Failed to fetch user profile", error);
           localStorage.removeItem('token');
+          localStorage.removeItem('last_activity');
           setUser(null);
         }
       }
@@ -50,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { user: userData, token } = response.data;
 
       localStorage.setItem('token', token);
+      localStorage.setItem('last_activity', Date.now().toString());
       setUser(userData);
     } catch (error) {
       console.error("Login Error:", error);
@@ -65,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setUser(null);
       localStorage.removeItem('token');
+      localStorage.removeItem('last_activity');
     }
   };
 

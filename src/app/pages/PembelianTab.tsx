@@ -1094,7 +1094,6 @@ export default function PembelianTab() {
                                     }}
                                     placeholder="Cari..."
                                     isSearchable
-                                    classNamePrefix="rs"
                                     menuPortalTarget={document.body}
                                     styles={{
                                       control: (base) => ({ ...base, minHeight: '28px', height: '28px', backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }),
@@ -1185,7 +1184,6 @@ export default function PembelianTab() {
                                 }}
                                 placeholder="Pilih Produk..."
                                 isSearchable
-                                classNamePrefix="rs"
                                 menuPortalTarget={document.body}
                                 styles={{
                                   control: (base) => ({ ...base, minHeight: '32px', borderRadius: '6px', borderColor: 'var(--border)', backgroundColor: 'var(--card)', fontSize: '12px', color: 'var(--foreground)' }),

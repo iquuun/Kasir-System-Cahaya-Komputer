@@ -22,6 +22,8 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeSalaryController;
 
 Route::post('/login', [AuthController::class , 'login']);
+Route::post('/check-email-role', [AuthController::class, 'checkEmailRole']);
+Route::post('/reset-password-recovery', [AuthController::class, 'resetPasswordRecovery']);
 Route::get('/settings', [SettingController::class , 'index']);
 Route::get('/ping', [SystemController::class, 'ping']);
 Route::get('/settings/backup-test', [SettingController::class, 'testGoogleDriveBackup']);

@@ -40,6 +40,23 @@ api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
         if (token) {
+            // Check for inactivity timeout (12 hours)
+            const lastActivity = localStorage.getItem('last_activity');
+            const now = Date.now();
+            const INACTIVITY_LIMIT_MS = 12 * 60 * 60 * 1000; // 12 hours
+            
+            if (lastActivity && (now - parseInt(lastActivity) > INACTIVITY_LIMIT_MS)) {
+                // Session expired
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('last_activity');
+                window.location.href = '/login?expired=true';
+                return Promise.reject(new Error('Session expired due to inactivity'));
+            }
+            
+            // Update last activity
+            localStorage.setItem('last_activity', now.toString());
+            
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -56,6 +73,7 @@ api.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
+            localStorage.removeItem('last_activity');
             window.location.href = '/login';
         }
         return Promise.reject(error);

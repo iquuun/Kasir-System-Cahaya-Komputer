@@ -660,7 +660,6 @@ export default function ProdukTab() {
                         } : null}
                         onChange={(option: any) => setFormData({ ...formData, category_id: option?.value || '' })}
                         options={categoriesList.map(cat => ({ value: cat.id.toString(), label: cat.name }))}
-                        classNamePrefix="rs"
                         menuPlacement="auto"
                         styles={{
                           control: (base) => ({ 
