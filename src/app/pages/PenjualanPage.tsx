@@ -1741,31 +1741,31 @@ export default function PenjualanPage() {
                   </div>
 
                   {/* Cart Totals Summary */}
-                  <div className="border-t border-border pt-4 mt-auto shrink-0">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                  <div className="border-t border-border pt-3 mt-3 shrink-0">
+                    <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-3">
                       {/* Left side: Tax / Additional fee */}
-                      <div className="w-full md:w-1/3">
-                        <div className="flex items-center justify-between text-xs bg-muted border border-border text-muted-foreground px-3 py-2 rounded-lg">
-                          <span className="font-semibold">Pajak / Fee (%) :</span>
+                      <div className="w-full xl:w-auto">
+                        <div className="flex items-center justify-between xl:justify-start gap-2 text-xs bg-muted border border-border text-muted-foreground px-3 py-2 rounded-lg">
+                          <span className="font-semibold whitespace-nowrap">Pajak/Fee (%) :</span>
                           <input
                             type="text"
                             value={formatNumber(taxPercent)}
                             onChange={(e) => setTaxPercent(parseNumber(e.target.value))}
-                            className="w-12 bg-card border border-border rounded px-1.5 py-0.5 text-right outline-none focus:border-[#3B82F6] font-bold"
+                            className="w-16 bg-card border border-border rounded px-2 py-0.5 text-right outline-none focus:border-[#3B82F6] font-bold"
                           />
                         </div>
                       </div>
 
                       {/* Right side: Grand Total */}
-                      <div className="w-full md:w-1/2 flex flex-col items-end">
+                      <div className="w-full xl:w-auto flex flex-col items-end">
                         <p className="text-muted-foreground font-bold uppercase tracking-wider text-[10px] mb-0.5">TOTAL KESELURUHAN</p>
-                        <div className="flex items-center gap-2 bg-[#3B82F6]/5 rounded-lg px-4 py-2 border border-[#3B82F6]/20">
-                          <span className="text-base font-bold text-[#3B82F6]">Rp</span>
+                        <div className="flex items-center justify-between w-full xl:w-auto gap-2 bg-[#3B82F6]/5 rounded-lg px-3 py-1.5 border border-[#3B82F6]/20">
+                          <span className="text-sm font-bold text-[#3B82F6]">Rp</span>
                           <input
                             type="text"
                             value={formatNumber(customTotal)}
                             onChange={(e) => setCustomTotal(parseNumber(e.target.value))}
-                            className="text-right font-black text-2xl text-[#3B82F6] w-36 bg-transparent outline-none"
+                            className="text-right font-black text-xl text-[#3B82F6] w-full xl:w-32 bg-transparent outline-none"
                           />
                         </div>
                       </div>

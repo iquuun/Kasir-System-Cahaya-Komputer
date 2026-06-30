@@ -70,7 +70,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response && error.response.status === 401) {
+        const isLoginRequest = error.config && error.config.url && error.config.url.includes('/login');
+        if (error.response && error.response.status === 401 && !isLoginRequest) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('last_activity');

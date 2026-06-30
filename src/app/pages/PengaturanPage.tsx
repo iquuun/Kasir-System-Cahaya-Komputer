@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Save, Upload, Store, MapPin, Database, DownloadCloud, UploadCloud, AlertTriangle, Trash2, Shield, X, RefreshCw, ChevronLeft, Key, Eye, EyeOff } from 'lucide-react';
+import { Save, Upload, Store, MapPin, Database, DownloadCloud, UploadCloud, AlertTriangle, Trash2, Shield, X, RefreshCw, ChevronLeft, Key, Eye, EyeOff, Info } from 'lucide-react';
 import api, { API_ASSET_URL } from '../api';
 import { toast } from 'sonner';
 
@@ -421,17 +421,17 @@ export default function PengaturanPage() {
             <div className="bg-card rounded-xl shadow-sm border border-emerald-100 p-4 text-xs">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 border-b border-emerald-50 pb-3">
                     <div className="flex items-center gap-2">
-                        <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-600">
+                        <div className="p-1.5 bg-emerald-500/10 rounded-lg text-emerald-600">
                             <Database size={14} />
                         </div>
-                        <div>
-                            <h2 className="text-sm font-bold text-foreground">Backup & Keamanan</h2>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file.</p>
-                        </div>
+                        <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                            Backup & Keamanan
+                            <Info size={12} className="text-muted-foreground cursor-help" title="Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file." />
+                        </h2>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                         <label
-                            className={`flex items-center justify-center gap-2 px-3 py-2 bg-amber-600 text-white rounded-lg font-bold shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition-all active:scale-95 text-xs cursor-pointer ${uploadingBackup || downloading ? 'opacity-75 cursor-wait' : ''}`}
+                            className={`flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-amber-600 text-white rounded-lg font-bold shadow-md shadow-amber-600/20 hover:bg-amber-700 transition-all active:scale-95 text-[10px] cursor-pointer ${uploadingBackup || downloading ? 'opacity-75 cursor-wait' : ''}`}
                         >
                             <input 
                                 type="file" 
@@ -440,95 +440,87 @@ export default function PengaturanPage() {
                                 onChange={handleFileSelection}
                                 disabled={uploadingBackup || downloading}
                             />
-                            <UploadCloud size={16} />
-                            {uploadingBackup ? 'Memulihkan...' : 'Upload Backup (.sqlite)'}
+                            <UploadCloud size={14} />
+                            {uploadingBackup ? 'Memulihkan...' : 'Upload Backup'}
                         </label>
                         <button
                             onClick={handleBackup}
                             disabled={downloading || uploadingBackup}
-                            className="flex items-center justify-center gap-2 px-3 py-2 bg-emerald-600 text-white rounded-lg font-bold shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 disabled:opacity-75 disabled:cursor-wait transition-all active:scale-95 text-xs"
+                            className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-emerald-600 text-white rounded-lg font-bold shadow-md shadow-emerald-600/20 hover:bg-emerald-700 disabled:opacity-75 disabled:cursor-wait transition-all active:scale-95 text-[10px]"
                         >
-                            <DownloadCloud size={16} />
-                            {downloading ? 'Memproses...' : 'Download Database (.sqlite)'}
+                            <DownloadCloud size={14} />
+                            {downloading ? 'Memproses...' : 'Download Database'}
                         </button>
                     </div>
                 </div>
                 
-                <div className="text-xs bg-amber-50 text-amber-800 p-3 rounded-lg border border-amber-200">
-                    <strong>💡 Tips:</strong> Rutin Download Database dan simpan di <strong>Google Drive / Flashdisk</strong> minimal 1 minggu sekali untuk keamanan data.
+                <div className="text-[10px] bg-amber-50 text-amber-800 p-2 rounded-lg border border-amber-200 flex gap-2">
+                    <span className="shrink-0">💡</span> 
+                    <span>Rutin Download Database ke <strong>Flashdisk / Google Drive</strong> untuk jaga-jaga.</span>
                 </div>
             </div>
 
             {/* SYNC DB SECTION */}
-            <div className="bg-card rounded-xl shadow-sm border border-blue-100 p-4 border-l-4 border-l-blue-500">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                        <div className="p-2 bg-blue-500/10 rounded-lg text-blue-600">
-                            <RefreshCw size={14} />
-                        </div>
-                        <div>
-                            <h2 className="text-sm font-bold text-foreground">Perbarui Struktur Database</h2>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">Gunakan tombol ini untuk menyesuaikan database setelah aplikasi mendapat pembaruan (update) fitur baru.</p>
-                        </div>
+            <div className="bg-card rounded-xl shadow-sm border border-blue-100 p-3 border-l-4 border-l-blue-500 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-blue-500/10 rounded-lg text-blue-600">
+                        <RefreshCw size={14} />
                     </div>
-                    <button
-                        onClick={handleSyncDatabase}
-                        disabled={syncingDb}
-                        className="flex-shrink-0 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg font-bold shadow-md shadow-blue-600/20 hover:bg-blue-700 disabled:opacity-75 disabled:cursor-wait transition-all flex-[0_0_auto] active:scale-95 text-xs"
-                    >
-                        <RefreshCw size={14} className={syncingDb ? "animate-spin" : ""} />
-                        {syncingDb ? 'Memproses...' : 'Perbarui Struktur Database'}
-                    </button>
+                    <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                        Sinkronisasi Database
+                        <Info size={12} className="text-muted-foreground cursor-help" title="Gunakan tombol ini untuk menyesuaikan database setelah aplikasi mendapat pembaruan (update) fitur baru." />
+                    </h2>
                 </div>
+                <button
+                    onClick={handleSyncDatabase}
+                    disabled={syncingDb}
+                    className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg font-bold shadow-sm shadow-blue-600/20 hover:bg-blue-700 disabled:opacity-75 disabled:cursor-wait transition-all flex-[0_0_auto] active:scale-95 text-[10px]"
+                >
+                    <RefreshCw size={12} className={syncingDb ? "animate-spin" : ""} />
+                    {syncingDb ? 'Memproses...' : 'Perbarui Struktur'}
+                </button>
             </div>
 
             {/* MASTER RECOVERY KEY SECTION */}
-            <div className="bg-card rounded-xl shadow-sm border border-orange-100 p-4 border-l-4 border-l-orange-500">
-                <div className="flex flex-col md:flex-row justify-between gap-4">
-                    <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="p-2 bg-orange-500/10 rounded-lg text-orange-600">
-                                <Key size={14} />
-                            </div>
-                            <h2 className="text-sm font-bold text-foreground">Kunci Darurat (Lupa Password)</h2>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground leading-relaxed md:max-w-md">
-                            Jika Anda (Owner) lupa password, Anda membutuhkan kunci rahasia ini untuk meresetnya dari halaman Login. 
-                            <strong> Simpan kunci ini baik-baik!</strong>
-                        </p>
+            <div className="bg-card rounded-xl shadow-sm border border-orange-100 p-3 border-l-4 border-l-orange-500 flex flex-col md:flex-row justify-between gap-4 md:items-center">
+                <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-orange-500/10 rounded-lg text-orange-600">
+                        <Key size={14} />
                     </div>
-                    <div className="flex-shrink-0 w-full md:w-auto mt-3 md:mt-0">
-                        <label className="block text-[10px] font-bold text-foreground mb-1.5">Buat Kode Brankas Anda Sendiri:</label>
-                        <div className="flex flex-col sm:flex-row items-center gap-2">
-                            <div className="relative w-full md:w-64">
-                                <input 
-                                    type={showRecoveryKey ? "text" : "password"} 
-                                    value={masterRecoveryKey}
-                                    onChange={(e) => setMasterRecoveryKey(e.target.value)}
-                                    placeholder="Ketik password/kode khusus Anda..."
-                                    className="w-full pl-3 pr-10 py-2 border border-border rounded-lg text-xs font-mono outline-none focus:ring-2 focus:ring-orange-500 bg-card"
-                                />
-                                <button 
-                                    type="button" 
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground"
-                                    onClick={() => setShowRecoveryKey(!showRecoveryKey)}
-                                >
-                                    {showRecoveryKey ? <EyeOff size={14} /> : <Eye size={14} />}
-                                </button>
-                            </div>
-                            <button
-                                onClick={() => {
-                                    const randomKey = 'CK-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-                                    setMasterRecoveryKey(randomKey);
-                                    setShowRecoveryKey(true);
-                                    toast.info('Kunci acak dibuat. Anda juga bisa mengetik kode Anda sendiri!');
-                                }}
-                                className="w-full sm:w-auto px-3 py-2 bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 rounded-lg text-[10px] font-bold shrink-0 transition-colors"
-                            >
-                                Acak Kode
-                            </button>
-                        </div>
+                    <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                        Kunci Lupa Password
+                        <Info size={12} className="text-muted-foreground cursor-help" title="Jika Anda (Owner) lupa password, masukkan kunci ini di menu Lupa Password di halaman Login untuk mereset. Jangan beritahu staf!" />
+                    </h2>
+                </div>
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                    <div className="relative w-full md:w-48">
+                        <input 
+                            type={showRecoveryKey ? "text" : "password"} 
+                            value={masterRecoveryKey}
+                            onChange={(e) => setMasterRecoveryKey(e.target.value)}
+                            placeholder="Ketik rahasia..."
+                            className="w-full pl-3 pr-8 py-1.5 border border-border rounded-lg text-[11px] font-mono outline-none focus:ring-1 focus:ring-orange-500 bg-card"
+                        />
+                        <button 
+                            type="button" 
+                            className="absolute inset-y-0 right-0 pr-2 flex items-center text-muted-foreground hover:text-foreground"
+                            onClick={() => setShowRecoveryKey(!showRecoveryKey)}
+                        >
+                            {showRecoveryKey ? <EyeOff size={12} /> : <Eye size={12} />}
+                        </button>
                     </div>
+                    <button
+                        onClick={() => {
+                            const randomKey = 'CK-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                            setMasterRecoveryKey(randomKey);
+                            setShowRecoveryKey(true);
+                            toast.info('Kunci acak dibuat!');
+                        }}
+                        className="w-full sm:w-auto px-2 py-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 rounded-lg text-[10px] font-bold shrink-0 transition-colors"
+                        title="Acak Kode"
+                    >
+                        Acak
+                    </button>
                 </div>
             </div>
             </div>
