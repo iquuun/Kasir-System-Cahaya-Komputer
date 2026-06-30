@@ -4,6 +4,16 @@ import api, { API_ASSET_URL } from '../api';
 import { toast } from 'sonner';
 import UsersPage from './UsersPage';
 
+const InfoTooltip = ({ text }: { text: string }) => (
+    <div className="group relative flex items-center">
+        <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2.5 bg-slate-800 text-white text-[11px] rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[9999] shadow-xl text-center font-normal leading-relaxed pointer-events-none">
+            {text}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-800" />
+        </div>
+    </div>
+);
+
 export default function PengaturanPage() {
     const [storeName, setStoreName] = useState('');
     const [storeAddress, setStoreAddress] = useState('');
@@ -303,7 +313,7 @@ export default function PengaturanPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {/* Logo Upload */}
                     <div className="space-y-2">
                         <label className="block text-xs font-medium text-foreground">Logo Toko</label>
@@ -352,73 +362,77 @@ export default function PengaturanPage() {
 
 
                     {/* Store Info */}
-                    <div className="md:col-span-2 space-y-3">
-                        <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-xs font-medium text-foreground">
-                                <Store size={16} className="text-muted-foreground" /> Nama Toko
-                            </label>
-                            <input
-                                type="text"
-                                value={storeName}
-                                onChange={(e) => setStoreName(e.target.value)}
-                                placeholder="Contoh: CAHAYA KOMPUTER"
-                                className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all"
-                            />
+                    <div className="md:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <label className="flex items-center gap-2 text-xs font-medium text-foreground">
+                                    <Store size={14} className="text-muted-foreground" /> Nama Toko
+                                </label>
+                                <input
+                                    type="text"
+                                    value={storeName}
+                                    onChange={(e) => setStoreName(e.target.value)}
+                                    placeholder="Contoh: CAHAYA KOMPUTER"
+                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                                    Telepon / WhatsApp
+                                </label>
+                                <input
+                                    type="text"
+                                    value={storePhone}
+                                    onChange={(e) => setStorePhone(e.target.value)}
+                                    placeholder="08xxxx..."
+                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs outline-none"
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                                    Mulai Nomor Faktur
+                                </label>
+                                <input
+                                    type="number"
+                                    value={invoiceStartNumber}
+                                    onChange={(e) => setInvoiceStartNumber(e.target.value)}
+                                    placeholder="Contoh: 10000"
+                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
+                                />
+                                <p className="text-[9px] text-muted-foreground leading-tight">
+                                    Faktur selanjutnya akan dimulai dari angka ini (misal: INV-10000).
+                                </p>
+                            </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                Telepon / WhatsApp
-                            </label>
-                            <input
-                                type="text"
-                                value={storePhone}
-                                onChange={(e) => setStorePhone(e.target.value)}
-                                placeholder="08xxxx..."
-                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs outline-none"
-                            />
-                        </div>
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                                    <MapPin size={12} className="text-muted-foreground" /> Alamat Lengkap
+                                </label>
+                                <textarea
+                                    value={storeAddress}
+                                    onChange={(e) => setStoreAddress(e.target.value)}
+                                    placeholder="Jl. Gajah Mada No. 123..."
+                                    rows={2}
+                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
+                                />
+                            </div>
 
-                        <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                Mulai Nomor Faktur
-                            </label>
-                            <input
-                                type="number"
-                                value={invoiceStartNumber}
-                                onChange={(e) => setInvoiceStartNumber(e.target.value)}
-                                placeholder="Contoh: 10000"
-                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
-                            />
-                            <p className="text-[9px] text-muted-foreground leading-tight">
-                                Faktur selanjutnya akan dimulai dari angka ini (misal: INV-10000) dan terus berlanjut tanpa reset harian.
-                            </p>
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                <MapPin size={12} className="text-muted-foreground" /> Alamat Lengkap
-                            </label>
-                            <textarea
-                                value={storeAddress}
-                                onChange={(e) => setStoreAddress(e.target.value)}
-                                placeholder="Jl. Gajah Mada No. 123..."
-                                rows={2}
-                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
-                            />
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                Keterangan Faktur (Notes)
-                            </label>
-                            <textarea
-                                value={storeNotes}
-                                onChange={(e) => setStoreNotes(e.target.value)}
-                                placeholder="Keterangan yang akan muncul di bawah faktur..."
-                                rows={4}
-                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
-                            />
+                            <div className="space-y-1">
+                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                                    Keterangan Faktur (Notes)
+                                </label>
+                                <textarea
+                                    value={storeNotes}
+                                    onChange={(e) => setStoreNotes(e.target.value)}
+                                    placeholder="Keterangan yang akan muncul di bawah faktur..."
+                                    rows={3}
+                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -446,7 +460,7 @@ export default function PengaturanPage() {
                         </div>
                         <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                             Backup & Keamanan
-                            <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" title="Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file." />
+                            <InfoTooltip text="Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file backup agar aman dari kehilangan." />
                         </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -488,7 +502,7 @@ export default function PengaturanPage() {
                     </div>
                     <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                         Sinkronisasi Database
-                        <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" title="Gunakan tombol ini untuk menyesuaikan database setelah aplikasi mendapat pembaruan (update) fitur baru." />
+                        <InfoTooltip text="Gunakan tombol ini untuk menyesuaikan struktur database setelah aplikasi mendapat pembaruan (update) fitur baru." />
                     </h2>
                 </div>
                 <button
@@ -509,7 +523,7 @@ export default function PengaturanPage() {
                     </div>
                     <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                         Kunci Lupa Password
-                        <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" title="Jika Anda (Owner) lupa password, masukkan kunci ini di menu Lupa Password di halaman Login untuk mereset. Jangan beritahu staf!" />
+                        <InfoTooltip text="Jika Anda (Owner) lupa password, masukkan kunci ini di menu Lupa Password di halaman Login untuk meresetnya." />
                     </h2>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center gap-2">
