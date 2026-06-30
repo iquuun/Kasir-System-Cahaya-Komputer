@@ -16,7 +16,6 @@ const KalkulatorRakitanPage = lazy(() => import("./pages/KalkulatorRakitanPage")
 const CashFlowPage = lazy(() => import("./pages/CashFlowPage"));
 const NilaiAsetPage = lazy(() => import("./pages/NilaiAsetPage"));
 const PengaturanPage = lazy(() => import("./pages/PengaturanPage"));
-const UsersPage = lazy(() => import("./pages/UsersPage"));
 const LaporanLabaPage = lazy(() => import("./pages/LaporanLabaPage"));
 const DistributorPage = lazy(() => import("./pages/DistributorPage"));
 const HutangDistributorPage = lazy(() => import("./pages/HutangDistributorPage"));
@@ -50,7 +49,6 @@ export const router = createBrowserRouter([
       { path: "cash-flow", element: withSuspense(CashFlowPage) },
       { path: "nilai-aset", element: withSuspense(NilaiAsetPage) },
       { path: "pengaturan", element: withSuspense(PengaturanPage) },
-      { path: "users", element: withSuspense(UsersPage) },
       { path: "laporan-laba", element: withSuspense(LaporanLabaPage) },
       { path: "distributor", element: withSuspense(DistributorPage) },
       { path: "hutang-distributor", element: withSuspense(HutangDistributorPage) },

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Save, Upload, Store, MapPin, Database, DownloadCloud, UploadCloud, AlertTriangle, Trash2, Shield, X, RefreshCw, ChevronLeft, Key, Eye, EyeOff, Info } from 'lucide-react';
+import { Save, Upload, Store, MapPin, Database, DownloadCloud, UploadCloud, AlertTriangle, Trash2, Shield, X, RefreshCw, ChevronLeft, Key, Eye, EyeOff, Info, Users } from 'lucide-react';
 import api, { API_ASSET_URL } from '../api';
 import { toast } from 'sonner';
+import UsersPage from './UsersPage';
 
 export default function PengaturanPage() {
     const [storeName, setStoreName] = useState('');
@@ -13,6 +14,7 @@ export default function PengaturanPage() {
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [stampPreview, setStampPreview] = useState<string | null>(null);
     const [stampFile, setStampFile] = useState<File | null>(null);
+    const [activeTab, setActiveTab] = useState<'profil' | 'akun'>('profil');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [downloading, setDownloading] = useState(false);
@@ -270,10 +272,28 @@ export default function PengaturanPage() {
     );
 
     return (
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-7">
-                <div className="bg-card rounded-xl shadow-sm border border-border p-4 h-full">
-                <div className="flex items-center gap-3 mb-4 border-b border-border pb-3">
+        <div className="max-w-6xl mx-auto space-y-4">
+            {/* TABS */}
+            <div className="flex items-center gap-1 border-b border-border pb-0">
+                <button 
+                    onClick={() => setActiveTab('profil')}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-t-xl font-bold text-[13px] transition-colors ${activeTab === 'profil' ? 'bg-card border border-b-0 border-border text-[#3B82F6]' : 'text-muted-foreground hover:bg-muted/50 border border-transparent'}`}
+                >
+                    <Store size={16} /> Profil & Sistem
+                </button>
+                <button 
+                    onClick={() => setActiveTab('akun')}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-t-xl font-bold text-[13px] transition-colors ${activeTab === 'akun' ? 'bg-card border border-b-0 border-border text-[#3B82F6]' : 'text-muted-foreground hover:bg-muted/50 border border-transparent'}`}
+                >
+                    <Users size={16} /> Manajemen Akun
+                </button>
+            </div>
+
+            {activeTab === 'profil' && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+                    <div className="lg:col-span-7">
+                        <div className="bg-card rounded-xl shadow-sm border border-border p-4 h-full">
+                        <div className="flex items-center gap-3 mb-4 border-b border-border pb-3">
                     <div className="p-2.5 bg-[#3B82F6]/10 rounded-lg text-[#3B82F6]">
                         <Store size={14} />
                     </div>
@@ -288,13 +308,13 @@ export default function PengaturanPage() {
                     <div className="space-y-2">
                         <label className="block text-xs font-medium text-foreground">Logo Toko</label>
                         <div className="relative group">
-                            <div className="w-full aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
+                            <div className="w-full h-32 bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
                                 {logoPreview ? (
                                     <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-3" />
                                 ) : (
                                     <div className="text-center p-3">
                                         <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                        <p className="text-[11px] text-muted-foreground">Klik untuk upload logo toko</p>
+                                        <p className="text-[10px] text-muted-foreground">Upload Logo</p>
                                     </div>
                                 )}
                                 <input
@@ -309,15 +329,15 @@ export default function PengaturanPage() {
                     
                     {/* Stamp Upload */}
                     <div className="space-y-2">
-                        <label className="block text-xs font-medium text-foreground">Cap / Tanda Tangan (PNG Transparan)</label>
+                        <label className="block text-xs font-medium text-foreground">Cap/TTD (PNG)</label>
                         <div className="relative group">
-                            <div className="w-full aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
+                            <div className="w-full h-32 bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
                                 {stampPreview ? (
                                     <img src={stampPreview} alt="Stamp Preview" className="w-full h-full object-contain p-3 opacity-80" />
                                 ) : (
                                     <div className="text-center p-3">
                                         <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                        <p className="text-[11px] text-muted-foreground">Klik untuk upload cap toko</p>
+                                        <p className="text-[10px] text-muted-foreground">Upload Cap</p>
                                     </div>
                                 )}
                                 <input
@@ -426,7 +446,7 @@ export default function PengaturanPage() {
                         </div>
                         <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                             Backup & Keamanan
-                            <Info size={12} className="text-muted-foreground cursor-help" title="Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file." />
+                            <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" title="Amankan data toko Anda (Produk, Faktur, Stok) menjadi 1 file." />
                         </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -463,12 +483,12 @@ export default function PengaturanPage() {
             {/* SYNC DB SECTION */}
             <div className="bg-card rounded-xl shadow-sm border border-blue-100 p-3 border-l-4 border-l-blue-500 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-blue-500/10 rounded-lg text-blue-600">
+                        <div className="p-1.5 bg-blue-500/10 rounded-lg text-blue-600">
                         <RefreshCw size={14} />
                     </div>
                     <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                         Sinkronisasi Database
-                        <Info size={12} className="text-muted-foreground cursor-help" title="Gunakan tombol ini untuk menyesuaikan database setelah aplikasi mendapat pembaruan (update) fitur baru." />
+                        <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" title="Gunakan tombol ini untuk menyesuaikan database setelah aplikasi mendapat pembaruan (update) fitur baru." />
                     </h2>
                 </div>
                 <button
@@ -484,12 +504,12 @@ export default function PengaturanPage() {
             {/* MASTER RECOVERY KEY SECTION */}
             <div className="bg-card rounded-xl shadow-sm border border-orange-100 p-3 border-l-4 border-l-orange-500 flex flex-col md:flex-row justify-between gap-4 md:items-center">
                 <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-orange-500/10 rounded-lg text-orange-600">
+                        <div className="p-1.5 bg-orange-500/10 rounded-lg text-orange-600">
                         <Key size={14} />
                     </div>
                     <h2 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                         Kunci Lupa Password
-                        <Info size={12} className="text-muted-foreground cursor-help" title="Jika Anda (Owner) lupa password, masukkan kunci ini di menu Lupa Password di halaman Login untuk mereset. Jangan beritahu staf!" />
+                        <Info size={12} className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors" title="Jika Anda (Owner) lupa password, masukkan kunci ini di menu Lupa Password di halaman Login untuk mereset. Jangan beritahu staf!" />
                     </h2>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -524,7 +544,13 @@ export default function PengaturanPage() {
                 </div>
             </div>
             </div>
-
+            </div>
+            )}
+            {activeTab === 'akun' && (
+                <div className="pt-2">
+                    <UsersPage />
+                </div>
+            )}
 
             {/* ============================== */}
             {/* RESTORE CONFIRMATION MODAL */}

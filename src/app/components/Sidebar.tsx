@@ -76,7 +76,6 @@ export const navItems: NavItem[] = [
   ] },
   { path: '/nilai-aset', label: 'Nilai Aset', icon: Wallet, ownerOnly: true },
   { path: '/pengaturan', label: 'Pengaturan Toko', icon: Settings, ownerOnly: true },
-  { path: '/users', label: 'Manajemen Akun', icon: Users, ownerOnly: true },
 ];
 
 // Popover component for collapsed sidebar — shows label + clickable sub-items
