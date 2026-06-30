@@ -135,9 +135,9 @@ export default function UsersPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         <button 
           onClick={() => handleOpenModal('add')}
-          className="flex items-center gap-2 bg-[#3B82F6] text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-[#3B82F6]/30 hover:bg-[#2563EB] transition-all active:scale-95"
+          className="flex items-center gap-1.5 bg-[#3B82F6] text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shadow-sm shadow-[#3B82F6]/30 hover:bg-[#2563EB] transition-all active:scale-95"
         >
-          <Plus size={18} />
+          <Plus size={14} />
           Tambah Kasir
         </button>
       </div>

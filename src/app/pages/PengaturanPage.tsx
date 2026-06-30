@@ -313,60 +313,63 @@ export default function PengaturanPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {/* Logo Upload */}
-                    <div className="space-y-2">
-                        <label className="block text-xs font-medium text-foreground">Logo Toko</label>
-                        <div className="relative group">
-                            <div className="w-full h-32 bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
-                                {logoPreview ? (
-                                    <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-3" />
-                                ) : (
-                                    <div className="text-center p-3">
-                                        <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                        <p className="text-[10px] text-muted-foreground">Upload Logo</p>
+                <div className="flex flex-col gap-4">
+                    {/* Top Row: Logo, Cap, Nama, Telepon, No Faktur */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+                        {/* Logo & Cap */}
+                        <div className="md:col-span-5 grid grid-cols-2 gap-3">
+                            {/* Logo Upload */}
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-foreground">Logo Toko</label>
+                                <div className="relative group">
+                                    <div className="w-full h-24 bg-muted rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
+                                        {logoPreview ? (
+                                            <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-2" />
+                                        ) : (
+                                            <div className="text-center p-2">
+                                                <Upload className="mx-auto text-gray-300 mb-1" size={14} />
+                                                <p className="text-[9px] text-muted-foreground">Upload Logo</p>
+                                            </div>
+                                        )}
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleLogoChange}
+                                            className="absolute inset-0 opacity-0 cursor-pointer"
+                                        />
                                     </div>
-                                )}
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleLogoChange}
-                                    className="absolute inset-0 opacity-0 cursor-pointer"
-                                />
+                                </div>
+                            </div>
+                            
+                            {/* Stamp Upload */}
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-foreground">Cap/TTD (PNG)</label>
+                                <div className="relative group">
+                                    <div className="w-full h-24 bg-muted rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
+                                        {stampPreview ? (
+                                            <img src={stampPreview} alt="Stamp Preview" className="w-full h-full object-contain p-2 opacity-80" />
+                                        ) : (
+                                            <div className="text-center p-2">
+                                                <Upload className="mx-auto text-gray-300 mb-1" size={14} />
+                                                <p className="text-[9px] text-muted-foreground">Upload Cap</p>
+                                            </div>
+                                        )}
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleStampChange}
+                                            className="absolute inset-0 opacity-0 cursor-pointer"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    {/* Stamp Upload */}
-                    <div className="space-y-2">
-                        <label className="block text-xs font-medium text-foreground">Cap/TTD (PNG)</label>
-                        <div className="relative group">
-                            <div className="w-full h-32 bg-muted rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center overflow-hidden">
-                                {stampPreview ? (
-                                    <img src={stampPreview} alt="Stamp Preview" className="w-full h-full object-contain p-3 opacity-80" />
-                                ) : (
-                                    <div className="text-center p-3">
-                                        <Upload className="mx-auto text-gray-300 mb-2" size={16} />
-                                        <p className="text-[10px] text-muted-foreground">Upload Cap</p>
-                                    </div>
-                                )}
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleStampChange}
-                                    className="absolute inset-0 opacity-0 cursor-pointer"
-                                />
-                            </div>
-                        </div>
-                    </div>
 
-
-                    {/* Store Info */}
-                    <div className="md:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-3">
+                        {/* Store Info */}
+                        <div className="md:col-span-7 flex flex-col justify-center gap-3">
                             <div className="space-y-1">
-                                <label className="flex items-center gap-2 text-xs font-medium text-foreground">
-                                    <Store size={14} className="text-muted-foreground" /> Nama Toko
+                                <label className="flex items-center gap-1.5 text-[11px] font-bold text-foreground">
+                                    <Store size={12} className="text-muted-foreground" /> Nama Toko
                                 </label>
                                 <input
                                     type="text"
@@ -377,62 +380,65 @@ export default function PengaturanPage() {
                                 />
                             </div>
 
-                            <div className="space-y-1">
-                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                    Telepon / WhatsApp
-                                </label>
-                                <input
-                                    type="text"
-                                    value={storePhone}
-                                    onChange={(e) => setStorePhone(e.target.value)}
-                                    placeholder="08xxxx..."
-                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs outline-none"
-                                />
-                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="space-y-1">
+                                    <label className="flex items-center gap-1.5 text-[10px] font-bold text-foreground">
+                                        Telepon / WhatsApp
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={storePhone}
+                                        onChange={(e) => setStorePhone(e.target.value)}
+                                        placeholder="08xxxx..."
+                                        className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
+                                    />
+                                </div>
 
-                            <div className="space-y-1">
-                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                    Mulai Nomor Faktur
-                                </label>
-                                <input
-                                    type="number"
-                                    value={invoiceStartNumber}
-                                    onChange={(e) => setInvoiceStartNumber(e.target.value)}
-                                    placeholder="Contoh: 10000"
-                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
-                                />
-                                <p className="text-[9px] text-muted-foreground leading-tight">
-                                    Faktur selanjutnya akan dimulai dari angka ini (misal: INV-10000).
-                                </p>
+                                <div className="space-y-1">
+                                    <label className="flex items-center gap-1.5 text-[10px] font-bold text-foreground">
+                                        Mulai Nomor Faktur
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={invoiceStartNumber}
+                                        onChange={(e) => setInvoiceStartNumber(e.target.value)}
+                                        placeholder="Contoh: 10000"
+                                        className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-xs"
+                                    />
+                                    <p className="text-[8px] text-muted-foreground leading-tight mt-0.5">
+                                        Faktur selanjutnya (misal: INV-10000).
+                                    </p>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="space-y-3">
-                            <div className="space-y-1">
-                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                    <MapPin size={12} className="text-muted-foreground" /> Alamat Lengkap
-                                </label>
-                                <textarea
-                                    value={storeAddress}
-                                    onChange={(e) => setStoreAddress(e.target.value)}
-                                    placeholder="Jl. Gajah Mada No. 123..."
-                                    rows={2}
-                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
-                                />
-                            </div>
+                    {/* Bottom Row: Alamat & Keterangan */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-border">
+                        <div className="space-y-1">
+                            <label className="flex items-center gap-1.5 text-[10px] font-bold text-foreground">
+                                <MapPin size={12} className="text-muted-foreground" /> Alamat Lengkap
+                            </label>
+                            <textarea
+                                value={storeAddress}
+                                onChange={(e) => setStoreAddress(e.target.value)}
+                                placeholder="Jl. Gajah Mada No. 123..."
+                                rows={2}
+                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
+                            />
+                        </div>
 
-                            <div className="space-y-1">
-                                <label className="flex items-center gap-2 text-[10px] font-bold text-foreground">
-                                    Keterangan Faktur (Notes)
-                                </label>
-                                <textarea
-                                    value={storeNotes}
-                                    onChange={(e) => setStoreNotes(e.target.value)}
-                                    placeholder="Keterangan yang akan muncul di bawah faktur..."
-                                    rows={3}
-                                    className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
-                                />
-                            </div>
+                        <div className="space-y-1">
+                            <label className="flex items-center gap-1.5 text-[10px] font-bold text-foreground">
+                                Keterangan Faktur (Notes)
+                            </label>
+                            <textarea
+                                value={storeNotes}
+                                onChange={(e) => setStoreNotes(e.target.value)}
+                                placeholder="Keterangan yang akan muncul di bawah faktur..."
+                                rows={2}
+                                className="w-full px-2.5 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all resize-none text-xs"
+                            />
                         </div>
                     </div>
                 </div>
@@ -441,10 +447,10 @@ export default function PengaturanPage() {
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#3B82F6] text-white rounded-lg text-xs font-bold shadow-lg shadow-[#3B82F6]/30 hover:bg-[#2563EB] disabled:bg-gray-300 transition-all active:scale-95"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#3B82F6] text-white rounded-lg text-[11px] font-bold shadow-sm shadow-[#3B82F6]/30 hover:bg-[#2563EB] disabled:bg-gray-300 transition-all active:scale-95"
                     >
-                        <Save size={16} />
-                        {saving ? 'Menyimpan...' : 'SIMPAN PENGATURAN'}
+                        <Save size={14} />
+                        {saving ? 'Menyimpan...' : 'SIMPAN'}
                     </button>
                 </div>
             </div>
@@ -452,8 +458,8 @@ export default function PengaturanPage() {
 
             <div className="lg:col-span-5 space-y-4">
             {/* BACKUP SECTION */}
-            <div className="bg-card rounded-xl shadow-sm border border-emerald-100 p-4 text-xs">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 border-b border-emerald-50 pb-3">
+                <div className="bg-card rounded-xl shadow-sm border border-emerald-100 p-3 text-xs">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2 border-b border-emerald-50 pb-2">
                     <div className="flex items-center gap-2">
                         <div className="p-1.5 bg-emerald-500/10 rounded-lg text-emerald-600">
                             <Database size={14} />
@@ -465,7 +471,7 @@ export default function PengaturanPage() {
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                         <label
-                            className={`flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-amber-600 text-white rounded-lg font-bold shadow-md shadow-amber-600/20 hover:bg-amber-700 transition-all active:scale-95 text-[10px] cursor-pointer ${uploadingBackup || downloading ? 'opacity-75 cursor-wait' : ''}`}
+                            className={`flex items-center justify-center gap-1.5 px-2 py-1 bg-amber-600 text-white rounded-md font-bold shadow-sm shadow-amber-600/20 hover:bg-amber-700 transition-all active:scale-95 text-[10px] cursor-pointer ${uploadingBackup || downloading ? 'opacity-75 cursor-wait' : ''}`}
                         >
                             <input 
                                 type="file" 
@@ -474,21 +480,21 @@ export default function PengaturanPage() {
                                 onChange={handleFileSelection}
                                 disabled={uploadingBackup || downloading}
                             />
-                            <UploadCloud size={14} />
+                            <UploadCloud size={12} />
                             {uploadingBackup ? 'Memulihkan...' : 'Upload Backup'}
                         </label>
                         <button
                             onClick={handleBackup}
                             disabled={downloading || uploadingBackup}
-                            className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-emerald-600 text-white rounded-lg font-bold shadow-md shadow-emerald-600/20 hover:bg-emerald-700 disabled:opacity-75 disabled:cursor-wait transition-all active:scale-95 text-[10px]"
+                            className="flex items-center justify-center gap-1.5 px-2 py-1 bg-emerald-600 text-white rounded-md font-bold shadow-sm shadow-emerald-600/20 hover:bg-emerald-700 disabled:opacity-75 disabled:cursor-wait transition-all active:scale-95 text-[10px]"
                         >
-                            <DownloadCloud size={14} />
+                            <DownloadCloud size={12} />
                             {downloading ? 'Memproses...' : 'Download Database'}
                         </button>
                     </div>
                 </div>
                 
-                <div className="text-[10px] bg-amber-50 text-amber-800 p-2 rounded-lg border border-amber-200 flex gap-2">
+                <div className="text-[10px] bg-amber-50 text-amber-800 p-1.5 rounded-lg border border-amber-200 flex gap-2">
                     <span className="shrink-0">💡</span> 
                     <span>Rutin Download Database ke <strong>Flashdisk / Google Drive</strong> untuk jaga-jaga.</span>
                 </div>
@@ -508,7 +514,7 @@ export default function PengaturanPage() {
                 <button
                     onClick={handleSyncDatabase}
                     disabled={syncingDb}
-                    className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg font-bold shadow-sm shadow-blue-600/20 hover:bg-blue-700 disabled:opacity-75 disabled:cursor-wait transition-all flex-[0_0_auto] active:scale-95 text-[10px]"
+                    className="flex-shrink-0 flex items-center justify-center gap-1.5 px-2.5 py-1 bg-blue-600 text-white rounded-md font-bold shadow-sm shadow-blue-600/20 hover:bg-blue-700 disabled:opacity-75 disabled:cursor-wait transition-all flex-[0_0_auto] active:scale-95 text-[10px]"
                 >
                     <RefreshCw size={12} className={syncingDb ? "animate-spin" : ""} />
                     {syncingDb ? 'Memproses...' : 'Perbarui Struktur'}
