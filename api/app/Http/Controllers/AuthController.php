@@ -88,7 +88,7 @@ class AuthController extends Controller
         }
 
         if ($request->recovery_key !== $masterKey) {
-            return response()->json(['message' => 'Kode Brankas Rahasia salah!'], 401);
+            return response()->json(['message' => 'Kode Brankas Rahasia salah!'], 400);
         }
 
         $user->password = Hash::make($request->new_password);

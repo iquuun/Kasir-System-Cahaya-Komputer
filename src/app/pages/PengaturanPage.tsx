@@ -497,16 +497,16 @@ export default function PengaturanPage() {
                             <strong> Simpan kunci ini baik-baik!</strong>
                         </p>
                     </div>
-                    <div className="flex-shrink-0 w-full md:w-auto">
-                        <label className="block text-[10px] font-bold text-foreground mb-1.5">Kode Brankas Rahasia saat ini:</label>
-                        <div className="flex items-center gap-2">
-                            <div className="relative w-full md:w-48">
+                    <div className="flex-shrink-0 w-full md:w-auto mt-3 md:mt-0">
+                        <label className="block text-[10px] font-bold text-foreground mb-1.5">Buat Kode Brankas Anda Sendiri:</label>
+                        <div className="flex flex-col sm:flex-row items-center gap-2">
+                            <div className="relative w-full md:w-64">
                                 <input 
                                     type={showRecoveryKey ? "text" : "password"} 
                                     value={masterRecoveryKey}
-                                    readOnly
-                                    placeholder="Belum ada kunci"
-                                    className="w-full pl-3 pr-10 py-2 border border-border rounded-lg text-xs font-mono outline-none bg-muted"
+                                    onChange={(e) => setMasterRecoveryKey(e.target.value)}
+                                    placeholder="Ketik password/kode khusus Anda..."
+                                    className="w-full pl-3 pr-10 py-2 border border-border rounded-lg text-xs font-mono outline-none focus:ring-2 focus:ring-orange-500 bg-card"
                                 />
                                 <button 
                                     type="button" 
@@ -521,11 +521,11 @@ export default function PengaturanPage() {
                                     const randomKey = 'CK-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
                                     setMasterRecoveryKey(randomKey);
                                     setShowRecoveryKey(true);
-                                    toast.info('Kunci baru dibuat. Jangan lupa klik SIMPAN PENGATURAN agar aktif!');
+                                    toast.info('Kunci acak dibuat. Anda juga bisa mengetik kode Anda sendiri!');
                                 }}
-                                className="px-3 py-2 bg-card border border-border text-foreground hover:bg-muted rounded-lg text-[10px] font-bold shrink-0 transition-colors"
+                                className="w-full sm:w-auto px-3 py-2 bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 rounded-lg text-[10px] font-bold shrink-0 transition-colors"
                             >
-                                Buat Baru
+                                Acak Kode
                             </button>
                         </div>
                     </div>

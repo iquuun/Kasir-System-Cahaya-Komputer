@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, Eye, EyeOff, Loader2, Monitor, WifiOff, RefreshCw, X, Info } from 'lucide-react';
+import { LogIn, Eye, EyeOff, Loader2, Monitor, WifiOff, RefreshCw, X, Info, Shield, Key, AlertTriangle } from 'lucide-react';
 import api from '../api';
 
 export default function LoginPage() {
@@ -225,107 +225,137 @@ export default function LoginPage() {
       {/* Modal Lupa Password */}
       {showForgotModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-card rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="bg-blue-50 px-5 py-4 border-b border-blue-100 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-blue-700">
-                <Info size={18} />
-                <h3 className="font-bold text-sm">Lupa Password?</h3>
+          <div className="bg-card rounded-3xl w-full max-w-md shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 flex items-center justify-between shadow-sm">
+              <div className="flex items-center gap-3 text-white">
+                <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+                  <Shield size={20} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base leading-tight">Pemulihan Akun</h3>
+                  <p className="text-blue-100 text-[11px]">Sistem Keamanan Berlapis</p>
+                </div>
               </div>
               <button 
                 onClick={closeForgotModal}
-                className="text-blue-400 hover:text-blue-700 transition-colors p-1"
+                className="text-blue-100 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all"
               >
                 <X size={18} />
               </button>
             </div>
             
-            <div className="p-5 space-y-4 text-sm text-foreground">
+            <div className="p-6 space-y-5 text-sm text-foreground bg-slate-50/50">
               {forgotStep === 1 && (
-                <form onSubmit={handleCheckEmailRole} className="space-y-4">
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Masukkan alamat email Anda. Sistem akan memeriksa peran Anda (Owner atau Staf) dan memberikan instruksi selanjutnya.
+                <form onSubmit={handleCheckEmailRole} className="space-y-5">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Masukkan alamat email yang terdaftar. Kami akan memverifikasi tingkat akses Anda untuk proses pemulihan.
                   </p>
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5">Email Akun Anda</label>
-                    <input 
-                      type="email" 
-                      value={forgotEmail} 
-                      onChange={(e) => setForgotEmail(e.target.value)} 
-                      placeholder="email@contoh.com" 
-                      className="w-full px-3 py-2 border border-border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold text-slate-700">Alamat Email</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <span className="text-slate-400">@</span>
+                      </div>
+                      <input 
+                        type="email" 
+                        value={forgotEmail} 
+                        onChange={(e) => setForgotEmail(e.target.value)} 
+                        placeholder="email@contoh.com" 
+                        className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                        required
+                      />
+                    </div>
                   </div>
                   {forgotRole === 'staf' && (
-                    <div className="bg-orange-50 border border-orange-200 p-3 rounded-lg flex gap-2">
-                      <span className="text-orange-600">⚠️</span>
+                    <div className="bg-orange-50 border border-orange-200 p-4 rounded-xl flex gap-3 shadow-sm animate-in slide-in-from-bottom-2">
+                      <AlertTriangle className="text-orange-500 shrink-0 mt-0.5" size={18} />
                       <p className="text-xs text-orange-800 leading-relaxed">
-                        Email ini terdeteksi sebagai <b>Staf Kasir</b>. Anda tidak dapat mereset password sendiri.<br/><br/>
-                        Silakan hubungi <b>Pemilik Toko (Owner)</b>. Mereka dapat mereset password Anda melalui menu <b>Pengaturan &gt; Manajemen Akun</b>.
+                        Akun Anda terdeteksi sebagai <b>Staf Kasir</b>. Demi keamanan toko, staf tidak dapat mereset password secara sepihak.<br/><br/>
+                        Silakan hubungi <b>Owner (Pemilik)</b> untuk mereset password Anda melalui menu Pengaturan.
                       </p>
                     </div>
                   )}
-                  {forgotError && <div className="text-xs text-red-600 bg-red-50 p-2 rounded">{forgotError}</div>}
+                  {forgotError && <div className="text-xs text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl flex gap-2 items-center"><X size={14} className="shrink-0"/> {forgotError}</div>}
                   <button 
                     type="submit" 
                     disabled={forgotLoading || forgotRole === 'staf'} 
-                    className="w-full py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:shadow-none active:scale-[0.98]"
                   >
-                    {forgotLoading ? 'Memeriksa...' : 'Lanjutkan'}
+                    {forgotLoading ? (
+                      <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin"/> Memeriksa...</span>
+                    ) : 'Lanjutkan Pemulihan'}
                   </button>
                 </form>
               )}
 
               {forgotStep === 2 && (
-                <form onSubmit={handleResetPassword} className="space-y-4">
-                  <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-2">
+                <form onSubmit={handleResetPassword} className="space-y-5 animate-in slide-in-from-right-4 duration-300">
+                  <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl mb-2 flex gap-3 items-start shadow-sm">
+                    <Shield className="text-blue-600 shrink-0 mt-0.5" size={18} />
                     <p className="text-xs text-blue-800 leading-relaxed">
-                      Akun <b>Owner</b> terdeteksi. Silakan masukkan <b>Kode Brankas Rahasia</b> yang Anda simpan sebelumnya untuk mereset password.
+                      Otorisasi <b>Owner</b> berhasil. Silakan masukkan <b>Kode Brankas Rahasia</b> yang telah Anda tetapkan di Pengaturan untuk memvalidasi identitas.
                     </p>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5">Kode Brankas Rahasia</label>
-                    <input 
-                      type="text" 
-                      value={forgotRecoveryKey} 
-                      onChange={(e) => setForgotRecoveryKey(e.target.value)} 
-                      placeholder="Masukkan kode rahasia..." 
-                      className="w-full px-3 py-2 border border-border rounded-lg text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold text-slate-700">Kode Brankas Rahasia</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <Key className="text-slate-400" size={16} />
+                      </div>
+                      <input 
+                        type="text" 
+                        value={forgotRecoveryKey} 
+                        onChange={(e) => setForgotRecoveryKey(e.target.value)} 
+                        placeholder="Masukkan kode rahasia..." 
+                        className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                        required
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5">Password Baru</label>
-                    <input 
-                      type="password" 
-                      value={forgotNewPassword} 
-                      onChange={(e) => setForgotNewPassword(e.target.value)} 
-                      placeholder="Minimal 6 karakter" 
-                      minLength={6}
-                      className="w-full px-3 py-2 border border-border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold text-slate-700">Buat Password Baru</label>
+                    <div className="relative">
+                      <input 
+                        type="password" 
+                        value={forgotNewPassword} 
+                        onChange={(e) => setForgotNewPassword(e.target.value)} 
+                        placeholder="Minimal 6 karakter" 
+                        minLength={6}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                        required
+                      />
+                    </div>
                   </div>
-                  {forgotError && <div className="text-xs text-red-600 bg-red-50 p-2 rounded">{forgotError}</div>}
+                  {forgotError && <div className="text-xs text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl flex gap-2 items-center animate-in shake"><X size={14} className="shrink-0"/> {forgotError}</div>}
                   <button 
                     type="submit" 
                     disabled={forgotLoading} 
-                    className="w-full py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:shadow-none active:scale-[0.98]"
                   >
-                    {forgotLoading ? 'Memproses...' : 'Reset Password Sekarang'}
+                    {forgotLoading ? (
+                      <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin"/> Memproses...</span>
+                    ) : 'Reset Password Sekarang'}
                   </button>
                 </form>
               )}
 
               {forgotStep === 3 && (
-                <div className="text-center py-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-green-600 text-xl">✓</span>
+                <div className="text-center py-6 animate-in zoom-in-95 duration-300">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30">
+                      <span className="text-white text-xl">✓</span>
+                    </div>
                   </div>
-                  <h4 className="font-bold text-foreground mb-2">Password Berhasil Direset!</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Silakan tutup jendela ini dan login kembali menggunakan password baru Anda.
+                  <h4 className="font-bold text-lg text-slate-800 mb-2">Password Direset!</h4>
+                  <p className="text-sm text-slate-500 mb-6 px-4">
+                    Pemulihan akun berhasil. Silakan tutup jendela ini dan masuk menggunakan password baru Anda.
                   </p>
+                  <button 
+                    onClick={closeForgotModal}
+                    className="px-6 py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl text-sm font-bold transition-colors"
+                  >
+                    Kembali ke Login
+                  </button>
                 </div>
               )}
 
