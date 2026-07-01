@@ -388,111 +388,111 @@ export default function EmployeeSalaryTab() {
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
            <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200 h-full md:h-auto flex flex-col">
-              <div className="bg-purple-600 p-4 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
-                 <div className="flex items-center gap-3">
+              <div className="bg-purple-600 px-4 py-2.5 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
+                 <div className="flex items-center gap-2">
                     <button type="button" onClick={() => setShowModal(false)} className="md:hidden p-1 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
-                      <ChevronLeft size={18} />
+                      <ChevronLeft size={16} />
                     </button>
                     <div>
-                       <h3 className="text-sm font-black tracking-tight">Input Pembayaran Gaji / Kasbon</h3>
-                       <p className="text-purple-100 text-[10px] opacity-80">Dana akan otomatis memotong Kas Toko secara real-time</p>
+                       <h3 className="text-xs font-black tracking-tight">Input Pembayaran Gaji / Kasbon</h3>
+                       <p className="text-purple-100 text-[9px] opacity-80">Dana akan otomatis memotong Kas Toko secara real-time</p>
                     </div>
                  </div>
-                 <button type="button" onClick={() => setShowModal(false)} className="hidden md:block bg-white/10 p-1.5 rounded-lg hover:bg-white/20 transition-colors border-0">
-                    <X size={18} />
+                 <button type="button" onClick={() => setShowModal(false)} className="hidden md:block bg-white/10 p-1 rounded-lg hover:bg-white/20 transition-colors border-0">
+                    <X size={16} />
                  </button>
               </div>
               
-              <form onSubmit={handleSubmit} className="p-4 space-y-4 flex-1 overflow-y-auto">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="p-3 space-y-2.5 flex-1 overflow-y-auto">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     <div>
-                        <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1.5">Pilih Karyawan</label>
+                        <label className="block text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Pilih Karyawan</label>
                         <select
                           required
                           value={form.employee_id}
                           onChange={(e) => setForm({...form, employee_id: e.target.value})}
-                          className="w-full px-3 py-1.5 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                          className="w-full px-2.5 py-1 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                         >
                           <option value="">-- Pilih Staf --</option>
                           {employees.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                          <Calendar size={10} /> Tanggal Transaksi
+                        <label className="block text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-1">
+                          <Calendar size={9} /> Tanggal Transaksi
                         </label>
                         <input
                           type="datetime-local"
                           value={form.tanggal}
                           onChange={(e) => setForm({...form, tanggal: e.target.value})}
-                          className="w-full px-3 py-1.5 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                          className="w-full px-2.5 py-1 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                         />
                     </div>
                  </div>
 
-                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <div>
-                        <label className="block text-[10px] font-black text-purple-600 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                          <DollarSign size={10} /> Gaji Pokok
+                        <label className="block text-[9px] font-black text-purple-600 uppercase tracking-widest mb-1 flex items-center gap-1">
+                          <DollarSign size={9} /> Gaji Pokok
                         </label>
                         <input
                           type="text"
                           value={formatNumber(form.gaji_pokok)}
                           onChange={(e) => setForm({...form, gaji_pokok: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
-                          className="w-full px-3 py-1.5 border border-purple-100 bg-purple-50/30 rounded-lg text-xs font-bold text-purple-700 outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full px-2.5 py-1 border border-purple-100 bg-purple-50/30 rounded-lg text-xs font-bold text-purple-700 outline-none focus:ring-2 focus:ring-purple-500"
                         />
                     </div>
                     <div>
-                        <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                          <Gift size={10} /> Bonus / Tambahan
+                        <label className="block text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-1 flex items-center gap-1">
+                          <Gift size={9} /> Bonus / Tambahan
                         </label>
                         <input
                           type="text"
                           value={formatNumber(form.bonus)}
                           onChange={(e) => setForm({...form, bonus: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
-                          className="w-full px-3 py-1.5 border border-emerald-100 bg-emerald-50/30 rounded-lg text-xs font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-500"
+                          className="w-full px-2.5 py-1 border border-emerald-100 bg-emerald-50/30 rounded-lg text-xs font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-500"
                         />
                     </div>
                     <div>
-                        <label className="block text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                          <MinusCircle size={10} /> Potongan / Pinjam
+                        <label className="block text-[9px] font-black text-rose-600 uppercase tracking-widest mb-1 flex items-center gap-1">
+                          <MinusCircle size={9} /> Potongan / Pinjam
                         </label>
                         <input
                           type="text"
                           value={formatNumber(form.potongan)}
                           onChange={(e) => setForm({...form, potongan: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
-                          className="w-full px-3 py-1.5 border border-rose-100 bg-rose-50/30 rounded-lg text-xs font-bold text-rose-700 outline-none focus:ring-2 focus:ring-rose-500"
+                          className="w-full px-2.5 py-1 border border-rose-100 bg-rose-50/30 rounded-lg text-xs font-bold text-rose-700 outline-none focus:ring-2 focus:ring-rose-500"
                         />
                     </div>
                  </div>
 
                  <div>
-                    <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1.5">Keterangan Tambahan</label>
+                    <label className="block text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Keterangan Tambahan</label>
                     <input
                       type="text"
                       value={form.keterangan}
                       onChange={(e) => setForm({...form, keterangan: e.target.value})}
                       placeholder="Contoh: Bonus target lebaran"
-                      className="w-full px-3 py-1.5 border border-border rounded-lg text-xs font-medium text-foreground outline-none dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                      className="w-full px-2.5 py-1 border border-border rounded-lg text-xs font-medium text-foreground outline-none dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                     />
                  </div>
 
-                  <div className="pt-2">
+                  <div>
                     {(() => {
                       const total = (Number(form.gaji_pokok) || 0) + (Number(form.bonus) || 0) - (Number(form.potongan) || 0);
                       const isLoan = total < 0;
                       return (
-                        <div className={`${isLoan ? 'bg-rose-600 shadow-rose-100' : 'bg-purple-600 shadow-purple-100'} p-3 rounded-lg text-white flex justify-between items-center shadow-lg transition-all`}>
+                        <div className={`${isLoan ? 'bg-rose-600 shadow-rose-100' : 'bg-purple-600 shadow-purple-100'} px-3 py-2 rounded-lg text-white flex justify-between items-center shadow-md transition-all`}>
                            <div>
-                              <p className="text-[10px] font-black uppercase opacity-70 font-bold">{isLoan ? 'Pinjaman (Uang Keluar)' : 'Total Gaji Bersih'}</p>
-                              <p className="text-xl font-black">
+                              <p className="text-[9px] font-black uppercase opacity-70">{isLoan ? 'Pinjaman (Uang Keluar)' : 'Total Gaji Bersih'}</p>
+                              <p className="text-lg font-black">
                                 Rp {Math.abs(total).toLocaleString('id-ID')}
                               </p>
                            </div>
-                           <div className="bg-white/20 px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+                           <div className="bg-white/20 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
                               {isLoan ? 'Potong Kas Toko' : 'Transfer Kas Toko'}
                            </div>
                         </div>
@@ -500,12 +500,12 @@ export default function EmployeeSalaryTab() {
                     })()}
                   </div>
 
-                 <div className="flex gap-2 pt-4 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-none md:pt-2">
-                    <button type="button" onClick={() => setShowModal(false)} className="hidden md:block flex-1 py-1.5 text-xs font-bold text-muted-foreground hover:bg-muted rounded-lg transition-colors border-0 bg-transparent">BATAL</button>
+                 <div className="flex gap-2 pt-2 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-none md:pt-1">
+                    <button type="button" onClick={() => setShowModal(false)} className="hidden md:block flex-1 py-1 text-xs font-bold text-muted-foreground hover:bg-muted rounded-lg transition-colors border-0 bg-transparent">BATAL</button>
                     <button
                       type="submit"
                       disabled={saving}
-                      className="flex-1 md:flex-none w-full bg-purple-600 py-1.5 text-xs font-black text-white rounded-lg hover:bg-purple-700 shadow-md shadow-purple-200 disabled:bg-gray-300 transition-colors border-0 uppercase active:scale-[0.98]"
+                      className="flex-1 md:flex-none w-full bg-purple-600 py-1.5 text-[11px] font-black text-white rounded-lg hover:bg-purple-700 shadow-sm shadow-purple-200 disabled:bg-gray-300 transition-colors border-0 uppercase active:scale-[0.98]"
                     >
                        {saving ? 'Menyimpan...' : 'Simpan & Potong Kas'}
                     </button>
