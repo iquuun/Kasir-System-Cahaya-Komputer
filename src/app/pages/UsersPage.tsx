@@ -277,7 +277,7 @@ export default function UsersPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-xl focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all"
+                  className="w-full px-3 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                   placeholder="Contoh: Asep Suryana"
                 />
               </div>
@@ -289,7 +289,7 @@ export default function UsersPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-xl focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all"
+                  className="w-full px-3 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                   placeholder="Contoh: asep@cahaya.id"
                 />
               </div>
@@ -299,7 +299,7 @@ export default function UsersPage() {
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value as 'owner' | 'staf' })}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-xl focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all font-medium text-foreground"
+                  className="w-full px-3 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all font-medium text-foreground text-sm"
                 >
                   <option value="staf">Staf Kasir (Hanya Penjualan)</option>
                   <option value="owner">Owner / Admin (Akses Penuh)</option>
@@ -316,7 +316,7 @@ export default function UsersPage() {
                   required={modalMode === 'add'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-xl focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all"
+                  className="w-full px-3 py-1.5 bg-muted border border-border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none transition-all text-sm"
                   placeholder={modalMode === 'edit' ? 'Ketik password baru...' : 'Minimal 6 karakter'}
                 />
               </div>
@@ -325,14 +325,14 @@ export default function UsersPage() {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="hidden md:block flex-1 px-4 py-2.5 bg-card border border-border text-foreground rounded-xl hover:bg-muted font-bold transition-all shadow-sm"
+                  className="flex-1 md:flex-none px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted text-sm font-bold transition-all shadow-sm"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 md:flex-none w-full px-4 py-3 md:py-2.5 bg-[#3B82F6] text-white rounded-xl hover:bg-[#2563EB] font-bold transition-all shadow-lg shadow-[#3B82F6]/30 disabled:opacity-50 active:scale-[0.98]"
+                  className="flex-1 w-full px-4 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] text-sm font-bold transition-all shadow-sm shadow-[#3B82F6]/30 disabled:opacity-50 active:scale-[0.98]"
                 >
                   {isSubmitting ? 'Menyimpan...' : 'Simpan Akun'}
                 </button>
