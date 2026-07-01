@@ -387,7 +387,7 @@ export default function EmployeeSalaryTab() {
 
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
-           <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200 h-full md:h-auto flex flex-col">
+           <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200 h-full md:h-auto md:max-h-[85vh] flex flex-col">
               <div className="bg-purple-600 px-4 py-2.5 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
                  <div className="flex items-center gap-2">
                     <button type="button" onClick={() => setShowModal(false)} className="md:hidden p-1 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
@@ -517,7 +517,7 @@ export default function EmployeeSalaryTab() {
 
       {promptModal.isOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
-           <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border-0 h-full md:h-auto flex flex-col">
+           <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border-0 h-full md:h-auto md:max-h-[85vh] flex flex-col">
               <div className="bg-gray-800 p-4 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
                  <div className="flex items-center gap-2">
                    <button type="button" onClick={() => setPromptModal({...promptModal, isOpen: false})} className="md:hidden p-1 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
