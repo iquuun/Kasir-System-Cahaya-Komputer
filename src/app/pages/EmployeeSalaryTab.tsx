@@ -388,22 +388,22 @@ export default function EmployeeSalaryTab() {
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
            <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200 h-full md:h-auto flex flex-col">
-              <div className="bg-purple-600 p-4 md:p-5 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
+              <div className="bg-purple-600 p-4 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
                  <div className="flex items-center gap-3">
-                    <button type="button" onClick={() => setShowModal(false)} className="md:hidden p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
-                      <ChevronLeft size={20} />
+                    <button type="button" onClick={() => setShowModal(false)} className="md:hidden p-1 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
+                      <ChevronLeft size={18} />
                     </button>
                     <div>
-                       <h3 className="text-sm md:text-lg font-black tracking-tight">Input Pembayaran Gaji / Kasbon</h3>
-                       <p className="text-purple-100 text-[10px] md:text-xs opacity-80">Dana akan otomatis memotong Kas Toko secara real-time</p>
+                       <h3 className="text-sm font-black tracking-tight">Input Pembayaran Gaji / Kasbon</h3>
+                       <p className="text-purple-100 text-[10px] opacity-80">Dana akan otomatis memotong Kas Toko secara real-time</p>
                     </div>
                  </div>
-                 <button type="button" onClick={() => setShowModal(false)} className="hidden md:block bg-white/10 p-2 rounded-lg hover:bg-white/20 transition-colors border-0">
-                    <X size={20} />
+                 <button type="button" onClick={() => setShowModal(false)} className="hidden md:block bg-white/10 p-1.5 rounded-lg hover:bg-white/20 transition-colors border-0">
+                    <X size={18} />
                  </button>
               </div>
               
-              <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-4 flex-1 overflow-y-auto">
+              <form onSubmit={handleSubmit} className="p-4 space-y-4 flex-1 overflow-y-auto">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1.5">Pilih Karyawan</label>
@@ -411,7 +411,7 @@ export default function EmployeeSalaryTab() {
                           required
                           value={form.employee_id}
                           onChange={(e) => setForm({...form, employee_id: e.target.value})}
-                          className="w-full px-3 py-2 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                          className="w-full px-3 py-1.5 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                         >
                           <option value="">-- Pilih Staf --</option>
                           {employees.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
@@ -425,7 +425,7 @@ export default function EmployeeSalaryTab() {
                           type="datetime-local"
                           value={form.tanggal}
                           onChange={(e) => setForm({...form, tanggal: e.target.value})}
-                          className="w-full px-3 py-2 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                          className="w-full px-3 py-1.5 border border-border rounded-lg text-xs font-bold text-foreground outline-none focus:ring-2 focus:ring-purple-500 bg-muted dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                         />
                     </div>
                  </div>
@@ -440,7 +440,7 @@ export default function EmployeeSalaryTab() {
                           value={formatNumber(form.gaji_pokok)}
                           onChange={(e) => setForm({...form, gaji_pokok: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
-                          className="w-full px-3 py-2 border border-purple-100 bg-purple-50/30 rounded-lg text-xs font-bold text-purple-700 outline-none focus:ring-2 focus:ring-purple-500 font-bold"
+                          className="w-full px-3 py-1.5 border border-purple-100 bg-purple-50/30 rounded-lg text-xs font-bold text-purple-700 outline-none focus:ring-2 focus:ring-purple-500"
                         />
                     </div>
                     <div>
@@ -452,7 +452,7 @@ export default function EmployeeSalaryTab() {
                           value={formatNumber(form.bonus)}
                           onChange={(e) => setForm({...form, bonus: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
-                          className="w-full px-3 py-2 border border-emerald-100 bg-emerald-50/30 rounded-lg text-xs font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-500 font-bold"
+                          className="w-full px-3 py-1.5 border border-emerald-100 bg-emerald-50/30 rounded-lg text-xs font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-500"
                         />
                     </div>
                     <div>
@@ -464,7 +464,7 @@ export default function EmployeeSalaryTab() {
                           value={formatNumber(form.potongan)}
                           onChange={(e) => setForm({...form, potongan: parseNumber(e.target.value).toString()})}
                           placeholder="Rp..."
-                          className="w-full px-3 py-2 border border-rose-100 bg-rose-50/30 rounded-lg text-xs font-bold text-rose-700 outline-none focus:ring-2 focus:ring-rose-500 font-bold"
+                          className="w-full px-3 py-1.5 border border-rose-100 bg-rose-50/30 rounded-lg text-xs font-bold text-rose-700 outline-none focus:ring-2 focus:ring-rose-500"
                         />
                     </div>
                  </div>
@@ -476,7 +476,7 @@ export default function EmployeeSalaryTab() {
                       value={form.keterangan}
                       onChange={(e) => setForm({...form, keterangan: e.target.value})}
                       placeholder="Contoh: Bonus target lebaran"
-                      className="w-full px-3 py-2 border border-border rounded-lg text-xs font-medium text-foreground outline-none dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                      className="w-full px-3 py-1.5 border border-border rounded-lg text-xs font-medium text-foreground outline-none dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                     />
                  </div>
 
@@ -485,7 +485,7 @@ export default function EmployeeSalaryTab() {
                       const total = (Number(form.gaji_pokok) || 0) + (Number(form.bonus) || 0) - (Number(form.potongan) || 0);
                       const isLoan = total < 0;
                       return (
-                        <div className={`${isLoan ? 'bg-rose-600 shadow-rose-100' : 'bg-purple-600 shadow-purple-100'} p-4 rounded-xl text-white flex justify-between items-center shadow-lg transition-all`}>
+                        <div className={`${isLoan ? 'bg-rose-600 shadow-rose-100' : 'bg-purple-600 shadow-purple-100'} p-3 rounded-lg text-white flex justify-between items-center shadow-lg transition-all`}>
                            <div>
                               <p className="text-[10px] font-black uppercase opacity-70 font-bold">{isLoan ? 'Pinjaman (Uang Keluar)' : 'Total Gaji Bersih'}</p>
                               <p className="text-xl font-black">
@@ -501,11 +501,11 @@ export default function EmployeeSalaryTab() {
                   </div>
 
                  <div className="flex gap-2 pt-4 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-none md:pt-2">
-                    <button type="button" onClick={() => setShowModal(false)} className="hidden md:block flex-1 py-3 text-xs font-bold text-muted-foreground hover:bg-muted rounded-lg transition-colors border-0 bg-transparent">BATAL</button>
+                    <button type="button" onClick={() => setShowModal(false)} className="hidden md:block flex-1 py-1.5 text-xs font-bold text-muted-foreground hover:bg-muted rounded-lg transition-colors border-0 bg-transparent">BATAL</button>
                     <button
                       type="submit"
                       disabled={saving}
-                      className="flex-1 md:flex-none w-full bg-purple-600 py-3 text-xs font-black text-white rounded-xl md:rounded-lg hover:bg-purple-700 shadow-md shadow-purple-200 disabled:bg-gray-300 transition-colors border-0 uppercase active:scale-[0.98]"
+                      className="flex-1 md:flex-none w-full bg-purple-600 py-1.5 text-xs font-black text-white rounded-lg hover:bg-purple-700 shadow-md shadow-purple-200 disabled:bg-gray-300 transition-colors border-0 uppercase active:scale-[0.98]"
                     >
                        {saving ? 'Menyimpan...' : 'Simpan & Potong Kas'}
                     </button>
@@ -518,18 +518,18 @@ export default function EmployeeSalaryTab() {
       {promptModal.isOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
            <div className="bg-card md:rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border-0 h-full md:h-auto flex flex-col">
-              <div className="bg-gray-800 p-4 md:p-5 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
+              <div className="bg-gray-800 p-4 text-white flex items-center justify-between shrink-0 sticky top-0 z-20">
                  <div className="flex items-center gap-2">
-                   <button type="button" onClick={() => setPromptModal({...promptModal, isOpen: false})} className="md:hidden p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
-                     <ChevronLeft size={20} />
+                   <button type="button" onClick={() => setPromptModal({...promptModal, isOpen: false})} className="md:hidden p-1 bg-white/10 hover:bg-white/20 rounded-lg transition-colors border-0">
+                     <ChevronLeft size={18} />
                    </button>
                    <h3 className="text-sm font-bold tracking-tight">{promptModal.id ? 'Edit Data Staf' : 'Tambah Staf Baru'}</h3>
                  </div>
                  <button type="button" onClick={() => setPromptModal({...promptModal, isOpen: false})} className="hidden md:block bg-white/10 p-1.5 rounded-lg hover:bg-white/20 transition-colors border-0">
-                    <X size={18} />
+                    <X size={16} />
                  </button>
               </div>
-              <form onSubmit={submitEmployee} className="p-4 md:p-6 space-y-4 flex-1 overflow-y-auto">
+              <form onSubmit={submitEmployee} className="p-4 space-y-4 flex-1 overflow-y-auto">
                 <div>
                   <label className="block text-[10px] font-black text-muted-foreground uppercase mb-1.5 tracking-wider">Nama Lengkap</label>
                   <input
@@ -539,7 +539,7 @@ export default function EmployeeSalaryTab() {
                     value={promptModal.name}
                     onChange={(e) => setPromptModal({...promptModal, name: e.target.value})}
                     placeholder="Masukkan nama staf..."
-                    className="w-full px-3 py-2.5 border border-border rounded-xl text-sm outline-none focus:ring-2 focus:ring-purple-500 font-bold text-foreground dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                    className="w-full px-3 py-1.5 border border-border rounded-lg text-sm outline-none focus:ring-2 focus:ring-purple-500 font-bold text-foreground dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                   />
                 </div>
                 <div>
@@ -552,15 +552,15 @@ export default function EmployeeSalaryTab() {
                       value={formatNumber(promptModal.base_salary)}
                       onChange={(e) => setPromptModal({...promptModal, base_salary: parseNumber(e.target.value).toString()})}
                       placeholder="Contoh: 2.500.000"
-                      className="w-full pl-9 pr-3 py-2.5 border border-border rounded-xl text-sm outline-none focus:ring-2 focus:ring-purple-500 font-bold text-foreground dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
+                      className="w-full pl-9 pr-3 py-1.5 border border-border rounded-lg text-sm outline-none focus:ring-2 focus:ring-purple-500 font-bold text-foreground dark:bg-slate-900 dark:border-slate-700 dark:text-gray-200"
                     />
                   </div>
                   <p className="text-[9px] text-muted-foreground mt-2 font-medium italic">Gaji ini digunakan sebagai acuan perhitungan "Sisa Gaji" setiap bulannya.</p>
                 </div>
                 
                 <div className="flex gap-2 pt-4 sticky bottom-0 bg-card mt-auto md:mt-0 border-t border-border md:border-none md:pt-2">
-                  <button type="button" onClick={() => setPromptModal({...promptModal, isOpen: false})} className="hidden md:block flex-1 py-3 text-xs font-bold text-muted-foreground hover:bg-muted rounded-xl transition-colors border-0 bg-transparent">BATAL</button>
-                  <button type="submit" className="flex-1 bg-gray-800 py-3 text-xs font-black text-white rounded-xl hover:bg-gray-900 shadow-large transition-colors border-0 uppercase active:scale-[0.98]">
+                  <button type="button" onClick={() => setPromptModal({...promptModal, isOpen: false})} className="hidden md:block flex-1 py-1.5 text-xs font-bold text-muted-foreground hover:bg-muted rounded-lg transition-colors border-0 bg-transparent">BATAL</button>
+                  <button type="submit" className="flex-1 bg-gray-800 py-1.5 text-xs font-black text-white rounded-lg hover:bg-gray-900 shadow-sm transition-colors border-0 uppercase active:scale-[0.98]">
                     {promptModal.id ? 'Update Data' : 'Simpan Staf'}
                   </button>
                 </div>
@@ -578,8 +578,8 @@ export default function EmployeeSalaryTab() {
               <h3 className="text-sm font-black text-foreground mb-2 uppercase tracking-wide">Hapus Riwayat Gaji?</h3>
               <p className="text-xs text-muted-foreground mb-6 leading-relaxed">Peringatan: Riwayat transaksi ini juga akan dihapus dari catatan Mutasi Kas Toko secara permanen.</p>
               <div className="flex gap-2 justify-end">
-                <button onClick={() => setConfirmDialog({isOpen: false, id: null})} className="px-5 py-2.5 text-[10px] font-black text-muted-foreground hover:bg-accent rounded-xl transition-colors uppercase border-0 bg-transparent">Batal</button>
-                <button onClick={executeDelete} className="px-5 py-2.5 text-[10px] font-black text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-lg shadow-red-200 transition-colors uppercase border-0">Ya, Hapus</button>
+                <button onClick={() => setConfirmDialog({isOpen: false, id: null})} className="px-4 py-1.5 text-[10px] font-black text-muted-foreground hover:bg-accent rounded-lg transition-colors uppercase border-0 bg-transparent">Batal</button>
+                <button onClick={executeDelete} className="px-4 py-1.5 text-[10px] font-black text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm shadow-red-200 transition-colors uppercase border-0">Ya, Hapus</button>
               </div>
            </div>
         </div>
