@@ -233,7 +233,7 @@ export default function StokOpnamePage() {
       </div>
       <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="h-10 bg-accent border-b border-border" />
-        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
+        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-1.5 flex gap-4"><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
       </div>
     </div>
   );

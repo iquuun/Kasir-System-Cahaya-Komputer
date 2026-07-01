@@ -617,7 +617,7 @@ export default function HutangDistributorPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 md:flex-none px-3 py-3 md:py-2 bg-[#3B82F6] text-white rounded-xl md:rounded-lg hover:bg-blue-700 disabled:opacity-50 text-xs font-bold active:scale-[0.98]"
+                  className="flex-1 md:flex-none px-3 py-1.5 bg-[#3B82F6] text-white rounded-xl md:rounded-lg hover:bg-blue-700 disabled:opacity-50 text-xs font-bold active:scale-[0.98]"
                 >
                   {isSubmitting ? 'Memproses...' : 'Proses Bayar'}
                 </button>

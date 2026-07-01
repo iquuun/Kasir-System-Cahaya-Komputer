@@ -290,7 +290,7 @@ export default function MutasiRekeningTab() {
       </div>
 
       {/* Sisa Kas Highlight Bar */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 rounded-2xl flex items-center justify-between shadow-lg shadow-blue-200/50 relative overflow-hidden group">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-1.5 rounded-2xl flex items-center justify-between shadow-lg shadow-blue-200/50 relative overflow-hidden group">
         <div className="absolute right-0 top-0 opacity-10 group-hover:scale-110 transition-transform">
            <Banknote size={80} strokeWidth={1} className="text-white" />
         </div>
@@ -443,7 +443,7 @@ export default function MutasiRekeningTab() {
               <tbody className="divide-y divide-gray-50">
                 {currentFlows.map((flow) => (
                   <tr key={flow.id} className="hover:bg-blue-50/20 transition-colors border-b border-border last:border-0">
-                    <td className="px-4 py-3 text-xs text-foreground">
+                    <td className="px-4 py-1.5 text-xs text-foreground">
                       <p className="font-bold">{new Date(flow.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">{new Date(flow.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
                     </td>
@@ -454,7 +454,7 @@ export default function MutasiRekeningTab() {
                         {flow.tipe === 'masuk' ? 'MASUK' : 'KELUAR'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs font-bold text-foreground capitalize">
+                    <td className="px-4 py-1.5 text-xs font-bold text-foreground capitalize">
                        {flow.sumber.replace(/_/g, ' ')}
                         {flow.sumber === 'biaya_operasional' && (
                           <>
@@ -474,7 +474,7 @@ export default function MutasiRekeningTab() {
                         {flow.tipe === 'masuk' ? '+' : '-'} Rp {Math.abs(Number(flow.nominal)).toLocaleString('id-ID')}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground font-medium">
+                    <td className="px-4 py-1.5 text-xs text-muted-foreground font-medium">
                       {flow.keterangan || '-'}
                       {flow.staff_name && (
                         <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase italic">Staf: {flow.staff_name}</div>
@@ -718,7 +718,7 @@ export default function MutasiRekeningTab() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 py-3 md:py-2 rounded-xl md:rounded-lg bg-blue-600 text-white font-bold text-[11px] hover:bg-blue-700 disabled:bg-gray-300 transition-colors uppercase tracking-wider shadow-md shadow-blue-200 active:scale-[0.98]"
+                  className="flex-1 py-1.5 rounded-xl md:rounded-lg bg-blue-600 text-white font-bold text-[11px] hover:bg-blue-700 disabled:bg-gray-300 transition-colors uppercase tracking-wider shadow-md shadow-blue-200 active:scale-[0.98]"
                 >
                   {saving ? 'MENYIMPAN...' : 'SIMPAN TRANSAKSI'}
                 </button>

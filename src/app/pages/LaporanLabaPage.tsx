@@ -281,7 +281,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* ═══ SECTION 2: TABEL HUTANG PER DISTRIBUTOR ═══ */}
         <div className="bg-card dark:bg-slate-800/60 rounded-2xl shadow-sm border border-border dark:border-slate-700/50 overflow-hidden flex flex-col backdrop-blur-sm">
           <div className="p-5 border-b border-border dark:border-slate-700/50 flex items-center justify-between bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-500/5">
@@ -306,9 +306,9 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
                 <table className="w-full text-left">
                   <thead>
                     <tr className="bg-muted/50 dark:bg-slate-900/30">
-                      <th className="px-5 py-3 text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Distributor</th>
-                      <th className="px-5 py-3 text-right text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Pembelian</th>
-                      <th className="px-5 py-3 text-right text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Sisa Hutang</th>
+                      <th className="px-5 py-1.5 text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Distributor</th>
+                      <th className="px-5 py-1.5 text-right text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Pembelian</th>
+                      <th className="px-5 py-1.5 text-right text-[10px] uppercase font-black text-muted-foreground dark:text-slate-500 tracking-[0.1em]">Sisa Hutang</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100/50 dark:divide-slate-700/30">
@@ -334,7 +334,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
               {/* Mobile Card List for Distributor Debt */}
               <div className="md:hidden divide-y divide-gray-100 dark:divide-slate-700/30 flex-1 px-4 bg-card dark:bg-slate-800/60">
                 {data.hutang_per_distributor.map((dist) => (
-                  <div key={dist.name} className="py-3.5 space-y-2">
+                  <div key={dist.name} className="py-1.5.5 space-y-2">
                     <div className="flex justify-between items-start">
                       <h4 className="font-bold text-xs text-foreground dark:text-gray-200">{dist.name}</h4>
                       <div className="bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded border border-rose-100 dark:border-rose-500/20 shrink-0">
@@ -355,7 +355,7 @@ export default function LaporanLabaPage({ isEmbedded }: { isEmbedded?: boolean }
         </div>
 
         {/* ═══ SECTION 3: GRAFIK POSISI KEUANGAN ═══ */}
-        <div className="bg-card dark:bg-slate-800/60 rounded-2xl shadow-sm border border-border dark:border-slate-700/50 p-6 flex flex-col backdrop-blur-sm">
+        <div className="bg-card dark:bg-slate-800/60 rounded-2xl shadow-sm border border-border dark:border-slate-700/50 p-4 flex flex-col backdrop-blur-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shadow-inner">

@@ -144,7 +144,7 @@ export default function LoginPage() {
   if (!serverOnline) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center p-4 font-['Inter']">
-        <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md p-6 text-center">
+        <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md p-4 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 rounded-full mb-4 border border-red-100">
             <WifiOff className="text-red-500" size={28} />
           </div>
@@ -244,7 +244,7 @@ export default function LoginPage() {
               </button>
             </div>
             
-            <div className="p-6 space-y-5 text-sm text-foreground bg-slate-50/50">
+            <div className="p-4 space-y-5 text-sm text-foreground bg-slate-50/50">
               {forgotStep === 1 && (
                 <form onSubmit={handleCheckEmailRole} className="space-y-5">
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -261,7 +261,7 @@ export default function LoginPage() {
                         value={forgotEmail} 
                         onChange={(e) => setForgotEmail(e.target.value)} 
                         placeholder="email@contoh.com" 
-                        className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                        className="w-full pl-10 pr-4 py-1.5 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
                         required
                       />
                     </div>
@@ -279,7 +279,7 @@ export default function LoginPage() {
                   <button 
                     type="submit" 
                     disabled={forgotLoading || forgotRole === 'staf'} 
-                    className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:shadow-none active:scale-[0.98]"
+                    className="w-full py-1.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:shadow-none active:scale-[0.98]"
                   >
                     {forgotLoading ? (
                       <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin"/> Memeriksa...</span>
@@ -307,7 +307,7 @@ export default function LoginPage() {
                         value={forgotRecoveryKey} 
                         onChange={(e) => setForgotRecoveryKey(e.target.value)} 
                         placeholder="Masukkan kode rahasia..." 
-                        className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                        className="w-full pl-10 pr-4 py-1.5 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
                         required
                       />
                     </div>
@@ -321,7 +321,7 @@ export default function LoginPage() {
                         onChange={(e) => setForgotNewPassword(e.target.value)} 
                         placeholder="Minimal 6 karakter" 
                         minLength={6}
-                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                        className="w-full px-4 py-1.5 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
                         required
                       />
                     </div>
@@ -330,7 +330,7 @@ export default function LoginPage() {
                   <button 
                     type="submit" 
                     disabled={forgotLoading} 
-                    className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:shadow-none active:scale-[0.98]"
+                    className="w-full py-1.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:shadow-none active:scale-[0.98]"
                   >
                     {forgotLoading ? (
                       <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin"/> Memproses...</span>

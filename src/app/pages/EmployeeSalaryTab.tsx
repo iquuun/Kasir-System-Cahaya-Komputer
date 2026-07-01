@@ -202,7 +202,7 @@ export default function EmployeeSalaryTab() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="lg:col-span-5 bg-card rounded-xl shadow-sm border border-border overflow-hidden flex flex-col h-fit">
           <div className="p-3 border-b border-border bg-muted/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -228,17 +228,17 @@ export default function EmployeeSalaryTab() {
                 ) : (
                   salaries.map((s) => (
                     <tr key={s.id} className="hover:bg-muted transition-colors">
-                      <td className="px-4 py-3 text-[11px] font-bold text-muted-foreground">
+                      <td className="px-4 py-1.5 text-[11px] font-bold text-muted-foreground">
                         {new Date(s.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-1.5">
                         <p className="text-xs font-bold text-foreground">{s.employee?.name}</p>
                         <p className="text-[9px] text-muted-foreground uppercase">{s.keterangan || '-'}</p>
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-4 py-1.5 text-right">
                         <p className="text-xs font-black text-purple-600">Rp {Number(s.total).toLocaleString('id-ID')}</p>
                       </td>
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-4 py-1.5 text-center">
                         <button onClick={() => handleDelete(s.id)} className="p-1.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded transition-colors">
                           <Trash2 size={14} />
                         </button>
@@ -258,7 +258,7 @@ export default function EmployeeSalaryTab() {
               <div className="p-8 text-center text-xs text-muted-foreground italic">Belum ada riwayat gaji</div>
             ) : (
               salaries.map((s) => (
-                <div key={s.id} className="py-3 flex justify-between items-center gap-2">
+                <div key={s.id} className="py-1.5 flex justify-between items-center gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] font-bold text-muted-foreground">
@@ -571,7 +571,7 @@ export default function EmployeeSalaryTab() {
 
       {confirmDialog.isOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-3 animate-in fade-in duration-200">
-           <div className="bg-card rounded-2xl shadow-xl w-full max-w-sm overflow-hidden p-6 animate-in zoom-in-95 border-0">
+           <div className="bg-card rounded-2xl shadow-xl w-full max-w-sm overflow-hidden p-4 animate-in zoom-in-95 border-0">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
                  <Trash2 className="text-red-500" size={24} />
               </div>

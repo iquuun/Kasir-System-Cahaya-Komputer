@@ -369,7 +369,7 @@ export default function Dashboard() {
             <h3 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Transaksi Terbaru</h3>
           </div>
           {data.recent_transactions.length === 0 ? (
-            <p className="text-muted-foreground text-xs text-center py-3">Belum ada transaksi</p>
+            <p className="text-muted-foreground text-xs text-center py-1.5">Belum ada transaksi</p>
           ) : (
             <div className="space-y-1 overflow-y-auto pr-1 flex-1 min-h-0">
               {data.recent_transactions.map((transaction) => (

@@ -465,7 +465,7 @@ export default function KalkulatorPage() {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-2">
                 {renderConfigForm()}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
                     <div>
 
                     <div className="bg-card border rounded-xl shadow-sm p-4">
@@ -590,7 +590,7 @@ export default function KalkulatorPage() {
             <div className="transition-all animate-in fade-in slide-in-from-bottom-2">
                 {!screenshotMode && renderConfigForm()}
                 
-                <div className={`${screenshotMode ? 'w-full' : 'grid grid-cols-1 lg:grid-cols-2 gap-6'}`}>
+                <div className={`${screenshotMode ? 'w-full' : 'grid grid-cols-1 lg:grid-cols-2 gap-4'}`}>
                     {/* Mode Developer (Layar Kiri) */}
                     {!screenshotMode && (
                         <div className="space-y-4">
@@ -831,7 +831,7 @@ export default function KalkulatorPage() {
                                 <div className="flex justify-between text-[11px] font-bold pt-1.5 border-t border-red-100 mt-1.5"><span className="text-red-700">TOTAL POTONGAN ONLINE</span><span className="text-red-700">Rp {result.totalPotongan.toLocaleString('id-ID', {maximumFractionDigits:0})}</span></div>
                             </div>
                             
-                            <button onClick={() => setScreenshotMode(true)} className="w-full mt-5 flex items-center justify-center gap-2 bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-black text-white py-3 rounded-lg text-sm font-bold shadow-xl hover:from-black hover:to-gray-800 transition active:scale-[0.98]">
+                            <button onClick={() => setScreenshotMode(true)} className="w-full mt-5 flex items-center justify-center gap-2 bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-black text-white py-1.5 rounded-lg text-sm font-bold shadow-xl hover:from-black hover:to-gray-800 transition active:scale-[0.98]">
                                 <Camera size={18} /> KUNCI & BUKA MODE SCREENSHOT CUSTOMER
                             </button>
                         </div>
@@ -1059,7 +1059,7 @@ export default function KalkulatorPage() {
                 </div>
 
                 <div className="mt-4">
-                    <button onClick={() => setStoreConfigs([...storeConfigs, { id: `store_${Date.now()}`, name: 'Toko Baru', categories: [], feeRules: [] }])} className="w-full flex items-center justify-center gap-2 py-3 shadow-sm border-2 border-dashed border-blue-300 rounded-xl text-blue-600 hover:bg-blue-50 font-bold text-sm tracking-wide transition active:scale-[0.99]">
+                    <button onClick={() => setStoreConfigs([...storeConfigs, { id: `store_${Date.now()}`, name: 'Toko Baru', categories: [], feeRules: [] }])} className="w-full flex items-center justify-center gap-2 py-1.5 shadow-sm border-2 border-dashed border-blue-300 rounded-xl text-blue-600 hover:bg-blue-50 font-bold text-sm tracking-wide transition active:scale-[0.99]">
                         <Plus size={16} /> TAMBAH TOKO BARU
                     </button>
                 </div>
@@ -1076,18 +1076,18 @@ export default function KalkulatorPage() {
 
             {confirmAction && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm animate-in fade-in transition-all">
-                    <div className="bg-card rounded-2xl shadow-2xl p-6 w-full max-w-sm animate-in zoom-in-95 duration-200">
+                    <div className="bg-card rounded-2xl shadow-2xl p-4 w-full max-w-sm animate-in zoom-in-95 duration-200">
                         <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-5 shadow-inner">
                            <Trash2 className="text-red-600" size={28} />
                         </div>
                         <h3 className="text-xl font-black text-center text-foreground mb-2">{confirmAction.title}</h3>
                         <p className="text-sm text-center text-muted-foreground mb-8 leading-relaxed px-2">{confirmAction.desc}</p>
                         <div className="flex gap-3">
-                            <button onClick={() => setConfirmAction(null)} className="flex-1 py-3 rounded-xl font-bold text-muted-foreground bg-accent hover:bg-accent transition active:scale-95">Batal</button>
+                            <button onClick={() => setConfirmAction(null)} className="flex-1 py-1.5 rounded-xl font-bold text-muted-foreground bg-accent hover:bg-accent transition active:scale-95">Batal</button>
                             <button onClick={() => {
                                 confirmAction.onConfirm();
                                 setConfirmAction(null);
-                            }} className="flex-1 py-3 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 shadow-md shadow-red-500/20 transition active:scale-95">Ya, Eksekusi</button>
+                            }} className="flex-1 py-1.5 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 shadow-md shadow-red-500/20 transition active:scale-95">Ya, Eksekusi</button>
                         </div>
                     </div>
                 </div>

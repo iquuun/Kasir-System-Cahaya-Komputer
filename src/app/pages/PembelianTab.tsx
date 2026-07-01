@@ -608,7 +608,7 @@ export default function PembelianTab() {
       <div className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="flex gap-3"><div className="flex-1 h-9 bg-accent rounded-lg" /><div className="w-48 h-9 bg-accent rounded-lg" /></div></div>
       <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="h-10 bg-accent border-b border-border" />
-        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
+        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-1.5 flex gap-4"><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
       </div>
     </div>
   );
@@ -988,7 +988,7 @@ export default function PembelianTab() {
             </div>
 
             {/* Scrollable Content */}
-            <div className="px-3 py-3 md:p-4 overflow-y-auto flex-1 overscroll-contain">
+            <div className="px-3 py-1.5 md:p-4 overflow-y-auto flex-1 overscroll-contain">
               <form id="purchaseForm" onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
                 {/* Invoice & Tanggal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1056,7 +1056,7 @@ export default function PembelianTab() {
                   </div>
 
                   {formData.items.length === 0 ? (
-                    <p className="text-xs text-muted-foreground text-center py-3">Tidak ada barang spesifik dicatat (Hanya mencatat total).</p>
+                    <p className="text-xs text-muted-foreground text-center py-1.5">Tidak ada barang spesifik dicatat (Hanya mencatat total).</p>
                   ) : (
                     <>
                       {/* Desktop View - table layout */}
@@ -1367,7 +1367,7 @@ export default function PembelianTab() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 md:flex-none px-3 py-3 md:py-2 bg-green-600 text-white rounded-xl md:rounded-lg hover:bg-green-700 disabled:opacity-50 font-bold active:scale-[0.98]"
+                  className="flex-1 md:flex-none px-3 py-1.5 bg-green-600 text-white rounded-xl md:rounded-lg hover:bg-green-700 disabled:opacity-50 font-bold active:scale-[0.98]"
                 >
                   {isSubmitting ? 'Memproses...' : 'Proses Bayar'}
                 </button>
@@ -1406,7 +1406,7 @@ export default function PembelianTab() {
               <h4 className="font-medium text-foreground mb-3 border-b pb-2">Daftar Barang Dibeli</h4>
 
               {!selectedDetailPurchase.items || selectedDetailPurchase.items.length === 0 ? (
-                <p className="text-muted-foreground italic text-xs text-center py-3 bg-muted rounded">
+                <p className="text-muted-foreground italic text-xs text-center py-1.5 bg-muted rounded">
                   Tidak ada rincian barang untuk transaksi ini. (Hanya nominal total).
                 </p>
               ) : (
@@ -1592,7 +1592,7 @@ export default function PembelianTab() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 md:flex-none px-4 py-3 md:py-2 bg-[#3B82F6] text-white rounded-xl md:rounded-lg hover:bg-[#2563EB] disabled:opacity-50 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-[0.98]"
+                  className="flex-1 md:flex-none px-4 py-1.5 bg-[#3B82F6] text-white rounded-xl md:rounded-lg hover:bg-[#2563EB] disabled:opacity-50 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-[0.98]"
                 >
                   {isSubmitting ? 'Memproses...' : 'Simpan Produk'}
                 </button>

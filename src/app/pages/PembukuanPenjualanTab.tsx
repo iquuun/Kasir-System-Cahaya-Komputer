@@ -309,7 +309,7 @@ export default function PembukuanPenjualanTab() {
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-3">{[...Array(5)].map((_, i) => (<div key={i} className="bg-card rounded-xl shadow-sm border border-border p-3"><div className="h-3 bg-accent rounded w-20 mb-2" /><div className="h-6 bg-accent rounded w-28" /></div>))}</div>
       <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="h-10 bg-accent border-b border-border" />
-        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-3 flex gap-4"><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
+        <div className="divide-y divide-gray-100">{[...Array(5)].map((_, i) => (<div key={i} className="px-4 py-1.5 flex gap-4"><div className="h-4 bg-accent rounded w-1/6" /><div className="h-4 bg-accent rounded w-1/4" /><div className="h-4 bg-accent rounded w-1/6 ml-auto" /></div>))}</div>
       </div>
     </div>
   );
@@ -358,7 +358,7 @@ export default function PembukuanPenjualanTab() {
       </div>
 
       {/* Today Highlight Indicator */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-3 rounded-2xl flex items-center justify-between shadow-lg shadow-purple-200/50 relative overflow-hidden group">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-1.5 rounded-2xl flex items-center justify-between shadow-lg shadow-purple-200/50 relative overflow-hidden group">
         <div className="absolute right-0 top-0 opacity-10 group-hover:scale-110 transition-transform">
            <ShoppingCart size={80} strokeWidth={1} className="text-white" />
         </div>

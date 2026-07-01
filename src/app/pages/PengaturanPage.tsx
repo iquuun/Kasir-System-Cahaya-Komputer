@@ -300,7 +300,7 @@ export default function PengaturanPage() {
             </div>
 
             {activeTab === 'profil' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2">
                     <div className="lg:col-span-7">
                         <div className="bg-card rounded-xl shadow-sm border border-border p-4 h-full">
                         <div className="flex items-center gap-3 mb-4 border-b border-border pb-3">
@@ -592,7 +592,7 @@ export default function PengaturanPage() {
                                 <X size={20} />
                             </button>
                         </div>
-                        <div className="p-4 md:p-6 flex-1 overflow-y-auto">
+                        <div className="p-4 md:p-4 flex-1 overflow-y-auto">
                             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-5 text-center">
                                 <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
                                     <AlertTriangle className="text-red-600" size={24} />
@@ -619,7 +619,7 @@ export default function PengaturanPage() {
                                 </button>
                                 <button
                                     onClick={confirmRestoreBackup}
-                                    className="flex-1 md:flex-none w-full py-3 md:py-2.5 bg-red-600 text-white rounded-xl md:rounded-lg font-bold text-sm hover:bg-red-700 transition-all active:scale-[0.98] shadow-lg shadow-red-600/30"
+                                    className="flex-1 md:flex-none w-full py-1.5 md:py-1.5 bg-red-600 text-white rounded-xl md:rounded-lg font-bold text-sm hover:bg-red-700 transition-all active:scale-[0.98] shadow-lg shadow-red-600/30"
                                 >
                                     Ya, Pulihkan Sekarang
                                 </button>

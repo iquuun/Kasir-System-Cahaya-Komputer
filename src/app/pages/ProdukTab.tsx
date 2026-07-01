@@ -328,7 +328,7 @@ export default function ProdukTab() {
           <div className="h-10 bg-accent border-b border-border"></div>
           <div className="divide-y divide-gray-100">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="px-4 py-3 flex gap-4">
+              <div key={i} className="px-4 py-1.5 flex gap-4">
                 <div className="h-4 bg-accent rounded w-1/4"></div>
                 <div className="h-4 bg-accent rounded w-1/6"></div>
                 <div className="h-4 bg-accent rounded w-1/6 ml-auto"></div>
@@ -812,7 +812,7 @@ export default function ProdukTab() {
                 type="submit"
                 form="productForm"
                 disabled={isSubmitting}
-                className="flex-1 md:flex-none justify-center px-6 py-3 md:py-2 bg-[#3B82F6] text-white rounded-xl md:rounded-lg hover:bg-[#2563EB] shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 font-bold text-xs md:text-xs uppercase tracking-widest flex items-center gap-2 active:scale-[0.98]"
+                className="flex-1 md:flex-none justify-center px-6 py-1.5 bg-[#3B82F6] text-white rounded-xl md:rounded-lg hover:bg-[#2563EB] shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 font-bold text-xs md:text-xs uppercase tracking-widest flex items-center gap-2 active:scale-[0.98]"
               >
                 {isSubmitting ? 'Memproses...' : (
                   <>

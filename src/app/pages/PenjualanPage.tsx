@@ -2421,7 +2421,7 @@ export default function PenjualanPage() {
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-50">
           <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm h-full md:h-auto overflow-hidden flex flex-col animate-in">
             {/* Red header strip */}
-            <div className="bg-gradient-to-r from-red-500 to-red-600 px-4 py-3 text-center shrink-0 sticky top-0 z-20 flex justify-between items-center md:block">
+            <div className="bg-gradient-to-r from-red-500 to-red-600 px-4 py-1.5 text-center shrink-0 sticky top-0 z-20 flex justify-between items-center md:block">
               <button
                 type="button"
                 onClick={() => setVoidTarget(null)}
@@ -2487,7 +2487,7 @@ export default function PenjualanPage() {
                 <button
                   onClick={confirmVoid}
                   disabled={isVoiding}
-                  className="flex-1 px-3 py-3 md:py-2 bg-red-600 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 active:scale-[0.98]"
+                  className="flex-1 px-3 py-1.5 bg-red-600 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 active:scale-[0.98]"
                 >
                   <Ban size={14} className="md:w-[13px] md:h-[13px]" />
                   {isVoiding ? 'Memproses...' : 'Ya, Void Transaksi'}
@@ -2502,7 +2502,7 @@ export default function PenjualanPage() {
       {editTarget && editForm && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-50">
           <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-2xl h-full md:h-auto md:max-h-[90vh] overflow-hidden flex flex-col animate-in">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 md:py-2 flex items-center justify-between text-center shrink-0 sticky top-0 z-20">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-1.5 flex items-center justify-between text-center shrink-0 sticky top-0 z-20">
               <button
                 type="button"
                 onClick={() => setEditTarget(null)}
@@ -2633,7 +2633,7 @@ export default function PenjualanPage() {
             
             <div className="p-3 bg-muted border-t border-border flex gap-2 shrink-0 sticky bottom-0 z-20">
               <button onClick={() => setEditTarget(null)} disabled={isEditing} className="hidden md:block flex-1 px-4 py-2 bg-card border border-border text-foreground rounded-lg text-[11px] font-bold hover:bg-accent transition-colors">Batal</button>
-              <button onClick={submitEditInvoice} disabled={isEditing} className="flex-1 px-4 py-3 md:py-2 bg-[#3B82F6] text-white rounded-xl md:rounded-lg text-xs md:text-[11px] font-bold hover:bg-blue-600 shadow-md transition-colors flex items-center justify-center gap-1.5 active:scale-[0.98]">
+              <button onClick={submitEditInvoice} disabled={isEditing} className="flex-1 px-4 py-1.5 bg-[#3B82F6] text-white rounded-xl md:rounded-lg text-xs md:text-[11px] font-bold hover:bg-blue-600 shadow-md transition-colors flex items-center justify-center gap-1.5 active:scale-[0.98]">
                 <Save size={14} className="md:w-[13px] md:h-[13px]" /> {isEditing ? 'Menyimpan...' : 'Simpan & Cetak Ulang'}
               </button>
             </div>
@@ -2645,7 +2645,7 @@ export default function PenjualanPage() {
       {pelunasanTarget && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-50">
           <div className="bg-card md:rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-sm h-full md:h-auto overflow-hidden flex flex-col animate-in">
-            <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3 md:py-4 text-center shrink-0 sticky top-0 z-20 flex justify-between items-center md:block">
+            <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-1.5 md:py-4 text-center shrink-0 sticky top-0 z-20 flex justify-between items-center md:block">
               <button
                 type="button"
                 onClick={() => { setPelunasanTarget(null); setPelunasanInput(''); }}
@@ -2681,7 +2681,7 @@ export default function PenjualanPage() {
               </div>
               <div className="flex gap-2 sticky bottom-0 bg-card pt-2 border-t border-border mt-auto md:mt-0 md:border-none md:pt-0">
                 <button onClick={() => { setPelunasanTarget(null); setPelunasanInput(''); }} disabled={isPelunasanSubmitting} className="hidden md:block flex-1 px-3 py-2.5 md:py-2 bg-accent text-foreground rounded-lg text-xs font-bold hover:bg-accent transition-colors disabled:opacity-50">Batal</button>
-                <button onClick={handlePelunasanSubmit} disabled={isPelunasanSubmitting} className="flex-1 px-3 py-3 md:py-2 bg-amber-500 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-amber-600 transition-colors disabled:opacity-50 active:scale-[0.98]">
+                <button onClick={handlePelunasanSubmit} disabled={isPelunasanSubmitting} className="flex-1 px-3 py-1.5 bg-amber-500 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-amber-600 transition-colors disabled:opacity-50 active:scale-[0.98]">
                   {isPelunasanSubmitting ? 'Memproses...' : 'Proses Bayar'}
                 </button>
               </div>
@@ -2986,7 +2986,7 @@ export default function PenjualanPage() {
                 <button 
                   onClick={saveTemplate} 
                   disabled={isSubmitting}
-                  className="flex-1 md:flex-none px-6 py-3 md:py-2 bg-amber-500 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-amber-600 transition-all shadow-md shadow-amber-500/20 active:scale-95 disabled:opacity-50"
+                  className="flex-1 md:flex-none px-6 py-1.5 bg-amber-500 text-white rounded-xl md:rounded-lg text-xs font-bold hover:bg-amber-600 transition-all shadow-md shadow-amber-500/20 active:scale-95 disabled:opacity-50"
                 >
                   SIMPAN SEKARANG
                 </button>
@@ -3006,7 +3006,7 @@ export default function PenjualanPage() {
       {showScanner && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 z-[70] no-print">
           <div className="bg-card md:rounded-2xl shadow-2xl w-full md:max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 h-full md:h-auto flex flex-col">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-3 md:px-4 py-3 flex justify-between items-center shrink-0 sticky top-0 z-20">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-3 md:px-4 py-1.5 flex justify-between items-center shrink-0 sticky top-0 z-20">
               <div className="flex items-center gap-2">
                 <button 
                   onClick={closeScanner} 
@@ -3187,7 +3187,7 @@ export default function PenjualanPage() {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-card rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Header */}
-            <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-3 shrink-0">
+            <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-1.5 shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Cpu size={18} />
@@ -3350,7 +3350,7 @@ export default function PenjualanPage() {
             </div>
 
             {/* Footer - compact */}
-            <div className="border-t bg-muted px-4 py-3 shrink-0">
+            <div className="border-t bg-muted px-4 py-1.5 shrink-0">
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <div className="text-[9px] text-muted-foreground font-bold uppercase">Total Rakitan</div>
