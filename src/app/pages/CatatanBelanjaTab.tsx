@@ -386,7 +386,7 @@ export default function CatatanBelanjaTab() {
                                      ? 'bg-red-50 text-red-600 border-red-200'
                                      : 'bg-amber-100 text-amber-700 border-amber-300 shadow-sm'
                                  }`}>
-                                   {p.stok_saat_ini === 0 ? 'Habis (0)' : `Sisa Stok: ${p.stok_saat_ini}`}
+                                   STOK: {p.stok_saat_ini}
                                  </span>
                                </div>
                                <div className="flex items-center gap-1 shrink-0">
@@ -731,7 +731,7 @@ export default function CatatanBelanjaTab() {
                       ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800' 
                       : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800'
                   }`}>
-                    Sisa: {p.stok_saat_ini}
+                    STOK: {p.stok_saat_ini}
                   </span>
                 </button>
               ))
