@@ -381,12 +381,12 @@ export default function CatatanBelanjaTab() {
                              >
                                <div className="flex-1 min-w-0 flex items-center gap-2">
                                  <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">{p.name}</span>
-                                 <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
-                                   p.stok_saat_ini < 10
-                                     ? 'bg-red-100 text-red-600'
-                                     : 'bg-emerald-100 text-emerald-600'
+                                 <span className={`text-[10px] uppercase font-black px-2 py-1 rounded shrink-0 border ${
+                                   p.stok_saat_ini === 0
+                                     ? 'bg-red-50 text-red-600 border-red-200'
+                                     : 'bg-amber-100 text-amber-700 border-amber-300 shadow-sm'
                                  }`}>
-                                   Stok: {p.stok_saat_ini}
+                                   {p.stok_saat_ini === 0 ? 'Habis (0)' : `Sisa Stok: ${p.stok_saat_ini}`}
                                  </span>
                                </div>
                                <div className="flex items-center gap-1 shrink-0">
@@ -726,12 +726,12 @@ export default function CatatanBelanjaTab() {
                     <span className="text-[11px] font-bold text-foreground group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors block truncate">{p.name}</span>
                     {p.category && <span className="text-[9px] text-muted-foreground">{p.category.name}</span>}
                   </div>
-                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 ${
+                  <span className={`text-[10px] font-black px-2 py-1 rounded shrink-0 uppercase border ${
                     p.stok_saat_ini < 10 
-                      ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' 
-                      : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                      ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800' 
+                      : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800'
                   }`}>
-                    {p.stok_saat_ini}
+                    Sisa: {p.stok_saat_ini}
                   </span>
                 </button>
               ))
